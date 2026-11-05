@@ -28,7 +28,9 @@ try {
 
 let options: Array<{ name: string; values: string[] }> = [];
 try {
-  options = pData.options_json ? JSON.parse(pData.options_json) : [];
+  if (pData.options_json) {
+    options = typeof pData.options_json === 'string' ? JSON.parse(pData.options_json) : pData.options_json;
+  }
 } catch {
   options = [];
 }
