@@ -6,20 +6,11 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import type {
-  ToolType,
-  WeightClassId,
-  BatteryChemistry,
-  WeaponState,
-  CenterDistanceState,
-} from './types';
+import type { ToolType, WeightClassId, BatteryChemistry, WeaponState, CenterDistanceState } from './types';
 import { WEIGHT_CLASSES, getWeightClassDefaults, RECOMMENDED_CELL_COUNTS } from './utils/constants';
 import { computeWeapon, calculatePackVoltage } from './utils/calculations';
 import type { GlobalAppState } from './utils/urlState';
-import {
-  serializeStateToUrl,
-  parseStateFromUrl,
-} from './utils/urlState';
+import { serializeStateToUrl, parseStateFromUrl } from './utils/urlState';
 import { exportConfigurationToCsv } from './utils/csvExport';
 import {
   saveSessionState,
@@ -36,6 +27,9 @@ import { CenterDistanceTool } from './components/tools/CenterDistanceTool';
 import { BatteryRuntimeTool } from './components/tools/BatteryRuntimeTool';
 import { CapacitanceTool } from './components/tools/CapacitanceTool';
 import { GlossaryFlyout } from './components/common/GlossaryFlyout';
+import { FruityDecor, FruityMySpaceBar } from './fruity/FruityDecor';
+import { audioPlayer } from './fruity/audioEngine';
+import './fruity/fruity.css';
 
 const INITIAL_STATE: GlobalAppState = {
   theme: 'light',
@@ -168,6 +162,44 @@ export default function App() {
       return next;
     });
   };
+
+  // Serious Mode state: toggles between clean engineering UI and Frutiger Aero aesthetic
+  // Defaults to true (Serious Mode active by default) per user specification
+  const [seriousMode, setSeriousMode] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    const stored = localStorage.getItem('lncr_serious_mode');
+    return stored !== null ? stored === 'true' : true;
+  });
+
+  const toggleSeriousMode = () => {
+    setSeriousMode((prev) => {
+      const next = !prev;
+      localStorage.setItem('lncr_serious_mode', String(next));
+      if (next) {
+        document.documentElement.classList.remove('fruity');
+      } else {
+        document.documentElement.classList.add('fruity');
+      }
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    if (seriousMode) {
+      document.documentElement.classList.remove('fruity');
+    } else {
+      document.documentElement.classList.add('fruity');
+    }
+  }, [seriousMode]);
+
+  // Auto-play music whenever page is loaded unless seriousMode is active
+  useEffect(() => {
+    if (!seriousMode) {
+      audioPlayer.play().catch(() => {});
+    } else {
+      audioPlayer.pause();
+    }
+  }, [seriousMode]);
 
   // Sync state to URL query parameters and debounced localStorage session
   useEffect(() => {
@@ -469,13 +501,19 @@ export default function App() {
   }, [appState, effectiveWeaponCellCount, effectiveWeaponChemistry]);
 
   return (
-    <div className="calc-suite-container">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#16181D] text-[#0F172A] dark:text-[#E2E4E9] flex flex-col font-sans selection:bg-[#094AD8] selection:text-white transition-colors duration-200">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="calc-toast">
+        <div className="fixed bottom-5 right-5 z-50 bg-[#094AD8] text-white px-4 py-2.5 rounded-none shadow-lg border border-white/20 text-xs font-semibold animate-in fade-in slide-in-from-bottom-2 duration-200">
           <span>{toastMessage}</span>
         </div>
       )}
+
+      {/* Frutiger Aero Atmosphere & Interactive Stickers */}
+      <FruityDecor
+        seriousMode={seriousMode}
+        onToggleSeriousMode={toggleSeriousMode}
+      />
 
       {/* Top Bar Navigation with Combat Weight Class & Electronics vs Mechanical Panes */}
       <Header
@@ -486,15 +524,15 @@ export default function App() {
         onResetDefaults={handleResetDefaults}
         weightClass={appState.weightClass}
         onChangeWeightClass={handleWeightClassChange}
-        onOpenGlossary={() => setIsGlossaryOpen(true)}
-        extendedPreset={appState.extendedPreset ?? false}
-        onToggleExtendedPreset={() =>
-          setAppState((prev) => ({ ...prev, extendedPreset: !prev.extendedPreset }))
-        }
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
+      {/* 2000s MySpace Profile Banner, Tiffany Day Music Player & Hit Counter */}
+      <FruityMySpaceBar seriousMode={seriousMode} />
+
       {/* Main Content Workspace */}
-      <div className="calc-workspace">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 lg:px-8 py-6">
         {appState.activeTool === 'drivetrain' && (
           <DrivetrainTool
             state={appState.drivetrain}
@@ -525,37 +563,6 @@ export default function App() {
         )}
 
         {appState.activeTool === 'weapon' && (
-          <WeaponTool
-            state={appState.weapon}
-            onChange={handleWeaponChange}
-            chemistry={appState.chemistry}
-            onChangeChemistry={handleChangeMainChemistry}
-            voltageState={appState.voltageState}
-            onChangeVoltageState={(voltageState) =>
-              setAppState((prev) => ({ ...prev, voltageState }))
-            }
-            weightClass={appState.weightClass}
-            hasWeaponBattery={appState.hasWeaponBattery}
-            onChangeHasWeaponBattery={handleToggleHasWeaponBattery}
-            weaponChemistry={effectiveWeaponChemistry}
-            onChangeWeaponChemistry={handleChangeWeaponChemistry}
-            weaponCellCount={effectiveWeaponCellCount}
-            onChangeWeaponCellCount={handleChangeWeaponCellCount}
-            drivetrainCellCount={appState.drivetrain.cellCount}
-            onChangeDrivetrainCellCount={handleChangeMainCellCount}
-            useDirectVoltage={appState.useDirectVoltage}
-            onChangeUseDirectVoltage={handleToggleUseDirectVoltage}
-            directVoltage={appState.directVoltage}
-            onChangeDirectVoltage={handleChangeDirectVoltage}
-            useWeaponDirectVoltage={appState.useWeaponDirectVoltage}
-            onChangeUseWeaponDirectVoltage={handleToggleUseWeaponDirectVoltage}
-            weaponDirectVoltage={appState.weaponDirectVoltage}
-            onChangeWeaponDirectVoltage={handleChangeWeaponDirectVoltage}
-            extendedPreset={appState.extendedPreset ?? false}
-          />
-        )}
-
-        {appState.activeTool === 'weapon-whatif' && (
           <WeaponTool
             state={appState.weapon}
             onChange={handleWeaponChange}
@@ -684,7 +691,115 @@ export default function App() {
             onChangeWeaponDirectVoltage={handleChangeWeaponDirectVoltage}
           />
         )}
-      </div>
+      </main>
+
+      {/* Persistent Bottom Bar (No Icons) */}
+      <footer className="mt-auto border-t border-[#E2E8F0] dark:border-[#2D333F] bg-white dark:bg-[#16181D] px-4 lg:px-8 py-4 transition-colors">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          <a
+            href="https://www.latenightcombat.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-bold text-[#0F172A] dark:text-[#CEDDFD] hover:text-[#094AD8] dark:hover:text-[#60A5FA] transition-colors"
+          >
+            latenightcombat.com
+          </a>
+
+          <span className="text-xs text-[#94A3B8] dark:text-[#64748B] text-center select-none">
+            This Slopsite proudly uses Google AI Studio
+          </span>
+
+          <div className="flex items-center gap-3">
+            {/* Glossary Flyout Trigger Button */}
+            <button
+              type="button"
+              onClick={() => setIsGlossaryOpen(true)}
+              className="px-3 py-1.5 rounded-none border border-[#CBD5E1] dark:border-[#333C4D] bg-[#F8FAFC] dark:bg-[#1C2028] text-xs font-semibold text-[#0F172A] dark:text-[#CEDDFD] hover:border-[#094AD8] dark:hover:border-[#60A5FA] transition-all cursor-pointer shadow-2xs"
+              aria-label="Open engineering contractions glossary"
+            >
+              Glossary
+            </button>
+
+            {/* Extended Preset Toggle Switch */}
+            <div className="flex items-center gap-2 pl-3 border-l border-[#CBD5E1] dark:border-[#333C4D]">
+              <span className="text-xs font-semibold text-[#64748B] dark:text-[#94A3B8] select-none">
+                Extended Preset
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={appState.extendedPreset ?? false}
+                onClick={() => setAppState((prev) => ({ ...prev, extendedPreset: !prev.extendedPreset }))}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-none border border-[#CBD5E1] dark:border-[#333C4D] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#094AD8] ${
+                  appState.extendedPreset ? 'bg-[#094AD8]' : 'bg-[#CBD5E1]'
+                }`}
+                aria-label="Toggle extended preset all brands"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition duration-200 ease-in-out ${
+                    appState.extendedPreset ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Persistent Light / Dark Mode Toggle Switch */}
+            <div className="flex items-center gap-2 pl-1">
+              <span className="text-xs font-semibold text-[#64748B] dark:text-[#94A3B8] select-none">
+                Dark Mode
+              </span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={theme === 'dark'}
+                onClick={toggleTheme}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-none border border-[#CBD5E1] dark:border-[#333C4D] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#094AD8] ${
+                  theme === 'dark' ? 'bg-[#094AD8]' : 'bg-[#CBD5E1]'
+                }`}
+                aria-label="Toggle dark mode"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition duration-200 ease-in-out ${
+                    theme === 'dark' ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Serious Mode Slider Toggle (Resets UI to normal) */}
+            <div className="flex items-center gap-2 pl-3 border-l border-[#CBD5E1] dark:border-[#333C4D]">
+              <div className="flex flex-col text-right select-none">
+                <span className="text-xs font-semibold text-[#64748B] dark:text-[#94A3B8]">
+                  Serious Mode
+                </span>
+                <span className="text-[10px] text-[#94A3B8] dark:text-[#64748B] font-mono leading-none">
+                  {seriousMode ? 'Normal UI' : 'Aero 2000s'}
+                </span>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={seriousMode}
+                onClick={toggleSeriousMode}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-none border border-[#CBD5E1] dark:border-[#333C4D] transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#094AD8] ${
+                  seriousMode ? 'bg-[#094AD8]' : 'bg-[#CBD5E1]'
+                }`}
+                aria-label="Toggle serious mode - resets UI to normal"
+                title={seriousMode ? 'Serious Mode: ON (Normal Engineering UI)' : 'Serious Mode: OFF (Aero 2000s Active)'}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-none bg-white shadow-md transition duration-200 ease-in-out ${
+                    seriousMode ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       {/* Contractions & Engineering Glossary Flyout Window */}
       <GlossaryFlyout

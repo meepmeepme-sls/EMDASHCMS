@@ -4,7 +4,7 @@
  */
 
 import type { GlobalAppState } from './urlState';
-import { parseStateFromUrl  } from './urlState';
+import { parseStateFromUrl } from './urlState';
 
 const SESSION_STORAGE_KEY = 'lncr_session_v1';
 
@@ -108,7 +108,6 @@ export function loadInitialAppState(search: string, fallback: GlobalAppState): G
       ...saved,
       drivetrain: { ...fallback.drivetrain, ...saved.drivetrain },
       weapon: { ...fallback.weapon, ...saved.weapon },
-      weaponWhatIf: { ...(fallback.weaponWhatIf ?? { selectedFamilyId: 'repeat_robotics_2812_beetleweight_hubmotor', customKvsText: '1100, 1800, 2300', minCells: 3, maxCells: 6, speedUnit: 'mph' }), ...saved.weaponWhatIf },
       spinup: { ...fallback.spinup, ...saved.spinup },
       capacitance: { ...fallback.capacitance, ...saved.capacitance },
       centerDistance: { ...fallback.centerDistance, ...saved.centerDistance },

@@ -94,7 +94,7 @@
 .video-embed-container.border-rounded .mejs__container {
   border-radius: var(--video-rounded-radius, 16px);
 }
-@media (max-width: var(--video-mobile-breakpoint, 768px)) {
+@media (max-width: 768px) {
   .video-embed-container.size-small .mejs__container, .video-embed-container.size-medium .mejs__container, .video-embed-container.size-large .mejs__container {
     max-width: 100%;
     margin: 0 var(--video-mobile-padding, 16px);

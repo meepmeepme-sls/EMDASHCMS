@@ -5,13 +5,8 @@
  */
 
 import React, { useState } from 'react';
-import type {
-  SpinUpState,
-  BatteryChemistry,
-  VoltageState,
-  WeightClassId,
-  MoiUnit,
-} from '../../types';
+import type { SpinUpState, BatteryChemistry, VoltageState, WeightClassId } from '../../types';
+import type { MoiUnit } from '../../types';
 import { computeSpinUp } from '../../utils/calculations';
 import { kgM2ToUnit, moiToKgM2 } from '../../utils/conversions';
 import { FieldInputWithToggle } from '../common/FieldInputWithToggle';

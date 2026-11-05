@@ -4,14 +4,9 @@
  * Dual-theme (light and dark) support. No icons.
  */
 
-import React, { useMemo } from 'react';
-import type {
-  DrivetrainState,
-  BatteryChemistry,
-  VoltageState,
-  WeightClassId,
-  LengthUnit,
-} from '../../types';
+import React, { useMemo, useState, useEffect } from 'react';
+import type { DrivetrainState, BatteryChemistry, VoltageState, WeightClassId } from '../../types';
+import type { LengthUnit } from '../../types';
 import { MOTOR_PRESETS, WEIGHT_CLASSES, BIGBOT_GEARBOX_PRESETS } from '../../utils/constants';
 import { computeDrivetrain } from '../../utils/calculations';
 import { FieldInputWithToggle } from '../common/FieldInputWithToggle';
@@ -43,6 +38,57 @@ interface DrivetrainToolProps {
   onChangeWeaponDirectVoltage?: (voltage: number) => void;
   extendedPreset?: boolean;
 }
+
+const DecimalRatioInput: React.FC<{
+  label: string;
+  value: number;
+  onChange: (val: number) => void;
+  title: string;
+}> = ({ label, value, onChange, title }) => {
+  const [text, setText] = useState<string>(isNaN(value) ? '1' : value.toString());
+  const [focused, setFocused] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!focused) {
+      setText(isNaN(value) ? '1' : value.toString());
+    }
+  }, [value, focused]);
+
+  return (
+    <div className="relative">
+      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold text-[#64748B] dark:text-[#85A3E0] select-none pointer-events-none">
+        {label}:
+      </span>
+      <input
+        type="text"
+        inputMode="decimal"
+        value={text}
+        onFocus={() => setFocused(true)}
+        onBlur={() => {
+          setFocused(false);
+          const parsed = parseFloat(text);
+          if (isNaN(parsed) || parsed <= 0) {
+            setText(value.toString());
+          } else {
+            onChange(parsed);
+          }
+        }}
+        onChange={(e) => {
+          const val = e.target.value;
+          if (/^[0-9]*\.?[0-9]*$/.test(val)) {
+            setText(val);
+            const parsed = parseFloat(val);
+            if (!isNaN(parsed) && parsed > 0) {
+              onChange(parsed);
+            }
+          }
+        }}
+        className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none pl-11 pr-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] tabular-nums"
+        title={title}
+      />
+    </div>
+  );
+};
 
 export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
   state,
@@ -314,6 +360,7 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
                 onChange={handleMotorPresetChange}
                 groups={motorPresetGroups}
                 ariaLabel="Motor Preset"
+                placeholder="Search drive motor presets (e.g. Blitz, DartBox, 2850)..."
               />
             </div>
 
@@ -443,59 +490,25 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
-                    External Reduction (Belt/Gear)
+                    External Reduction (Belt/Gear Ratio)
                   </label>
                   <span className="text-[11px] font-mono text-[#094AD8] dark:text-[#60A5FA] font-bold">
                     {results.externalRatio.toFixed(2)}:1
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="relative">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold text-[#64748B] dark:text-[#85A3E0]">
-                      IN:
-                    </span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={150}
-                      step={1}
-                      value={state.externalInputTeeth ?? 1}
-                      onChange={(e) =>
-                        onChange({
-                          ...state,
-                          externalInputTeeth: Math.max(1, parseInt(e.target.value) || 1),
-                        })
-                      }
-                      className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none pl-8 pr-6 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] tabular-nums"
-                      title="Driver teeth (gearbox output pulley/gear)"
-                    />
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[#94A3B8]">
-                      T
-                    </span>
-                  </div>
-                  <div className="relative">
-                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold text-[#64748B] dark:text-[#85A3E0]">
-                      OUT:
-                    </span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={150}
-                      step={1}
-                      value={state.externalOutputTeeth ?? 1}
-                      onChange={(e) =>
-                        onChange({
-                          ...state,
-                          externalOutputTeeth: Math.max(1, parseInt(e.target.value) || 1),
-                        })
-                      }
-                      className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none pl-10 pr-6 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] tabular-nums"
-                      title="Driven teeth (wheel axle pulley/gear)"
-                    />
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-mono text-[#94A3B8]">
-                      T
-                    </span>
-                  </div>
+                  <DecimalRatioInput
+                    label="IN"
+                    value={state.externalInputTeeth ?? 1}
+                    onChange={(val) => onChange({ ...state, externalInputTeeth: val })}
+                    title="Driver ratio or tooth count (e.g. 1 or 15)"
+                  />
+                  <DecimalRatioInput
+                    label="OUT"
+                    value={state.externalOutputTeeth ?? 1}
+                    onChange={(val) => onChange({ ...state, externalOutputTeeth: val })}
+                    title="Driven ratio or tooth count (e.g. 2.5 or 30)"
+                  />
                 </div>
                 <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
                   Total Drive Ratio: <strong>{results.totalRatio.toFixed(2)}:1</strong> (Gearbox × External)
@@ -563,8 +576,8 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
               <div className="flex items-baseline gap-2 flex-wrap">
                 <span className="text-4xl sm:text-5xl font-extrabold font-mono text-[#094AD8] dark:text-white tabular-nums">
                   {isFtPerSec
-                    ? results.theoreticalSpeedFts.toFixed(1)
-                    : results.theoreticalSpeedMph.toFixed(1)}
+                    ? results.theoreticalSpeedFts.toFixed(2)
+                    : results.theoreticalSpeedMph.toFixed(2)}
                 </span>
                 <span className="text-lg font-mono font-bold text-[#0F172A] dark:text-[#094AD8]">
                   {isFtPerSec ? 'ft/s' : 'mph'}
@@ -572,8 +585,8 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
               </div>
               <div className="text-sm font-mono text-[#64748B] dark:text-[#85A3E0] mt-0.5">
                 {isFtPerSec
-                  ? `${results.theoreticalSpeedMph.toFixed(1)} mph · ${results.theoreticalSpeedMs.toFixed(2)} m/s`
-                  : `${results.theoreticalSpeedMs.toFixed(2)} m/s · ${results.theoreticalSpeedFts.toFixed(1)} ft/s`}
+                  ? `${results.theoreticalSpeedMph.toFixed(2)} mph · ${results.theoreticalSpeedMs.toFixed(2)} m/s`
+                  : `${results.theoreticalSpeedMs.toFixed(2)} m/s · ${results.theoreticalSpeedFts.toFixed(2)} ft/s`}
               </div>
             </div>
 

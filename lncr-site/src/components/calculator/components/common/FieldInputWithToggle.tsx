@@ -21,7 +21,7 @@ type AnyUnit = LengthUnit | MassUnit | SpeedUnit | EnergyUnit | MoiUnit | string
 interface FieldInputWithToggleProps {
   label: string;
   value: number;
-  unit: AnyUnit;
+  unit?: AnyUnit;
   units?: AnyUnit[];
   onChangeValue: (newVal: number) => void;
   onChangeUnit?: (newUnit: any, convertedValue?: number) => void;
@@ -37,7 +37,7 @@ interface FieldInputWithToggleProps {
 export const FieldInputWithToggle: React.FC<FieldInputWithToggleProps> = ({
   label,
   value,
-  unit,
+  unit = '',
   units,
   onChangeValue,
   onChangeUnit,
@@ -226,11 +226,11 @@ export const FieldInputWithToggle: React.FC<FieldInputWithToggleProps> = ({
               );
             })}
           </div>
-        ) : (
+        ) : unit ? (
           <span className="px-3 py-1 text-xs font-mono text-[#64748B] dark:text-[#85A3E0] shrink-0">
             {unit}
           </span>
-        )}
+        ) : null}
       </div>
     </div>
   );

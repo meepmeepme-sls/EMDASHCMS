@@ -4,19 +4,7 @@
  * Adheres to Option 1: Delta-Encoding + Short Key Aliases with 100% Backwards Compatibility.
  */
 
-import type {
-  ToolType,
-  WeightClassId,
-  BatteryChemistry,
-  VoltageState,
-  DrivetrainState,
-  WeaponState,
-  SpinUpState,
-  CenterDistanceState,
-  BatteryRuntimeState,
-  CapacitanceState,
-  WeaponWhatIfState,
-} from '../types';
+import type { ToolType, WeightClassId, BatteryChemistry, VoltageState, DrivetrainState, WeaponState, SpinUpState, CenterDistanceState, BatteryRuntimeState, CapacitanceState } from '../types';
 import { getWeightClassDefaults } from './constants';
 
 export interface GlobalAppState {
@@ -35,7 +23,6 @@ export interface GlobalAppState {
   extendedPreset?: boolean;
   drivetrain: DrivetrainState;
   weapon: WeaponState;
-  weaponWhatIf?: WeaponWhatIfState;
   spinup: SpinUpState;
   capacitance: CapacitanceState;
   centerDistance: CenterDistanceState;
@@ -46,7 +33,6 @@ export interface GlobalAppState {
 const TOOL_TO_CODE: Record<ToolType, string> = {
   drivetrain: 'd',
   weapon: 'w',
-  'weapon-whatif': 'wwi',
   spinup: 's',
   'center-distance': 'c',
   battery: 'b',
@@ -58,8 +44,6 @@ const CODE_TO_TOOL: Record<string, ToolType> = {
   drivetrain: 'drivetrain',
   w: 'weapon',
   weapon: 'weapon',
-  wwi: 'weapon-whatif',
-  'weapon-whatif': 'weapon-whatif',
   s: 'spinup',
   spinup: 'spinup',
   c: 'center-distance',
@@ -232,36 +216,6 @@ export function serializeStateToUrl(state: GlobalAppState): string {
     if (state.weapon.weaponMassUnit && state.weapon.weaponMassUnit !== 'lbs') {
       params.set('wmassu', state.weapon.weaponMassUnit);
     }
-  } else if (state.activeTool === 'weapon-whatif' && state.weaponWhatIf) {
-    if (state.weaponWhatIf.selectedFamilyId && state.weaponWhatIf.selectedFamilyId !== 'repeat_robotics_2812_beetleweight_hubmotor') {
-      params.set('ww_m', state.weaponWhatIf.selectedFamilyId);
-    }
-    if (state.weaponWhatIf.selectedFamilyId === 'custom' && state.weaponWhatIf.customKvsText) {
-      params.set('ww_kvs', state.weaponWhatIf.customKvsText);
-    }
-    const defMin = state.weightClass === 'ant' ? 2 : state.weightClass === 'bigbot' ? 4 : 3;
-    const defMax = state.weightClass === 'ant' ? 4 : state.weightClass === 'bigbot' ? 12 : 6;
-    if (state.weaponWhatIf.minCells !== defMin) {
-      params.set('ww_l', String(state.weaponWhatIf.minCells));
-    }
-    if (state.weaponWhatIf.maxCells !== defMax) {
-      params.set('ww_h', String(state.weaponWhatIf.maxCells));
-    }
-    if (state.weaponWhatIf.speedUnit && state.weaponWhatIf.speedUnit !== 'mph') {
-      params.set('ww_u', state.weaponWhatIf.speedUnit);
-    }
-    if (state.weapon.effectiveDiameter !== d.effectiveDiameter) {
-      params.set('wd', String(state.weapon.effectiveDiameter));
-    }
-    if (state.weapon.effectiveDiameterUnit !== d.effectiveDiameterUnit) {
-      params.set('wdu', state.weapon.effectiveDiameterUnit);
-    }
-    if (state.weapon.inputTeeth !== undefined && state.weapon.inputTeeth !== 16) {
-      params.set('win', String(state.weapon.inputTeeth));
-    }
-    if (state.weapon.outputTeeth !== undefined && state.weapon.outputTeeth !== 16) {
-      params.set('wout', String(state.weapon.outputTeeth));
-    }
   } else if (state.activeTool === 'spinup') {
     if (state.spinup.useWeaponTabMotorKv === false) {
       params.set('suwk', '0');
@@ -412,10 +366,6 @@ export function parseStateFromUrl(search: string, fallback: GlobalAppState): Glo
       state.spinup.moi = d.moiKgM2;
       state.capacitance.cellCount = defaultDriveCells;
       state.batteryRuntime.cellCount = defaultDriveCells;
-      if (state.weaponWhatIf) {
-        state.weaponWhatIf.minCells = targetWc === 'ant' ? 2 : targetWc === 'bigbot' ? 4 : 3;
-        state.weaponWhatIf.maxCells = targetWc === 'ant' ? 4 : targetWc === 'bigbot' ? 12 : 6;
-      }
     }
   }
 
@@ -494,15 +444,6 @@ export function parseStateFromUrl(search: string, fallback: GlobalAppState): Glo
   if (p.has('win') || p.has('w_in')) state.weapon.inputTeeth = Number(p.get('win') || p.get('w_in')) || state.weapon.inputTeeth;
   if (p.has('wout') || p.has('w_out')) state.weapon.outputTeeth = Number(p.get('wout') || p.get('w_out')) || state.weapon.outputTeeth;
   if (p.has('wppre') || p.has('w_ppre')) state.weapon.pulleyPresetId = (p.get('wppre') || p.get('w_ppre')) || state.weapon.pulleyPresetId;
-
-  // Weapon What-If
-  if (state.weaponWhatIf) {
-    if (p.has('ww_m')) state.weaponWhatIf.selectedFamilyId = p.get('ww_m') || state.weaponWhatIf.selectedFamilyId;
-    if (p.has('ww_kvs')) state.weaponWhatIf.customKvsText = p.get('ww_kvs') || state.weaponWhatIf.customKvsText;
-    if (p.has('ww_l')) state.weaponWhatIf.minCells = Number(p.get('ww_l')) || state.weaponWhatIf.minCells;
-    if (p.has('ww_h')) state.weaponWhatIf.maxCells = Number(p.get('ww_h')) || state.weaponWhatIf.maxCells;
-    if (p.has('ww_u')) state.weaponWhatIf.speedUnit = (p.get('ww_u') as any) || state.weaponWhatIf.speedUnit;
-  }
 
   // Spin-Up
   if (p.has('sk') || p.has('s_kv')) state.spinup.motorKv = Number(p.get('sk') || p.get('s_kv')) || state.spinup.motorKv;

@@ -5,14 +5,8 @@
  */
 
 import React, { useMemo } from 'react';
-import type {
-  WeaponState,
-  BatteryChemistry,
-  VoltageState,
-  WeightClassId,
-  LengthUnit,
-  MoiUnit,
-} from '../../types';
+import type { WeaponState, BatteryChemistry, VoltageState, WeightClassId } from '../../types';
+import type { LengthUnit, MoiUnit } from '../../types';
 import {
   MOTOR_PRESETS,
   WEIGHT_CLASSES,
@@ -299,6 +293,7 @@ export const WeaponTool: React.FC<WeaponToolProps> = ({
                 onChange={handleMotorPresetChange}
                 groups={motorPresetGroups}
                 ariaLabel="Motor Preset"
+                placeholder="Search weapon motor presets (e.g. Blitz, Propdrive, 1500)..."
               />
             </div>
 
@@ -335,11 +330,11 @@ export const WeaponTool: React.FC<WeaponToolProps> = ({
               </div>
             </div>
 
-            {/* Weapon Reduction Teeth Inputs */}
+            {/* Weapon Reduction Inputs */}
             <div className="flex flex-col gap-2 pt-2 border-t border-[#E2E8F0] dark:border-[#2E3646]">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
-                  Weapon Reduction Teeth
+                  Weapon Reduction (Belt / Gear Ratio)
                 </label>
                 <span className="text-xs font-mono text-[#094AD8] dark:text-[#5B8DEF] font-bold">
                   {((state.outputTeeth ?? 16) / (state.inputTeeth ?? 16)).toFixed(2)}:1 Ratio
@@ -347,11 +342,11 @@ export const WeaponTool: React.FC<WeaponToolProps> = ({
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FieldInputWithToggle
-                  label="Input Teeth (Motor / Driver)"
+                  label="Input (Motor / Driver)"
                   value={state.inputTeeth ?? 16}
-                  unit="T"
+                  unit=""
                   onChangeValue={(val) => {
-                    const inT = Math.max(1, Math.round(val));
+                    const inT = Math.max(0.01, val);
                     const outT = state.outputTeeth ?? 16;
                     const ratio = Number((outT / inT).toFixed(4));
                     onChange({
@@ -362,18 +357,18 @@ export const WeaponTool: React.FC<WeaponToolProps> = ({
                       pulleyPresetId: inT === 25 && outT === 36 ? 'repeat_vbelt_hub_25mm' : 'custom',
                     });
                   }}
-                  step={1}
-                  min={1}
-                  max={200}
-                  helperText="Motor pulley or driver gear teeth"
+                  step={0.1}
+                  min={0.01}
+                  max={500}
+                  helperText="Driver teeth count or input ratio (e.g. 1 or 16)"
                 />
                 <FieldInputWithToggle
-                  label="Output Teeth (Weapon / Driven)"
+                  label="Output (Weapon / Driven)"
                   value={state.outputTeeth ?? 16}
-                  unit="T"
+                  unit=""
                   onChangeValue={(val) => {
                     const inT = state.inputTeeth ?? 16;
-                    const outT = Math.max(1, Math.round(val));
+                    const outT = Math.max(0.01, val);
                     const ratio = Number((outT / inT).toFixed(4));
                     onChange({
                       ...state,
@@ -383,10 +378,10 @@ export const WeaponTool: React.FC<WeaponToolProps> = ({
                       pulleyPresetId: inT === 25 && outT === 36 ? 'repeat_vbelt_hub_25mm' : 'custom',
                     });
                   }}
-                  step={1}
-                  min={1}
-                  max={200}
-                  helperText="Weapon pulley or driven gear teeth"
+                  step={0.1}
+                  min={0.01}
+                  max={500}
+                  helperText="Driven teeth count or output ratio (e.g. 2.5 or 36)"
                 />
               </div>
             </div>
@@ -509,11 +504,11 @@ export const WeaponTool: React.FC<WeaponToolProps> = ({
                 </span>
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-3xl sm:text-4xl font-extrabold font-mono text-[#094AD8] dark:text-white tabular-nums">
-                    {results.tipSpeedMph.toFixed(0)}
+                    {results.tipSpeedMph.toFixed(2)}
                   </span>
                   <span className="text-base sm:text-lg font-mono font-bold text-[#0F172A] dark:text-[#094AD8]">mph</span>
                   <span className="text-xs font-mono text-[#64748B] dark:text-[#85A3E0]">
-                    ({results.tipSpeedMs.toFixed(1)} m/s · {(results.tipSpeedMs * 3.28084).toFixed(0)} ft/s)
+                    ({results.tipSpeedMs.toFixed(2)} m/s · {(results.tipSpeedMs * 3.28084).toFixed(2)} ft/s)
                   </span>
                 </div>
                 <p className="text-[11px] text-[#64748B] dark:text-[#85A3E0]/80 mt-1 font-mono">

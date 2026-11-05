@@ -31,7 +31,6 @@ export type ToolCategory = 'electronics' | 'mechanical';
 export type ToolType =
   | 'drivetrain'
   | 'weapon'
-  | 'weapon-whatif'
   | 'spinup'
   | 'capacitance'
   | 'battery'
@@ -180,20 +179,4 @@ export interface CapacitanceState {
   allowableRippleVolts: number;
   safetyFactor: number;
   cellCount: number;
-}
-
-// Interfaces for Weapon What-If Tool
-export interface WeaponWhatIfFamily {
-  id: string;
-  name: string;
-  brand: string;
-  variants: { id: string; name: string; kv: number }[];
-}
-
-export interface WeaponWhatIfState {
-  selectedFamilyId: string;
-  customKvsText: string;
-  minCells: number;
-  maxCells: number;
-  speedUnit: 'mph' | 'm/s' | 'ft/s';
 }

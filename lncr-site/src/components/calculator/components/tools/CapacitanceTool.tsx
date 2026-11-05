@@ -6,13 +6,8 @@
  */
 
 import React from 'react';
-import type {
-  CapacitanceState,
-  BatteryChemistry,
-  VoltageState,
-  WeightClassId,
-  LengthUnit,
-} from '../../types';
+import type { CapacitanceState, BatteryChemistry, VoltageState, WeightClassId } from '../../types';
+import type { LengthUnit } from '../../types';
 import { WEIGHT_CLASSES } from '../../utils/constants';
 import { computeCapacitance } from '../../utils/calculations';
 import { FieldInputWithToggle } from '../common/FieldInputWithToggle';

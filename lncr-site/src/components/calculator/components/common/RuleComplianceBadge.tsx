@@ -38,11 +38,11 @@ export const RuleComplianceBadge: React.FC<RuleComplianceBadgeProps> = ({
 
           <div className="text-right shrink-0">
             <span className="text-2xl font-bold font-mono tabular-nums text-[#094AD8] dark:text-[#CEDDFD]">
-              {tipSpeedMph.toFixed(1)}
+              {tipSpeedMph.toFixed(2)}
             </span>
             <span className="text-xs text-[#64748B] dark:text-[#85A3E0] font-mono ml-1">mph</span>
             <div className="text-[11px] text-[#64748B] dark:text-[#85A3E0]/70 font-mono">
-              ({tipSpeedMs.toFixed(1)} m/s)
+              ({tipSpeedMs.toFixed(2)} m/s)
             </div>
           </div>
         </div>

@@ -5,12 +5,7 @@
  */
 
 import React from 'react';
-import type {
-  BatteryRuntimeState,
-  BatteryChemistry,
-  VoltageState,
-  WeightClassId,
-} from '../../types';
+import type { BatteryRuntimeState, BatteryChemistry, VoltageState, WeightClassId } from '../../types';
 import { computeBatteryRuntime } from '../../utils/calculations';
 import { FieldInputWithToggle } from '../common/FieldInputWithToggle';
 import { BatteryVoltageBar } from '../common/BatteryVoltageBar';

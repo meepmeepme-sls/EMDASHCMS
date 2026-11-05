@@ -5,7 +5,8 @@
  */
 
 import React from 'react';
-import type { CenterDistanceState, BeltDriveType, SizingMode, LengthUnit } from '../../types';
+import type { CenterDistanceState } from '../../types';
+import type { BeltDriveType, SizingMode, LengthUnit } from '../../types';
 import { BELT_PITCH_PRESETS } from '../../utils/constants';
 import { computeCenterDistance } from '../../utils/calculations';
 import { FieldInputWithToggle } from '../common/FieldInputWithToggle';

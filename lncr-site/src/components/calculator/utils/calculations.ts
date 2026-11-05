@@ -3,16 +3,7 @@
  * Validated against Level 5 Robotics and Run Amok Combat Robotics benchmarks
  */
 
-import type {
-  BatteryChemistry,
-  VoltageState,
-  DrivetrainState,
-  WeaponState,
-  SpinUpState,
-  CenterDistanceState,
-  BatteryRuntimeState,
-  CapacitanceState,
-} from '../types';
+import type { BatteryChemistry, VoltageState, DrivetrainState, WeaponState, SpinUpState, CenterDistanceState, BatteryRuntimeState, CapacitanceState } from '../types';
 import {
   BATTERY_CHEMISTRIES,
   NHRL_TIP_SPEED_LIMIT_MPH,
