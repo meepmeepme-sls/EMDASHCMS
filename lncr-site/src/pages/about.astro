@@ -6,39 +6,36 @@ import CosmosLayout from "../layouts/CosmosLayout.astro";
 const { entry: page } = await getEmDashEntry("pages", "about");
 ---
 
-<CosmosLayout title="About" description="About Late Night Combat Robotics — Lowering barriers to combat robotics with competition kits, calculators, and documentation.">
-  <div class="content-wrapper" style="max-width:880px; margin:0 auto 60px auto; padding:0 24px;">
-    <article style="background:#fff; border:1px solid #3D4B59; padding:40px; margin-top:20px;">
-      <h1 style="font-family:var(--primary-font); font-size:2rem; font-weight:700; color:var(--header-text-color); margin-bottom:20px;">
-        About Late Night Combat Robotics
-      </h1>
-      <div style="font-size:1rem; line-height:1.7; color:#374151;">
+<CosmosLayout title="About" pageType="about" description="About Late Night Combat Robotics — Lowering barriers to combat robotics with competition kits, calculators, and documentation.">
+  <div class="content-wrapper content-wrapper--about" data-bc-hook="content">
+    <div class="custom-page">
+      <h1 class="page-title">About</h1>
+      <div class="custom-page--content">
         {page?.data?.content ? (
           <PortableText value={page.data.content} />
         ) : (
           <div>
             <p>I am a mechanical engineer specializing in product design.</p>
-            <p>I founded Late Night Combat Robotics to use my engineering experience to lower barriers in combat robotics — designing competition-proven combat robot kits, open-source engineering calculators, and technical build documentation.</p>
+            <p>I am looking to use my engineering experience to lower barriers in combat robotics.</p>
+            <p>Late Night Combat Robotics designs competition-proven combat robot kits, open-source engineering calculators, and technical build documentation to help new and experienced builders get into combat robotics with confidence.</p>
           </div>
         )}
-      </div>
 
-      <div style="margin-top:36px; padding:24px; background:#F9FAFB; border:1px solid #E5E7EB;">
-        <h3 style="font-family:var(--primary-font); font-size:1.1rem; font-weight:700; color:var(--header-text-color); margin-bottom:12px;">
-          Connect with the Community
-        </h3>
-        <p style="font-size:0.92rem; color:#4B5563; line-height:1.5; margin-bottom:16px;">
-          Have questions about Tropical Trouble or need advice on your combat robot design? Join our Discord or check out fight breakdown videos on YouTube.
-        </p>
-        <div style="display:flex; gap:16px; flex-wrap:wrap;">
-          <a href="https://discord.gg/JAwngFmVEq" target="_blank" rel="noopener" class="button" style="background:#094AD8; color:#fff; font-family:var(--primary-font); font-size:0.8rem; font-weight:700; padding:8px 18px; text-decoration:none; border-radius:0;">
-            Discord Community &rarr;
-          </a>
-          <a href="https://www.youtube.com/@LateNightCombatRobotics" target="_blank" rel="noopener" class="button" style="background:#16181D; color:#fff; font-family:var(--primary-font); font-size:0.8rem; font-weight:700; padding:8px 18px; text-decoration:none; border-radius:0;">
-            YouTube Channel &rarr;
-          </a>
+        <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border-color);">
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 12px;">Connect with the Community</h2>
+          <p style="margin-bottom: 24px;">
+            Have questions about Tropical Trouble or need advice on your combat robot design? Join our Discord or check out fight breakdown videos on YouTube.
+          </p>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <a href="https://discord.gg/JAwngFmVEq" target="_blank" rel="noopener" class="button button--secondary">
+              Discord Community &rarr;
+            </a>
+            <a href="https://www.youtube.com/@LateNightCombatRobotics" target="_blank" rel="noopener" class="button">
+              YouTube Channel &rarr;
+            </a>
+          </div>
         </div>
       </div>
-    </article>
+    </div>
   </div>
 </CosmosLayout>

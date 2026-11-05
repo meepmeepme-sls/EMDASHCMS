@@ -8,45 +8,45 @@ const { entries: guides } = await getEmDashCollection("wiki", {
 });
 ---
 
-<CosmosLayout title="Engineering & Build Documentation Wiki" description="Official assembly manuals, bills of materials, wiring diagrams, and 3D-printing slicer profiles for Late Night Combat Robotics kits.">
-  <div class="content-wrapper" style="max-width:1240px; margin:0 auto 60px auto; padding:0 24px;">
+<CosmosLayout title="Engineering & Build Documentation Wiki" pageType="wiki" description="Official assembly manuals, bills of materials, wiring diagrams, and 3D-printing slicer profiles for Late Night Combat Robotics kits.">
+  <div class="content-wrapper content-wrapper--wiki" data-bc-hook="content" style="max-width: 1240px; margin: 0 auto 60px auto; padding: 0 var(--side-padding, 24px);">
     <!-- Page Header -->
-    <header style="text-align:center; max-width:840px; margin:0 auto 36px auto; padding-top:20px;">
-      <h1 style="font-family:var(--primary-font); font-size:2.2rem; font-weight:700; color:var(--header-text-color); margin-bottom:10px;">
+    <header style="text-align: center; max-width: 840px; margin: 0 auto 36px auto; padding-top: 10px;">
+      <h1 class="page-title" style="margin-bottom: 8px;">
         Engineering &amp; Build Documentation Wiki
       </h1>
-      <p style="color:var(--text-color); font-size:1rem; line-height:1.5;">
+      <p style="color: var(--text-color); font-size: 1rem; line-height: 1.5;">
         Official assembly manuals, bills of materials, wiring diagrams, and Bambu Studio 3D-printing slicer profiles for Late Night Combat Robotics kits.
       </p>
     </header>
 
-    <div style="display:grid; grid-template-columns:260px minmax(0, 1fr); gap:36px; align-items:start;">
+    <div class="wiki-grid-container">
       <!-- Left Sidebar -->
-      <aside style="background:#fff; border:1px solid #3D4B59; padding:20px;">
-        <h3 style="font-family:var(--primary-font); font-size:0.85rem; font-weight:700; color:var(--header-text-color); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">
+      <aside class="wiki-index-aside" style="background: #fff; border: 1px solid var(--border-color); padding: 24px;">
+        <h3 style="font-family: var(--primary-font); font-size: 0.85rem; font-weight: 700; color: var(--header-text-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px;">
           Documentation Tree
         </h3>
-        <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem; margin-bottom:24px;">
+        <ul style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; margin-bottom: 28px; list-style: none; padding: 0;">
           {guides.map((g) => (
             <li>
-              <a href={`/wiki/${g.slug}`} style="color:#094AD8; text-decoration:none; font-weight:600; line-height:1.4; display:block;">
+              <a href={`/wiki/${g.slug}`} style="color: var(--header-text-color); text-decoration: none; font-weight: 600; line-height: 1.4; display: block;">
                 {g.data.title}
               </a>
             </li>
           ))}
         </ul>
 
-        <h3 style="font-family:var(--primary-font); font-size:0.85rem; font-weight:700; color:var(--header-text-color); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">
+        <h3 style="font-family: var(--primary-font); font-size: 0.85rem; font-weight: 700; color: var(--header-text-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px;">
           Design Tools
         </h3>
-        <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
+        <ul style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; list-style: none; padding: 0;">
           <li>
-            <a href="/calculator" style="color:#094AD8; text-decoration:none; font-weight:600;">
+            <a href="/calculator" style="color: var(--header-text-color); text-decoration: none; font-weight: 600;">
               Combat Calculator Suite &rarr;
             </a>
           </li>
           <li>
-            <a href="/products/tt-kit-files" style="color:#094AD8; text-decoration:none; font-weight:600;">
+            <a href="/products/tt-kit-files" style="color: var(--header-text-color); text-decoration: none; font-weight: 600;">
               CAD / 3MF Downloads &rarr;
             </a>
           </li>
@@ -54,36 +54,36 @@ const { entries: guides } = await getEmDashCollection("wiki", {
       </aside>
 
       <!-- Main Guides Grid -->
-      <div style="display:flex; flex-direction:column; gap:24px;">
+      <div style="display: flex; flex-direction: column; gap: 24px;">
         {guides.map((g) => (
-          <article style="background:#fff; border:1px solid #3D4B59; padding:28px; display:flex; flex-direction:column; gap:14px;">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+          <article style="background: #fff; border: 1px solid var(--border-color); padding: 28px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
               <div>
-                <span style="display:inline-block; font-family:var(--primary-font); font-size:0.75rem; font-weight:700; color:#094AD8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">
+                <span style="display: inline-block; font-family: var(--primary-font); font-size: 0.75rem; font-weight: 700; color: var(--header-text-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
                   {g.data.category}
                 </span>
-                <h2 style="font-family:var(--primary-font); font-size:1.35rem; font-weight:700; color:var(--header-text-color); margin:0;">
-                  <a href={`/wiki/${g.slug}`} style="text-decoration:none; color:inherit;">
+                <h2 style="font-family: var(--primary-font); font-size: 1.35rem; font-weight: 700; color: var(--header-text-color); margin: 0;">
+                  <a href={`/wiki/${g.slug}`} style="text-decoration: none; color: inherit;">
                     {g.data.title}
                   </a>
                 </h2>
               </div>
               {g.data.guide_version && (
-                <span style="background:#67C3E8; color:#1F2937; font-family:var(--primary-font); font-size:0.72rem; font-weight:700; padding:4px 8px;">
+                <span style="background: var(--product-status-background-color); color: var(--product-status-text-color); font-family: var(--primary-font); font-size: 0.72rem; font-weight: 700; padding: 4px 8px;">
                   {g.data.guide_version}
                 </span>
               )}
             </div>
 
-            <p style="color:#374151; font-size:0.95rem; line-height:1.6; margin:0;">
+            <p style="color: var(--text-color); font-size: 0.95rem; line-height: 1.6; margin: 0;">
               {g.data.excerpt}
             </p>
 
-            <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin-top:6px;">
+            <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 6px;">
               <a
                 href={`/wiki/${g.slug}`}
                 class="button"
-                style="background:#094AD8; color:#fff; font-family:var(--primary-font); font-size:0.8rem; font-weight:700; text-transform:uppercase; padding:8px 18px; text-decoration:none; border-radius:0;"
+                style="display: inline-block;"
               >
                 Read Guide &rarr;
               </a>
@@ -92,7 +92,7 @@ const { entries: guides } = await getEmDashCollection("wiki", {
                   href={g.data.cadasio_url}
                   target="_blank"
                   rel="noopener"
-                  style="color:#094AD8; font-size:0.85rem; font-weight:600; text-decoration:none;"
+                  style="color: var(--header-text-color); font-size: 0.85rem; font-weight: 600; text-decoration: underline;"
                 >
                   Interactive 3D Hardware (Cadasio) &rarr;
                 </a>
@@ -104,3 +104,17 @@ const { entries: guides } = await getEmDashCollection("wiki", {
     </div>
   </div>
 </CosmosLayout>
+
+<style>
+  .wiki-grid-container {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 820px) {
+    .wiki-grid-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

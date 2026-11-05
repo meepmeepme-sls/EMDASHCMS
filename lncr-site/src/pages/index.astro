@@ -1,238 +1,140 @@
 ---
-import { getEmDashCollection, getSiteSettingsWithCacheHint } from "emdash";
+import { getEmDashCollection } from "emdash";
 import CosmosLayout from "../layouts/CosmosLayout.astro";
 
-const [productsResult, wikiResult, postsResult, settingsResult] = await Promise.all([
+const [productsResult, wikiResult, postsResult] = await Promise.all([
   getEmDashCollection("products", { limit: 20 }),
   getEmDashCollection("wiki", { limit: 10 }),
   getEmDashCollection("posts", { limit: 5 }),
-  getSiteSettingsWithCacheHint(),
 ]);
 
 const products = productsResult.entries;
 const guides = wikiResult.entries;
 const posts = postsResult.entries;
-const featuredProducts = products.filter((p) => p.data.featured);
 
-const categories = [
-  {
-    slug: "robot-kits",
-    name: "Robot Kits",
-    desc: "Complete competition-proven 3lb beetleweight combat robot kits.",
-    image: "/products/tt-kit-1.jpg",
-  },
-  {
-    slug: "parts-wheels",
-    name: "Parts & Wheels",
-    desc: "Cast 45A urethane wheels and on-demand 3D printed replacement parts.",
-    image: "/products/tt-wheels-1.jpg",
-  },
-  {
-    slug: "digital-files",
-    name: "Digital Files",
-    desc: "STEP/STL CAD packs and Bambu Studio slicer profiles.",
-    image: "/products/tt-files-1.png",
-  },
-  {
-    slug: "merch",
-    name: "Merch",
-    desc: "Late Night Combat Robotics and Pipeline Punch graphic tees.",
-    image: "/products/pp-tee-1.jpg",
-  },
-];
+// Display featured products in the exact Cosmos order
+const featuredProducts = products.filter((p) => p.data.featured);
 ---
 
-<CosmosLayout title="Home">
-  <div class="content-wrapper content-wrapper--home">
-    <!-- 1. LNCR Hero Banner -->
-    <section class="lncr-hero-banner" style="position:relative; margin-bottom:48px; border:1px solid #3D4B59; overflow:hidden; background:#16181D;">
-      <div style="background-image: linear-gradient(rgba(14,24,45,0.78), rgba(14,24,45,0.88)), url('/products/tt-kit-1.jpg'); background-size:cover; background-position:center; padding:72px 32px; text-align:center; color:#fff;">
-        <span style="display:inline-block; font-family:var(--primary-font); font-size:0.8rem; font-weight:700; color:#67C3E8; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:12px;">
-          2024 MRCA Champion &amp; NHRL Top 8 Pedigree
-        </span>
-        <h1 style="font-family:var(--primary-font); font-size:clamp(1.8rem, 4vw, 2.75rem); font-weight:700; color:#FFFFFF; margin-bottom:16px; line-height:1.2;">
-          Tropical Trouble 3lb Combat Robot Kit
-        </h1>
-        <p style="font-family:var(--secondary-font); font-size:clamp(1rem, 1.8vw, 1.2rem); max-width:760px; margin:0 auto 28px auto; color:#CEDDFD; line-height:1.6;">
-          Lowering the barrier of entry into insect-weight combat robotics. 100% 3D-printable chassis on an 180&times;180mm bed (Bambu Lab A1 Mini), 4WD cast urethane drive, and a 217 MPH vertical spinner.
-        </p>
-        <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
-          <a href="/products/tt-kit" class="button" style="background:#094AD8; color:#fff; font-family:var(--primary-font); font-weight:700; padding:12px 28px; text-decoration:none; display:inline-block; border-radius:0;">
-            Explore Tropical Trouble &rarr;
-          </a>
-          <a href="/wiki/tropical-trouble-instructions" class="button" style="background:transparent; border:1px solid #CEDDFD; color:#CEDDFD; font-family:var(--primary-font); font-weight:700; padding:12px 24px; text-decoration:none; display:inline-block; border-radius:0;">
-            View Assembly Manual
-          </a>
+<CosmosLayout title="Home" pageType="home">
+  <div class="content-wrapper content-wrapper--home" data-bc-hook="content">
+    <div class="home-content">
+      <!-- 1. Featured Products (Exact Big Cartel Cosmos Alternating Layout) -->
+      <div class="home-featured-products">
+        <div class="featured-container">
+          <h1 class="featured-title">Featured</h1>
+        </div>
+
+        <div class="product-list-container">
+          <div class="product-list product-list--alternating">
+            {featuredProducts.map((p) => {
+              const badgeLabel = p.data.badge_label || (p.data.badge === "coming_soon" ? "Coming Soon" : "");
+              return (
+                <div class="product-list-thumb product">
+                  <a class="product-list-link original-dimensions" href={`/products/${p.slug}`} title={p.data.title}>
+                    <div class="product-list-image-container product-list-image-container-cover">
+                      {badgeLabel && (
+                        <div class="product-list-thumb-status status-primary">
+                          {badgeLabel}
+                        </div>
+                      )}
+                      <img
+                        alt={p.data.title}
+                        class="product-list-image grid-cover"
+                        src={p.data.featured_image || "/images/lncr-logo.png"}
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="product-list-thumb-info">
+                      <div class="product-list-thumb-name">{p.data.title}</div>
+                      <div class="product-list-thumb-price">
+                        <span class="currency_sign">$</span>{Number(p.data.price).toFixed(2)}
+                      </div>
+                      <span class="button product-list-shop-now">Shop</span>
+                    </div>
+                  </a>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- 2. Shop By Category Grid -->
-    <section class="lncr-categories-section" style="margin-bottom:60px;">
-      <div class="lncr-section-header" style="text-align:center; margin-bottom:28px;">
-        <h2 style="font-family:var(--primary-font); font-size:1.6rem; font-weight:700; color:var(--header-text-color);">
-          Shop by Category
-        </h2>
-      </div>
+      <a class="button button--centered button--secondary all-products-button" href="/products">
+        All products
+      </a>
 
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:20px;">
-        {categories.map((cat) => (
-          <a
-            href={`/products?category=${cat.slug}`}
-            class="lncr-category-card"
-            style="display:flex; flex-direction:column; background:#fff; border:1px solid #3D4B59; text-decoration:none; color:inherit; transition:transform 0.15s ease, border-color 0.15s ease;"
-          >
-            <div style="aspect-ratio:4/3; overflow:hidden; background:#e5e7eb;">
-              <img
-                src={cat.image}
-                alt={cat.name}
-                loading="lazy"
-                style="width:100%; height:100%; object-fit:cover;"
-              />
-            </div>
-            <div style="padding:16px; flex:1; display:flex; flex-direction:column;">
-              <h3 style="font-family:var(--primary-font); font-size:1.05rem; font-weight:700; color:var(--header-text-color); margin-bottom:6px;">
-                {cat.name}
-              </h3>
-              <p style="font-size:0.85rem; color:#4B5563; line-height:1.4; margin:0;">
-                {cat.desc}
-              </p>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
+      <!-- 2. Engineering & Builder Tools (Unified with Cosmos Tokens) -->
+      <section style="margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border-color, #3D4B59);">
+        <div class="featured-container" style="text-align: center; margin-bottom: 32px;">
+          <h2 class="featured-title" style="font-size: 1.5rem; margin-bottom: 8px;">Engineering &amp; Builder Tools</h2>
+          <p style="color: var(--text-color); font-size: 0.95rem; max-width: 680px; margin: 0 auto;">
+            Open-source engineering calculation tools and step-by-step build documentation for insect-weight combat robotics.
+          </p>
+        </div>
 
-    <!-- 3. Featured Products Grid (Cosmos 1:1 Layout) -->
-    <section class="home-featured-products" style="margin-bottom:60px;">
-      <div class="featured-container" style="text-align:center; margin-bottom:28px;">
-        <h2 class="featured-title" style="font-family:var(--primary-font); font-size:1.6rem; font-weight:700; color:var(--header-text-color);">
-          Featured Products
-        </h2>
-      </div>
-
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:24px;">
-        {featuredProducts.map((p) => {
-          const badgeLabel = p.data.badge_label || (p.data.badge === "coming_soon" ? "Coming Soon" : "");
-          return (
-            <div class="product-list-thumb product" style="background:#fff; border:1px solid #3D4B59;">
-              <a href={`/products/${p.slug}`} style="text-decoration:none; color:inherit; display:flex; flex-direction:column; height:100%;">
-                <div style="position:relative; aspect-ratio:1/1; background:#f9fafb; overflow:hidden;">
-                  {badgeLabel && (
-                    <div style="position:absolute; top:12px; left:12px; background:#67C3E8; color:#1F2937; font-family:var(--primary-font); font-size:0.75rem; font-weight:700; padding:4px 8px; text-transform:uppercase; z-index:2;">
-                      {badgeLabel}
-                    </div>
-                  )}
-                  <img
-                    src={p.data.featured_image || "/images/lncr-logo.png"}
-                    alt={p.data.title}
-                    loading="lazy"
-                    style="width:100%; height:100%; object-fit:cover;"
-                  />
-                </div>
-                <div style="padding:16px; display:flex; flex-direction:column; flex:1; justify-content:space-between; gap:12px;">
-                  <div>
-                    <h3 style="font-family:var(--primary-font); font-size:0.95rem; font-weight:700; color:var(--header-text-color); margin-bottom:6px; line-height:1.3;">
-                      {p.data.title}
-                    </h3>
-                    <div style="font-family:var(--primary-font); font-size:0.95rem; font-weight:700; color:var(--text-color);">
-                      ${Number(p.data.price).toFixed(2)}
-                    </div>
-                  </div>
-                  <span class="button" style="background:#094AD8; color:#fff; text-align:center; padding:8px 16px; font-family:var(--primary-font); font-size:0.8rem; font-weight:700; text-transform:uppercase;">
-                    View Product
-                  </span>
-                </div>
+        <div class="product-list-container">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+            <!-- Combat Calculator Card -->
+            <div style="border: 1px solid var(--border-color, #3D4B59); background: #fff; padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #67C3E8; background: #2B3A4A; padding: 3px 8px; text-transform: uppercase; display: inline-block; margin-bottom: 12px;">
+                  Interactive Tool
+                </span>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 10px;">
+                  Combat Robotics Calculator
+                </h3>
+                <p style="color: var(--text-color); font-size: 0.92rem; line-height: 1.6; margin-bottom: 16px;">
+                  7-in-1 calculation suite for Drivetrain top speed, Weapon KE &amp; Tip Speed, Spin-Up times, Capacitance, Battery Runtime, and Timing Belts.
+                </p>
+              </div>
+              <a href="/calculator" class="button" style="text-align: center; text-decoration: none; margin-top: 12px;">
+                Launch Calculator &rarr;
               </a>
             </div>
-          );
-        })}
-      </div>
 
-      <div style="text-align:center; margin-top:32px;">
-        <a href="/products" class="button" style="border:1px solid #094AD8; color:#094AD8; background:transparent; font-family:var(--primary-font); font-weight:700; padding:10px 28px; text-decoration:none; display:inline-block; border-radius:0;">
-          View All Products &rarr;
-        </a>
-      </div>
-    </section>
-
-    <!-- 4. Interactive Engineering Tools Spotlight -->
-    <section style="margin-bottom:60px; padding:36px; background:#16181D; color:#fff; border:1px solid #2A2F3D;">
-      <div style="text-align:center; max-width:800px; margin:0 auto 32px auto;">
-        <span style="font-family:var(--primary-font); font-size:0.75rem; font-weight:700; color:#67C3E8; text-transform:uppercase; letter-spacing:0.1em;">
-          Open-Source Builder Tools
-        </span>
-        <h2 style="font-family:var(--primary-font); font-size:1.75rem; font-weight:700; color:#FFFFFF; margin-top:6px; margin-bottom:12px;">
-          Combat Robotics Engineering Suite
-        </h2>
-        <p style="color:#CEDDFD; font-size:0.95rem; line-height:1.6; margin:0;">
-          Precision calculations and technical build documentation designed to save builders hours at the workbench.
-        </p>
-      </div>
-
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
-        <div style="background:#1F2430; border:1px solid #2A2F3D; padding:24px; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <h3 style="font-family:var(--primary-font); font-size:1.15rem; font-weight:700; color:#67C3E8; margin-bottom:10px;">
-              Engineering Calculator
-            </h3>
-            <p style="color:#CEDDFD; font-size:0.88rem; line-height:1.5; margin-bottom:16px;">
-              7-in-1 interactive calculator suite for Drivetrain top speed, Weapon MOI &amp; Tip Speed, Spin-Up times, Capacitance, Battery Runtime, and Timing Belt Center Distances.
-            </p>
-            <ul style="color:#85A3E0; font-size:0.82rem; display:flex; flex-direction:column; gap:6px; margin-bottom:20px;">
-              <li>&check; SPARC 250 MPH Tip Speed Safety Warnings</li>
-              <li>&check; Custom Repeat Robotics &amp; FingerTech motor presets</li>
-              <li>&check; Export configurations to CSV</li>
-            </ul>
+            <!-- Engineering Wiki Card -->
+            <div style="border: 1px solid var(--border-color, #3D4B59); background: #fff; padding: 28px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #67C3E8; background: #2B3A4A; padding: 3px 8px; text-transform: uppercase; display: inline-block; margin-bottom: 12px;">
+                  Build Manuals
+                </span>
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 10px;">
+                  Engineering Documentation Wiki
+                </h3>
+                <p style="color: var(--text-color); font-size: 0.92rem; line-height: 1.6; margin-bottom: 16px;">
+                  Official bill of materials, interactive 3D assembly on Cadasio, wiring layout diagrams, and Bambu Studio TPU modifier slicing profiles.
+                </p>
+              </div>
+              <a href="/wiki" class="button" style="text-align: center; text-decoration: none; margin-top: 12px;">
+                View Documentation &rarr;
+              </a>
+            </div>
           </div>
-          <a href="/calculator" class="button" style="background:#094AD8; color:#fff; text-decoration:none; padding:10px 20px; font-family:var(--primary-font); font-weight:700; text-align:center; font-size:0.85rem; border-radius:0;">
-            Launch Calculator &rarr;
-          </a>
-        </div>
-
-        <div style="background:#1F2430; border:1px solid #2A2F3D; padding:24px; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <h3 style="font-family:var(--primary-font); font-size:1.15rem; font-weight:700; color:#67C3E8; margin-bottom:10px;">
-              Engineering Wiki &amp; Manuals
-            </h3>
-            <p style="color:#CEDDFD; font-size:0.88rem; line-height:1.5; margin-bottom:16px;">
-              Full bill of materials (BOM), interactive 3D assembly on Cadasio, wiring layouts, smoke-stopper checklists, and Bambu Studio TPU modifier slicing profiles.
-            </p>
-            <ul style="color:#85A3E0; font-size:0.82rem; display:flex; flex-direction:column; gap:6px; margin-bottom:20px;">
-              <li>&check; Step-by-step Tropical Trouble kit assembly</li>
-              <li>&check; 95A TPU infill modifier meshes for Bambu Lab A1 Mini</li>
-              <li>&check; Sticky table of contents for shop workbench navigation</li>
-            </ul>
-          </div>
-          <a href="/wiki" class="button" style="background:#094AD8; color:#fff; text-decoration:none; padding:10px 20px; font-family:var(--primary-font); font-weight:700; text-align:center; font-size:0.85rem; border-radius:0;">
-            Browse Wiki Hub &rarr;
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. Latest Engineering Post -->
-    {posts.length > 0 && (
-      <section style="margin-bottom:60px;">
-        <div style="text-align:center; margin-bottom:28px;">
-          <h2 style="font-family:var(--primary-font); font-size:1.6rem; font-weight:700; color:var(--header-text-color);">
-            From the Workbench Blog
-          </h2>
-        </div>
-        <div style="max-width:840px; margin:0 auto; background:#fff; border:1px solid #3D4B59; padding:28px;">
-          <a href={`/blog/${posts[0].slug}`} style="text-decoration:none; color:inherit;">
-            <h3 style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:12px; line-height:1.3;">
-              {posts[0].data.title}
-            </h3>
-            <p style="color:#4B5563; font-size:0.95rem; line-height:1.6; margin-bottom:16px;">
-              {posts[0].data.excerpt}
-            </p>
-            <span style="font-family:var(--primary-font); font-size:0.85rem; font-weight:700; color:#094AD8;">
-              Read Full Article &rarr;
-            </span>
-          </a>
         </div>
       </section>
-    )}
+
+      <!-- 3. From the Workbench Blog -->
+      {posts.length > 0 && (
+        <section style="margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-color, #3D4B59);">
+          <div class="featured-container" style="text-align: center; margin-bottom: 24px;">
+            <h2 class="featured-title" style="font-size: 1.35rem; margin-bottom: 6px;">From the Workbench</h2>
+          </div>
+          <div style="max-width: 840px; margin: 0 auto; border: 1px solid var(--border-color, #3D4B59); background: #fff; padding: 32px;">
+            <a href={`/blog/${posts[0].slug}`} style="text-decoration: none; color: inherit;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 12px; line-height: 1.3;">
+                {posts[0].data.title}
+              </h3>
+              <p style="color: var(--text-color); font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;">
+                {posts[0].data.excerpt}
+              </p>
+              <span style="font-weight: 700; color: var(--header-text-color);">
+                Read Article &rarr;
+              </span>
+            </a>
+          </div>
+        </section>
+      )}
+    </div>
   </div>
 </CosmosLayout>

@@ -37,56 +37,57 @@ const matchingPosts = q
 const totalResults = matchingProducts.length + matchingGuides.length + matchingPosts.length;
 ---
 
-<CosmosLayout title={`Search: ${q || "All"}`} description="Search results across Late Night Combat Robotics store products, wiki guides, and blog posts.">
-  <div class="content-wrapper" style="max-width:960px; margin:0 auto 60px auto; padding:0 24px;">
-    <header style="text-align:center; margin-bottom:36px; padding-top:20px;">
-      <h1 style="font-family:var(--primary-font); font-size:2rem; font-weight:700; color:var(--header-text-color); margin-bottom:8px;">
+<CosmosLayout title={`Search: ${q || "All"}`} pageType="search" description="Search results across Late Night Combat Robotics store products, wiki guides, and blog posts.">
+  <div class="content-wrapper content-wrapper--search" data-bc-hook="content" style="max-width: 1080px; margin: 0 auto 60px auto; padding: 0 var(--side-padding, 24px);">
+    <header style="text-align: center; margin-bottom: 36px; padding-top: 10px;">
+      <h1 class="page-title" style="margin-bottom: 8px;">
         Search Results
       </h1>
-      <p style="color:var(--text-color); font-size:1rem;">
-        {q ? `Showing ${totalResults} results for "${q}"` : "Please enter a search query."}
+      <p style="color: var(--text-color); font-size: 1rem;">
+        {q ? `Showing ${totalResults} results for "${q}"` : "Search across kits, files, calculators, and build manuals."}
       </p>
     </header>
 
-    <!-- Search input -->
-    <form action="/search" method="get" style="display:flex; gap:8px; max-width:600px; margin:0 auto 40px auto;">
+    <!-- Search Form -->
+    <form action="/search" method="get" style="display: flex; gap: 8px; max-width: 600px; margin: 0 auto 48px auto;">
       <input
         type="search"
         name="q"
         value={q}
         placeholder="Search products, kits, guides..."
         required
-        style="flex:1; height:44px; padding:0 14px; border:1px solid #3D4B59; font-size:0.95rem; background:#fff; color:#000;"
+        style="flex: 1; height: 48px; padding: 0 16px; border: 1px solid var(--border-color); font-size: 1rem; background: var(--background-color); color: var(--text-color); font-family: var(--primary-font);"
       />
       <button
         type="submit"
-        style="background:#094AD8; color:#fff; border:0; padding:0 20px; font-family:var(--primary-font); font-weight:700; cursor:pointer;"
+        class="button button--primary"
+        style="height: 48px; padding: 0 24px;"
       >
         Search
       </button>
     </form>
 
     {totalResults === 0 && q && (
-      <div style="background:#fff; border:1px solid #3D4B59; padding:40px; text-align:center;">
-        <p style="font-size:1.1rem; color:var(--header-text-color); margin-bottom:12px;">No matching results found for "{q}".</p>
-        <p style="color:#6B7280; font-size:0.9rem;">Try searching for "Tropical Trouble", "kit", "wheels", "wiring", or "slicing".</p>
+      <div class="custom-page" style="text-align: center; padding: 40px 0;">
+        <p style="font-size: 1.1rem; color: var(--header-text-color); margin-bottom: 12px;">No matching results found for "{q}".</p>
+        <p style="color: var(--text-color); font-size: 0.95rem;">Try searching for "Tropical Trouble", "kit", "wheels", "wiring", or "slicing".</p>
       </div>
     )}
 
     {matchingProducts.length > 0 && (
-      <div style="margin-bottom:36px;">
-        <h2 style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:16px;">
-          Store Products ({matchingProducts.length})
+      <div style="margin-bottom: 48px;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+          Products ({matchingProducts.length})
         </h2>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:16px;">
+        <div class="product-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;">
           {matchingProducts.map((p) => (
-            <div style="background:#fff; border:1px solid #3D4B59; padding:14px;">
-              <a href={`/products/${p.slug}`} style="text-decoration:none; color:inherit;">
-                <h3 style="font-family:var(--primary-font); font-size:0.95rem; font-weight:700; color:var(--header-text-color); margin-bottom:4px;">
+            <div class="product-list-thumb product" style="border: 1px solid var(--border-color); background: #fff; padding: 16px;">
+              <a href={`/products/${p.slug}`} style="text-decoration: none; color: inherit; display: block;">
+                <h3 class="product-list-thumb-name" style="margin-bottom: 8px;">
                   {p.data.title}
                 </h3>
-                <div style="font-family:var(--primary-font); font-size:0.9rem; font-weight:700; color:var(--text-color);">
-                  ${Number(p.data.price).toFixed(2)}
+                <div class="product-list-thumb-price">
+                  <span class="currency_sign">$</span>{Number(p.data.price).toFixed(2)}
                 </div>
               </a>
             </div>
@@ -96,18 +97,25 @@ const totalResults = matchingProducts.length + matchingGuides.length + matchingP
     )}
 
     {matchingGuides.length > 0 && (
-      <div style="margin-bottom:36px;">
-        <h2 style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:16px;">
-          Engineering Wiki Guides ({matchingGuides.length})
+      <div style="margin-bottom: 48px;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+          Wiki Guides ({matchingGuides.length})
         </h2>
-        <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
           {matchingGuides.map((g) => (
-            <div style="background:#fff; border:1px solid #3D4B59; padding:16px;">
-              <a href={`/wiki/${g.slug}`} style="text-decoration:none; color:inherit;">
-                <h3 style="font-family:var(--primary-font); font-size:1.05rem; font-weight:700; color:var(--header-text-color); margin-bottom:4px;">
-                  {g.data.title}
+            <div style="border: 1px solid var(--border-color); background: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 4px;">
+                  <a href={`/wiki/${g.slug}`} style="text-decoration: none; color: inherit;">
+                    {g.data.title}
+                  </a>
                 </h3>
-                <p style="font-size:0.85rem; color:#4B5563; margin:0;">{g.data.excerpt}</p>
+                <p style="color: var(--text-color); font-size: 0.9rem; margin: 0;">
+                  {g.data.excerpt}
+                </p>
+              </div>
+              <a href={`/wiki/${g.slug}`} class="button button--secondary" style="font-size: 0.8rem; padding: 8px 16px;">
+                Read Guide &rarr;
               </a>
             </div>
           ))}
@@ -116,18 +124,25 @@ const totalResults = matchingProducts.length + matchingGuides.length + matchingP
     )}
 
     {matchingPosts.length > 0 && (
-      <div>
-        <h2 style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:16px;">
+      <div style="margin-bottom: 48px;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
           Blog Posts ({matchingPosts.length})
         </h2>
-        <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
           {matchingPosts.map((post) => (
-            <div style="background:#fff; border:1px solid #3D4B59; padding:16px;">
-              <a href={`/blog/${post.slug}`} style="text-decoration:none; color:inherit;">
-                <h3 style="font-family:var(--primary-font); font-size:1.05rem; font-weight:700; color:var(--header-text-color); margin-bottom:4px;">
-                  {post.data.title}
+            <div style="border: 1px solid var(--border-color); background: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 4px;">
+                  <a href={`/blog/${post.slug}`} style="text-decoration: none; color: inherit;">
+                    {post.data.title}
+                  </a>
                 </h3>
-                <p style="font-size:0.85rem; color:#4B5563; margin:0;">{post.data.excerpt}</p>
+                <p style="color: var(--text-color); font-size: 0.9rem; margin: 0;">
+                  {post.data.excerpt}
+                </p>
+              </div>
+              <a href={`/blog/${post.slug}`} class="button button--secondary" style="font-size: 0.8rem; padding: 8px 16px;">
+                Read Article &rarr;
               </a>
             </div>
           ))}

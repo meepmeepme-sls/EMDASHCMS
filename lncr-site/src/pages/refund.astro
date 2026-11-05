@@ -6,22 +6,20 @@ import CosmosLayout from "../layouts/CosmosLayout.astro";
 const { entry: page } = await getEmDashEntry("pages", "refund");
 ---
 
-<CosmosLayout title="Returns and Refunds" description="Returns and refund policy for Late Night Combat Robotics physical kit hardware and digital CAD downloads.">
-  <div class="content-wrapper" style="max-width:880px; margin:0 auto 60px auto; padding:0 24px;">
-    <article style="background:#fff; border:1px solid #3D4B59; padding:40px; margin-top:20px;">
-      <h1 style="font-family:var(--primary-font); font-size:2rem; font-weight:700; color:var(--header-text-color); margin-bottom:20px;">
-        Returns and Refunds Policy
-      </h1>
-      <div style="font-size:1rem; line-height:1.7; color:#374151;">
+<CosmosLayout title="Returns and refunds" pageType="page" description="Returns and refund policy for Late Night Combat Robotics physical kit hardware and digital CAD downloads.">
+  <div class="content-wrapper content-wrapper--refund" data-bc-hook="content">
+    <div class="custom-page">
+      <h1 class="page-title">Returns and refunds</h1>
+      <div class="custom-page--content">
         {page?.data?.content ? (
           <PortableText value={page.data.content} />
         ) : (
           <div>
             <p>All sales are final. Returns and refunds of fulfilled digital or physical purchases will not be accepted.</p>
-            <p>If there is an issue with your kit, missing hardware, or damaged shipping, please reach out to <a href="mailto:help@latenightcombat.com" style="color:#094AD8;">help@latenightcombat.com</a> or message <strong>@meepmeepme</strong> on our community Discord and I will make it right.</p>
+            <p>If there is an issue with your kit, missing hardware, or damaged shipping, please reach out to <a href="mailto:help@latenightcombat.com">help@latenightcombat.com</a> or message <strong>@meepmeepme</strong> on our community Discord and I will make it right.</p>
           </div>
         )}
       </div>
-    </article>
+    </div>
   </div>
 </CosmosLayout>

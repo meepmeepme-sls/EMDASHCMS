@@ -19,27 +19,27 @@ const { entries: allGuides } = await getEmDashCollection("wiki", { limit: 10 });
 const gData = guide.data;
 ---
 
-<CosmosLayout title={gData.title} description={gData.excerpt || gData.title}>
-  <div class="content-wrapper" style="max-width:1280px; margin:0 auto 60px auto; padding:0 24px;">
+<CosmosLayout title={gData.title} pageType="wiki-article" description={gData.excerpt || gData.title}>
+  <div class="content-wrapper content-wrapper--wiki-article" data-bc-hook="content" style="max-width: 1280px; margin: 0 auto 60px auto; padding: 0 var(--side-padding, 24px);">
     <!-- Breadcrumb -->
-    <nav class="product-breadcrumb" aria-label="Breadcrumb" style="font-size:0.85rem; margin-bottom:24px; color:var(--text-color);">
-      <a href="/" style="color:var(--header-text-color); text-decoration:none;">Home</a> /
-      <a href="/wiki" style="color:var(--header-text-color); text-decoration:none;">Wiki</a> /
-      <span style="color:#6B7280;">{gData.title}</span>
+    <nav class="product-breadcrumb" aria-label="Breadcrumb" style="font-size: 0.85rem; margin-bottom: 24px; color: var(--text-color);">
+      <a href="/" style="color: var(--header-text-color); text-decoration: none;">Home</a> /
+      <a href="/wiki" style="color: var(--header-text-color); text-decoration: none;">Wiki</a> /
+      <span style="color: var(--text-color); opacity: 0.7;">{gData.title}</span>
     </nav>
 
-    <div style="display:grid; grid-template-columns:250px minmax(0, 1fr) 220px; gap:36px; align-items:start;">
+    <div class="wiki-article-layout">
       <!-- 1. Left Sidebar: Wiki Navigation Tree -->
-      <aside class="wiki-sidebar" style="background:#fff; border:1px solid #3D4B59; padding:20px;">
-        <h3 style="font-family:var(--primary-font); font-size:0.85rem; font-weight:700; color:var(--header-text-color); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">
+      <aside class="wiki-sidebar" style="background: #fff; border: 1px solid var(--border-color); padding: 20px;">
+        <h3 style="font-family: var(--primary-font); font-size: 0.85rem; font-weight: 700; color: var(--header-text-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">
           All Build Guides
         </h3>
-        <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.88rem; margin-bottom:24px;">
+        <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; margin-bottom: 24px; list-style: none; padding: 0;">
           {allGuides.map((g) => (
             <li>
               <a
                 href={`/wiki/${g.slug}`}
-                style={`text-decoration:none; display:block; line-height:1.4; font-weight: ${g.slug === slug ? "700" : "500"}; color: ${g.slug === slug ? "#094AD8" : "var(--text-color)"};`}
+                style={`text-decoration:none; display:block; line-height:1.4; font-weight: ${g.slug === slug ? "700" : "500"}; color: ${g.slug === slug ? "var(--header-text-color)" : "var(--text-color)"};`}
               >
                 {g.data.title}
               </a>
@@ -47,18 +47,18 @@ const gData = guide.data;
           ))}
         </ul>
 
-        <h3 style="font-family:var(--primary-font); font-size:0.85rem; font-weight:700; color:var(--header-text-color); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">
+        <h3 style="font-family: var(--primary-font); font-size: 0.85rem; font-weight: 700; color: var(--header-text-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">
           Interactive Tools
         </h3>
-        <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.88rem;">
+        <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; list-style: none; padding: 0;">
           <li>
-            <a href="/calculator" style="color:#094AD8; text-decoration:none; font-weight:600;">
+            <a href="/calculator" style="color: var(--header-text-color); text-decoration: none; font-weight: 600;">
               LNCR Calculator Suite &rarr;
             </a>
           </li>
           {gData.kit_url && (
             <li>
-              <a href={gData.kit_url} style="color:#094AD8; text-decoration:none; font-weight:600;">
+              <a href={gData.kit_url} style="color: var(--header-text-color); text-decoration: none; font-weight: 600;">
                 Kit Product Page &rarr;
               </a>
             </li>
@@ -67,14 +67,14 @@ const gData = guide.data;
       </aside>
 
       <!-- 2. Main Guide Article -->
-      <article class="wiki-article" style="background:#fff; border:1px solid #3D4B59; padding:36px;">
-        <header style="margin-bottom:28px; border-bottom:1px solid #E5E7EB; padding-bottom:20px;">
-          <h1 style="font-family:var(--primary-font); font-size:1.85rem; font-weight:700; color:var(--header-text-color); line-height:1.25; margin-bottom:12px;">
+      <article class="wiki-article" style="background: #fff; border: 1px solid var(--border-color); padding: 36px;">
+        <header style="margin-bottom: 28px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px;">
+          <h1 style="font-family: var(--primary-font); font-size: 1.85rem; font-weight: 700; color: var(--header-text-color); line-height: 1.25; margin-bottom: 12px;">
             {gData.title}
           </h1>
-          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-size:0.82rem; color:#6B7280;">
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-color);">
             {gData.guide_version && (
-              <span style="background:#67C3E8; color:#1F2937; font-family:var(--primary-font); font-weight:700; padding:3px 8px;">
+              <span style="background: var(--product-status-background-color); color: var(--product-status-text-color); font-family: var(--primary-font); font-weight: 700; padding: 3px 8px;">
                 {gData.guide_version}
               </span>
             )}
@@ -84,18 +84,18 @@ const gData = guide.data;
         </header>
 
         <!-- Safety Banner -->
-        <div style="background:#FEF2F2; border-left:4px solid #EF4444; padding:16px 20px; margin-bottom:32px; color:#991B1B; font-size:0.92rem; line-height:1.5;">
-          <strong style="font-family:var(--primary-font);">A Word on Safety:</strong> Tropical Trouble, like all kinetic energy weaponized robots, can be extremely dangerous. The kit includes a second weapon bolt and nylock nut pair which serves as a <strong>dedicated weapon lock</strong>. Paint it bright orange or add a high-visibility ribbon. <strong>Never power on the robot without the weapon lock installed.</strong>
+        <div id="safety" style="background: #FEF2F2; border-left: 4px solid #EF4444; padding: 16px 20px; margin-bottom: 32px; color: #991B1B; font-size: 0.92rem; line-height: 1.5;">
+          <strong style="font-family: var(--primary-font);">A Word on Safety:</strong> Tropical Trouble, like all kinetic energy weaponized robots, can be extremely dangerous. The kit includes a second weapon bolt and nylock nut pair which serves as a <strong>dedicated weapon lock</strong>. Paint it bright orange or add a high-visibility ribbon. <strong>Never power on the robot without the weapon lock installed.</strong>
         </div>
 
         {/* Cadasio 3D Action if available */}
         {gData.cadasio_url && (
-          <div style="background:#16181D; color:#fff; border:1px solid #2A2F3D; padding:20px; margin-bottom:32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+          <div id="hardware" style="background: #16181D; color: #fff; border: 1px solid #2A2F3D; padding: 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
             <div>
-              <h3 style="font-family:var(--primary-font); font-size:1.05rem; font-weight:700; color:#67C3E8; margin:0 0 4px 0;">
+              <h3 style="font-family: var(--primary-font); font-size: 1.05rem; font-weight: 700; color: #67C3E8; margin: 0 0 6px 0;">
                 Interactive 3D Hardware Assembly
               </h3>
-              <p style="margin:0; font-size:0.88rem; color:#CEDDFD;">
+              <p style="margin: 0; font-size: 0.88rem; color: #CEDDFD;">
                 Rotate, zoom, and explode every fastener and bearing in 3D on Cadasio.
               </p>
             </div>
@@ -103,7 +103,8 @@ const gData = guide.data;
               href={gData.cadasio_url}
               target="_blank"
               rel="noopener"
-              style="background:#094AD8; color:#fff; font-family:var(--primary-font); font-size:0.82rem; font-weight:700; padding:10px 20px; text-decoration:none; text-transform:uppercase; border-radius:0;"
+              class="button"
+              style="font-size: 0.82rem; padding: 10px 20px; text-decoration: none;"
             >
               Open 3D Instructions &rarr;
             </a>
@@ -112,40 +113,40 @@ const gData = guide.data;
 
         <!-- Wiring Diagram Figure if slug is tropical-trouble-instructions -->
         {slug === "tropical-trouble-instructions" && (
-          <div style="margin-bottom:32px;">
-            <h2 id="wiring" style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:12px;">
+          <div style="margin-bottom: 32px;">
+            <h2 id="wiring" style="font-family: var(--primary-font); font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 12px;">
               Wiring Layout &amp; Diagram
             </h2>
-            <figure style="border:1px solid #3D4B59; background:#f9fafb; padding:12px; margin:0 0 16px 0;">
+            <figure style="border: 1px solid var(--border-color); background: var(--background-color); padding: 12px; margin: 0 0 16px 0;">
               <img
                 src="/wiki/tt-guide-img-1.jpeg"
                 alt="Tropical Trouble Wiring Diagram"
                 loading="lazy"
-                style="width:100%; height:auto;"
+                style="width: 100%; height: auto; display: block;"
               />
-              <figcaption style="font-size:0.8rem; color:#6B7280; text-align:center; margin-top:8px;">
+              <figcaption style="font-size: 0.8rem; color: var(--text-color); text-align: center; margin-top: 8px;">
                 Figure 1: Suggested wiring routing and cut lengths for Repeat AM32 Dual ESC &amp; 90A Weapon ESC.
               </figcaption>
             </figure>
           </div>
         )}
 
-        <!-- Bambu Slicing Figures if slug is tropical-trouble-instructions or 3dp -->
+        <!-- Bambu Slicing Figures if slug is tropical-trouble-instructions -->
         {slug === "tropical-trouble-instructions" && (
-          <div style="margin-bottom:32px;">
-            <h2 id="slicing" style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:12px;">
+          <div style="margin-bottom: 32px;">
+            <h2 id="slicing" style="font-family: var(--primary-font); font-size: 1.25rem; font-weight: 700; color: var(--header-text-color); margin-bottom: 12px;">
               Bambu Studio Modifier Meshes &amp; Slicing
             </h2>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;">
-              <figure style="border:1px solid #3D4B59; background:#f9fafb; padding:10px; margin:0;">
-                <img src="/wiki/tt-guide-img-2.png" alt="Chassis Split Modifier Bodies" loading="lazy" style="width:100%; height:auto;" />
-                <figcaption style="font-size:0.75rem; color:#6B7280; text-align:center; margin-top:6px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+              <figure style="border: 1px solid var(--border-color); background: var(--background-color); padding: 10px; margin: 0;">
+                <img src="/wiki/tt-guide-img-2.png" alt="Chassis Split Modifier Bodies" loading="lazy" style="width: 100%; height: auto; display: block;" />
+                <figcaption style="font-size: 0.75rem; color: var(--text-color); text-align: center; margin-top: 6px;">
                   Split modifier bodies for 100% solid infill around weapon uprights.
                 </figcaption>
               </figure>
-              <figure style="border:1px solid #3D4B59; background:#f9fafb; padding:10px; margin:0;">
-                <img src="/wiki/tt-guide-img-3.png" alt="Bambu Studio Infill Settings" loading="lazy" style="width:100%; height:auto;" />
-                <figcaption style="font-size:0.75rem; color:#6B7280; text-align:center; margin-top:6px;">
+              <figure style="border: 1px solid var(--border-color); background: var(--background-color); padding: 10px; margin: 0;">
+                <img src="/wiki/tt-guide-img-3.png" alt="Bambu Studio Infill Settings" loading="lazy" style="width: 100%; height: auto; display: block;" />
+                <figcaption style="font-size: 0.75rem; color: var(--text-color); text-align: center; margin-top: 6px;">
                   Per-object infill and wall loops (fits on 180&times;180mm A1 Mini bed).
                 </figcaption>
               </figure>
@@ -154,7 +155,7 @@ const gData = guide.data;
         )}
 
         <!-- Guide Content -->
-        <div class="wiki-prose" style="font-size:0.95rem; line-height:1.7; color:#374151;">
+        <div class="custom-page--content" style="font-size: 0.95rem; line-height: 1.75; color: var(--text-color);">
           {gData.content && Array.isArray(gData.content) ? (
             <PortableText value={gData.content} />
           ) : (
@@ -164,18 +165,35 @@ const gData = guide.data;
       </article>
 
       <!-- 3. Right Sidebar: Sticky Table of Contents -->
-      <aside class="wiki-toc" style="position:sticky; top:24px; background:#fff; border:1px solid #3D4B59; padding:20px;">
-        <h4 style="font-family:var(--primary-font); font-size:0.8rem; font-weight:700; color:var(--header-text-color); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">
+      <aside class="wiki-toc" style="position: sticky; top: 24px; background: #fff; border: 1px solid var(--border-color); padding: 20px;">
+        <h4 style="font-family: var(--primary-font); font-size: 0.8rem; font-weight: 700; color: var(--header-text-color); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">
           On This Page
         </h4>
-        <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.82rem; color:var(--text-color);">
-          <li><a href="#safety" style="color:#094AD8; text-decoration:none;">A Word on Safety</a></li>
-          {gData.cadasio_url && <li><a href="#hardware" style="color:#094AD8; text-decoration:none;">3D Hardware Assembly</a></li>}
-          {slug === "tropical-trouble-instructions" && <li><a href="#wiring" style="color:#094AD8; text-decoration:none;">Wiring Diagram</a></li>}
-          {slug === "tropical-trouble-instructions" && <li><a href="#slicing" style="color:#094AD8; text-decoration:none;">Bambu Studio Slicing</a></li>}
-          <li><a href="/calculator" style="color:#094AD8; text-decoration:none; font-weight:700;">Calculator Suite &rarr;</a></li>
+        <ul style="display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem; list-style: none; padding: 0;">
+          <li><a href="#safety" style="color: var(--header-text-color); text-decoration: none;">A Word on Safety</a></li>
+          {gData.cadasio_url && <li><a href="#hardware" style="color: var(--header-text-color); text-decoration: none;">3D Hardware Assembly</a></li>}
+          {slug === "tropical-trouble-instructions" && <li><a href="#wiring" style="color: var(--header-text-color); text-decoration: none;">Wiring Diagram</a></li>}
+          {slug === "tropical-trouble-instructions" && <li><a href="#slicing" style="color: var(--header-text-color); text-decoration: none;">Bambu Studio Slicing</a></li>}
+          <li><a href="/calculator" style="color: var(--header-text-color); text-decoration: none; font-weight: 700;">Calculator Suite &rarr;</a></li>
         </ul>
       </aside>
     </div>
   </div>
 </CosmosLayout>
+
+<style>
+  .wiki-article-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr) 200px;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (max-width: 1024px) {
+    .wiki-article-layout {
+      grid-template-columns: 1fr;
+    }
+    .wiki-toc {
+      display: none;
+    }
+  }
+</style>
