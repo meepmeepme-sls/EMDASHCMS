@@ -1,0 +1,280 @@
+---
+import CosmosLayout from '../layouts/CosmosLayout.astro';
+---
+
+<CosmosLayout title="Shopping Cart | Late Night Combat Robotics" pageType="cart" description="Your shopping cart for Late Night Combat Robotics kits, parts, and CAD files.">
+  <div class="content-wrapper content-wrapper--cart" data-bc-hook="content">
+    
+    <!-- Empty Cart View -->
+    <div class="cart-empty" id="cart-empty-view" style="display: none; padding: 60px 0; text-align: center;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4; margin-bottom: 16px;">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <h1 class="page-title" style="margin-bottom: 8px;">Your cart is empty</h1>
+      <p style="color: var(--text-color); margin-bottom: 24px; max-width: 440px;">
+        Looks like you haven't added any combat robot kits, weapon parts, or CAD models yet.
+      </p>
+      <a href="/products" class="button" style="display: inline-block; padding: 14px 28px;">Browse Products</a>
+    </div>
+
+    <!-- Active Cart View -->
+    <div id="cart-active-view" style="display: none;">
+      <div class="cart-header">
+        <h1 class="page-title">Shopping Cart</h1>
+        <a href="/products" class="continue-shopping">&larr; Continue shopping</a>
+      </div>
+
+      <div class="cart-columns">
+        <!-- Cart Items List -->
+        <div class="cart-items" id="cart-items-list">
+          <!-- Dynamically populated by client-side script -->
+        </div>
+
+        <!-- Order Summary & Checkout Sidebar -->
+        <aside class="cart-footer">
+          <div class="cart-subtotal">
+            <span class="cart-subtotal__label">Subtotal</span>
+            <span class="cart-subtotal__amount" id="cart-subtotal-display">$0.00</span>
+          </div>
+
+          <!-- Shipping Options -->
+          <div id="shipping-container" style="width: 100%; border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <div style="font-weight: 700; margin-bottom: 12px; font-size: 0.95rem;">Shipping (US)</div>
+            
+            <div id="physical-shipping-options" style="display: flex; flex-direction: column; gap: 10px;">
+              <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.9rem;">
+                <input type="radio" name="shipping_rate" value="usps_ground" checked style="margin-top: 3px;" />
+                <div>
+                  <div style="font-weight: 600;">USPS Ground Advantage ($8.95)</div>
+                  <div style="font-size: 0.8rem; opacity: 0.75;">Estimated delivery: 3–5 business days</div>
+                </div>
+              </label>
+
+              <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.9rem;">
+                <input type="radio" name="shipping_rate" value="usps_priority" style="margin-top: 3px;" />
+                <div>
+                  <div style="font-weight: 600;">USPS Priority Mail ($14.95)</div>
+                  <div style="font-size: 0.8rem; opacity: 0.75;">Estimated delivery: 1–3 business days</div>
+                </div>
+              </label>
+            </div>
+
+            <div id="digital-shipping-options" style="display: none; padding: 12px; border-radius: 6px; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.3);">
+              <div style="color: #059669; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
+                <span>✓ Instant Digital Delivery (Free)</span>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-color); margin-top: 4px;">
+                Instant Google Drive download link provided immediately upon checkout completion.
+              </div>
+            </div>
+          </div>
+
+          <!-- Total Due -->
+          <div class="cart-subtotal" style="border-top: 1px solid var(--border-color); padding-top: 16px; margin-top: 4px;">
+            <span class="cart-subtotal__label" style="font-size: 1.25rem;">Estimated Total</span>
+            <span class="cart-subtotal__amount" id="cart-total-display" style="font-size: 1.45rem; font-weight: 800;">$0.00</span>
+          </div>
+
+          <!-- Checkout Action -->
+          <div class="cart-submit">
+            <button type="button" class="button" id="proceed-checkout-btn" style="padding: 16px 20px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <span id="checkout-btn-text">Proceed to Checkout</span>
+              <svg id="checkout-arrow-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <div id="checkout-error-msg" style="display: none; color: #ef4444; font-size: 0.85rem; text-align: center; margin-top: 8px;"></div>
+            
+            <div style="margin-top: 16px; text-align: center; font-size: 0.8rem; color: var(--text-color); opacity: 0.85; line-height: 1.4;">
+              <div>🔒 Powered by <strong>Stripe</strong>.</div>
+              <div>Accepts Visa, Mastercard, AMEX, Discover, Apple Pay & Google Pay.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    import { getCart, updateCartQuantity, removeFromCart, type CartItem } from '../utils/cart';
+
+    const emptyView = document.getElementById('cart-empty-view')!;
+    const activeView = document.getElementById('cart-active-view')!;
+    const itemsList = document.getElementById('cart-items-list')!;
+    const subtotalEl = document.getElementById('cart-subtotal-display')!;
+    const totalEl = document.getElementById('cart-total-display')!;
+    const physicalShippingBox = document.getElementById('physical-shipping-options')!;
+    const digitalShippingBox = document.getElementById('digital-shipping-options')!;
+    const checkoutBtn = document.getElementById('proceed-checkout-btn') as HTMLButtonElement;
+    const checkoutBtnText = document.getElementById('checkout-btn-text')!;
+    const errorMsg = document.getElementById('checkout-error-msg')!;
+
+    function render() {
+      const items = getCart();
+
+      if (items.length === 0) {
+        emptyView.style.display = 'block';
+        activeView.style.display = 'none';
+        return;
+      }
+
+      emptyView.style.display = 'none';
+      activeView.style.display = 'block';
+
+      // Check if all items are digital
+      const allDigital = items.every((i) => i.isDigitalDownload);
+
+      if (allDigital) {
+        physicalShippingBox.style.display = 'none';
+        digitalShippingBox.style.display = 'block';
+      } else {
+        physicalShippingBox.style.display = 'flex';
+        digitalShippingBox.style.display = 'none';
+      }
+
+      // Compute subtotal
+      const subtotal = items.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+      subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+
+      // Compute shipping
+      let shippingCost = 0;
+      if (!allDigital) {
+        const selectedRadio = document.querySelector('input[name="shipping_rate"]:checked') as HTMLInputElement | null;
+        const rateVal = selectedRadio ? selectedRadio.value : 'usps_ground';
+        shippingCost = rateVal === 'usps_priority' ? 14.95 : 8.95;
+      }
+
+      const total = subtotal + shippingCost;
+      totalEl.textContent = `$${total.toFixed(2)}`;
+
+      // Render cart items HTML
+      itemsList.innerHTML = items
+        .map(
+          (item) => `
+        <div class="cart-item" data-product-id="${item.productId}" data-option="${item.option || ''}">
+          <div class="cart-item-image-holder">
+            <a href="/products/${item.slug}" class="cart-item-image-link">
+              <img src="${item.image}" alt="${item.title}" />
+            </a>
+          </div>
+          <div class="cart-item-detail">
+            <a href="/products/${item.slug}" class="product-name" style="color:var(--header-text-color); text-decoration:none;">
+              ${item.title}
+            </a>
+            ${item.option ? `<div class="option-name" style="color:var(--text-color); margin-top:4px;">${item.option}</div>` : ''}
+            ${
+              item.isDigitalDownload
+                ? `<div style="margin-top:6px;"><span style="font-size:0.75rem; font-weight:600; background:rgba(5,150,105,0.15); color:#059669; padding:3px 8px; border-radius:4px;">Instant Digital CAD</span></div>`
+                : ''
+            }
+          </div>
+          <div class="cart-qty">
+            <div class="qty-holder">
+              <button class="qty-button btn-qty-minus" aria-label="Decrease quantity" data-product-id="${item.productId}" data-option="${item.option || ''}" data-qty="${item.quantity}">
+                <svg viewBox="0 0 14 16"><path d="M2 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+              <input type="number" class="qty-input" value="${item.quantity}" min="1" max="99" readonly />
+              <button class="qty-button btn-qty-plus" aria-label="Increase quantity" data-product-id="${item.productId}" data-option="${item.option || ''}" data-qty="${item.quantity}">
+                <svg viewBox="0 0 14 16"><path d="M7 3v10M2 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <button class="cart-remove-item--link btn-remove" data-product-id="${item.productId}" data-option="${item.option || ''}" style="background:none; border:none; cursor:pointer; color:var(--text-color); text-decoration:underline;">
+              Remove
+            </button>
+          </div>
+          <div class="cart-item-price">
+            $${(item.price * item.quantity).toFixed(2)}
+          </div>
+        </div>
+      `
+        )
+        .join('');
+
+      // Attach event listeners to quantity buttons and remove buttons
+      itemsList.querySelectorAll('.btn-qty-minus').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const pid = btn.getAttribute('data-product-id')!;
+          const opt = btn.getAttribute('data-option') || undefined;
+          const currentQty = parseInt(btn.getAttribute('data-qty') || '1', 10);
+          updateCartQuantity(pid, opt, currentQty - 1);
+          render();
+        });
+      });
+
+      itemsList.querySelectorAll('.btn-qty-plus').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const pid = btn.getAttribute('data-product-id')!;
+          const opt = btn.getAttribute('data-option') || undefined;
+          const currentQty = parseInt(btn.getAttribute('data-qty') || '1', 10);
+          updateCartQuantity(pid, opt, currentQty + 1);
+          render();
+        });
+      });
+
+      itemsList.querySelectorAll('.btn-remove').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const pid = btn.getAttribute('data-product-id')!;
+          const opt = btn.getAttribute('data-option') || undefined;
+          removeFromCart(pid, opt);
+          render();
+        });
+      });
+    }
+
+    // Shipping radio button changes
+    document.querySelectorAll('input[name="shipping_rate"]').forEach((radio) => {
+      radio.addEventListener('change', render);
+    });
+
+    // Listen to storage/cart update events
+    window.addEventListener('lncr-cart-updated', render);
+    window.addEventListener('storage', render);
+
+    // Initial render
+    render();
+
+    // Handle Checkout initiation
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener('click', async () => {
+        const items = getCart();
+        if (items.length === 0) return;
+
+        const selectedRadio = document.querySelector('input[name="shipping_rate"]:checked') as HTMLInputElement | null;
+        const shippingRateId = selectedRadio ? selectedRadio.value : 'usps_ground';
+
+        try {
+          checkoutBtn.disabled = true;
+          checkoutBtn.style.opacity = '0.7';
+          checkoutBtnText.textContent = 'Redirecting to Checkout...';
+          errorMsg.style.display = 'none';
+
+          const res = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items, shippingRateId }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok || !data.url) {
+            throw new Error(data.error || 'Checkout initialization failed. Please try again.');
+          }
+
+          // Redirect user to Stripe Checkout session URL
+          window.location.href = data.url;
+        } catch (err: any) {
+          console.error('[Checkout Click Error]', err);
+          errorMsg.textContent = err.message || 'An unexpected error occurred. Please try again.';
+          errorMsg.style.display = 'block';
+          checkoutBtn.disabled = false;
+          checkoutBtn.style.opacity = '1';
+          checkoutBtnText.textContent = 'Proceed to Checkout';
+        }
+      });
+    }
+  </script>
+</CosmosLayout>

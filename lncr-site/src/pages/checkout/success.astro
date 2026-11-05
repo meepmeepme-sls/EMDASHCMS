@@ -1,0 +1,142 @@
+---
+import CosmosLayout from '../../layouts/CosmosLayout.astro';
+import Stripe from 'stripe';
+
+const sessionId = Astro.url.searchParams.get('session_id') || '';
+const isSandbox = Astro.url.searchParams.get('mode') === 'sandbox' || sessionId.startsWith('sim_session_');
+const isDigitalParam = Astro.url.searchParams.get('digital') === '1';
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const driveDownloadUrl = process.env.DIGITAL_CAD_DRIVE_URL || 'https://drive.google.com/drive/folders/1B_YOUR_CAD_FOLDER_ID';
+
+let customerEmail = 'your email';
+let customerName = 'Combat Robotics Builder';
+let totalAmount = '$0.00';
+let hasDigital = isDigitalParam;
+let lineItems: Array<{ description: string; quantity: number; amount: string }> = [];
+
+if (!isSandbox && stripeSecretKey && !stripeSecretKey.includes('placeholder') && sessionId) {
+  try {
+    const stripe = new Stripe(stripeSecretKey);
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['line_items'],
+    });
+
+    if (session.customer_details?.email) {
+      customerEmail = session.customer_details.email;
+    }
+    if (session.customer_details?.name) {
+      customerName = session.customer_details.name;
+    }
+    if (session.amount_total != null) {
+      totalAmount = `$${(session.amount_total / 100).toFixed(2)}`;
+    }
+    if (session.metadata?.hasDigital === 'true') {
+      hasDigital = true;
+    }
+
+    if (session.line_items?.data) {
+      lineItems = session.line_items.data.map((item) => ({
+        description: item.description || 'Custom Part',
+        quantity: item.quantity || 1,
+        amount: `$${((item.amount_total || 0) / 100).toFixed(2)}`,
+      }));
+    }
+  } catch (err) {
+    console.warn('[Stripe Success Page Warning] Could not retrieve session:', err);
+  }
+}
+---
+
+<CosmosLayout title="Order Confirmed | Late Night Combat Robotics" pageType="checkout" description="Thank you for your order from Late Night Combat Robotics.">
+  <div class="content-wrapper" style="max-width: 760px; margin: 40px auto; padding: 0 var(--side-padding);">
+    
+    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 40px 32px; text-align: center;">
+      <!-- Success Icon -->
+      <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(5, 150, 105, 0.15); border: 2px solid #059669; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+
+      <h1 class="page-title" style="margin-bottom: 12px; font-size: 2rem;">Order Confirmed!</h1>
+      <p style="font-size: 1.1rem; color: var(--text-color); margin-bottom: 24px;">
+        Thank you, <strong>{customerName}</strong>! Your order has been placed successfully.
+      </p>
+
+      {isSandbox && (
+        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 12px 16px; margin-bottom: 24px; font-size: 0.85rem; color: #f59e0b; text-align: left;">
+          <strong>Sandbox Demo Mode:</strong> Checkout simulation completed without charging a live credit card. To accept real credit card and digital wallet transactions, configure your <code>STRIPE_SECRET_KEY</code> in <code>.env</code>.
+        </div>
+      )}
+
+      <!-- Order details box -->
+      <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; text-align: left; margin-bottom: 32px; background: rgba(0, 0, 0, 0.15);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem;">
+          <span style="color: var(--text-color); opacity: 0.7;">Confirmation / Session ID:</span>
+          <span style="font-family: var(--font-mono, monospace); font-size: 0.8rem; word-break: break-all;">{sessionId || 'N/A'}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.9rem;">
+          <span style="color: var(--text-color); opacity: 0.7;">Receipt Sent To:</span>
+          <strong>{customerEmail}</strong>
+        </div>
+        {!isSandbox && lineItems.length > 0 && (
+          <div style="border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 12px;">
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 8px;">Order Summary:</div>
+            {lineItems.map((item) => (
+              <div style="display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 6px;">
+                <span>{item.quantity}x {item.description}</span>
+                <span>{item.amount}</span>
+              </div>
+            ))}
+            <div style="display: flex; justify-content: space-between; font-weight: 700; margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;">
+              <span>Total Paid:</span>
+              <span>{totalAmount}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Instant Digital Fulfillment Section -->
+      {hasDigital && (
+        <div style="background: rgba(5, 150, 105, 0.12); border: 2px solid #059669; border-radius: 10px; padding: 24px; text-align: left; margin-bottom: 32px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <h3 style="margin: 0; color: #10b981; font-size: 1.25rem;">Instant CAD & 3MF Access Ready</h3>
+          </div>
+          <p style="font-size: 0.95rem; color: var(--text-color); margin-bottom: 16px;">
+            Your purchase includes digital design files (STEP models, STL/3MF slicer presets, wiring diagrams, and build guides). You have immediate access via Google Drive:
+          </p>
+          <a
+            href={driveDownloadUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="button"
+            style="display: inline-flex; align-items: center; gap: 8px; background: #059669; border-color: #059669; color: #fff; padding: 12px 24px; font-weight: 700; text-decoration: none;"
+          >
+            <span>Open Google Drive CAD Folder &rarr;</span>
+          </a>
+        </div>
+      )}
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="/" class="button button--secondary" style="padding: 12px 24px;">Return Home</a>
+        <a href="/products" class="button" style="padding: 12px 24px;">Continue Shopping</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    import { clearCart } from '../../utils/cart';
+
+    // Clear cart on successful checkout completion
+    clearCart();
+  </script>
+</CosmosLayout>

@@ -76,10 +76,19 @@ const isComingSoon = pData.badge === "coming_soon";
           </div>
         </div>
 
-        <form id="add-to-cart-form" method="post" class="product-form show-sold-out" action="/products">
+        <form
+          id="add-to-cart-form"
+          class="product-form show-sold-out"
+          data-product-id={product.id || slug}
+          data-slug={slug}
+          data-title={pData.title}
+          data-price={pData.price}
+          data-image={images[0] || "/images/lncr-logo.png"}
+          data-digital={pData.google_drive_url ? "true" : "false"}
+        >
           {options.map((opt) => (
             <div class="select">
-              <select name="option" aria-label={opt.name}>
+              <select name="option" aria-label={opt.name} id="product-option-select">
                 {opt.values.map((v) => (
                   <option value={v}>{v}</option>
                 ))}
@@ -95,9 +104,15 @@ const isComingSoon = pData.badge === "coming_soon";
               Coming Soon
             </button>
           ) : (
-            <button id="add-to-cart-button" class="button add-to-cart-button" type="submit">
-              Add to cart
-            </button>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <button id="add-to-cart-button" class="button add-to-cart-button" type="submit">
+                Add to cart
+              </button>
+              <div id="added-notification" style="display:none; font-size:0.9rem; font-weight:600; color:#059669; align-items:center; gap:8px;">
+                <span>✓ Added to cart!</span>
+                <a href="/cart" style="color:var(--header-text-color); text-decoration:underline; font-weight:700;">View Cart & Checkout &rarr;</a>
+              </div>
+            </div>
           )}
 
           {pData.google_drive_url && (
@@ -133,6 +148,8 @@ const isComingSoon = pData.badge === "coming_soon";
   </style>
 
   <script>
+    import { addToCart } from '../../utils/cart';
+
     const mainImg = document.getElementById('main-product-image') as HTMLImageElement;
     const thumbBtns = document.querySelectorAll('.thumb-btn');
     thumbBtns.forEach((btn) => {
@@ -143,5 +160,50 @@ const isComingSoon = pData.badge === "coming_soon";
         }
       });
     });
+
+    const form = document.getElementById('add-to-cart-form') as HTMLFormElement | null;
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const productId = form.dataset.productId || '';
+        const slug = form.dataset.slug || '';
+        const title = form.dataset.title || '';
+        const price = parseFloat(form.dataset.price || '0');
+        const image = form.dataset.image || '';
+        const isDigitalDownload = form.dataset.digital === 'true';
+
+        const optionSelect = document.getElementById('product-option-select') as HTMLSelectElement | null;
+        const option = optionSelect ? optionSelect.value : undefined;
+
+        const btn = document.getElementById('add-to-cart-button') as HTMLButtonElement | null;
+        const notification = document.getElementById('added-notification');
+
+        addToCart({
+          productId,
+          slug,
+          title,
+          price,
+          image,
+          option,
+          isDigitalDownload,
+        });
+
+        if (btn) {
+          const origText = btn.textContent;
+          btn.textContent = 'Added!';
+          btn.style.backgroundColor = '#059669';
+          btn.style.borderColor = '#059669';
+          setTimeout(() => {
+            btn.textContent = origText;
+            btn.style.backgroundColor = '';
+            btn.style.borderColor = '';
+          }, 1200);
+        }
+
+        if (notification) {
+          notification.style.display = 'flex';
+        }
+      });
+    }
   </script>
 </CosmosLayout>
