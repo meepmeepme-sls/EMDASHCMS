@@ -1,0 +1,1139 @@
+{
+  "$schema": "https://emdashcms.com/seed.schema.json",
+  "version": "1",
+  "meta": {
+    "name": "Late Night Combat Robotics",
+    "description": "Combat Robot Kits, Engineering Wiki & Calculator",
+    "author": "Late Night Combat Robotics"
+  },
+  "settings": {
+    "title": "Late Night Combat Robotics",
+    "tagline": "Combat Robot Kits, Engineering Wiki & Calculator"
+  },
+  "collections": [
+    {
+      "slug": "products",
+      "label": "Products",
+      "labelSingular": "Product",
+      "urlPattern": "/products/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "price",
+          "label": "Price ($)",
+          "type": "number",
+          "required": true
+        },
+        {
+          "slug": "badge",
+          "label": "Status Badge",
+          "type": "string"
+        },
+        {
+          "slug": "badge_label",
+          "label": "Badge Label",
+          "type": "string"
+        },
+        {
+          "slug": "category_slug",
+          "label": "Category Slug",
+          "type": "string"
+        },
+        {
+          "slug": "category_name",
+          "label": "Category Name",
+          "type": "string"
+        },
+        {
+          "slug": "featured",
+          "label": "Featured Product",
+          "type": "boolean"
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "string"
+        },
+        {
+          "slug": "images_json",
+          "label": "Gallery Images (JSON)",
+          "type": "text"
+        },
+        {
+          "slug": "options_json",
+          "label": "Option Groups (JSON)",
+          "type": "text"
+        },
+        {
+          "slug": "excerpt",
+          "label": "Summary",
+          "type": "text"
+        },
+        {
+          "slug": "description",
+          "label": "Description",
+          "type": "portableText",
+          "searchable": true
+        },
+        {
+          "slug": "specs_json",
+          "label": "Specifications (JSON)",
+          "type": "text"
+        },
+        {
+          "slug": "google_drive_url",
+          "label": "Google Drive Download URL",
+          "type": "url"
+        }
+      ]
+    },
+    {
+      "slug": "wiki",
+      "label": "Engineering Wiki",
+      "labelSingular": "Wiki Guide",
+      "urlPattern": "/wiki/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "category",
+          "label": "Category",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "guide_version",
+          "label": "Guide Version",
+          "type": "string"
+        },
+        {
+          "slug": "updated_date",
+          "label": "Last Updated",
+          "type": "string"
+        },
+        {
+          "slug": "cadasio_url",
+          "label": "Cadasio 3D URL",
+          "type": "url"
+        },
+        {
+          "slug": "kit_url",
+          "label": "Associated Kit URL",
+          "type": "string"
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "string"
+        },
+        {
+          "slug": "excerpt",
+          "label": "Summary",
+          "type": "text"
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        }
+      ]
+    },
+    {
+      "slug": "posts",
+      "label": "Blog Posts",
+      "labelSingular": "Post",
+      "urlPattern": "/blog/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "scheduling",
+        "search",
+        "seo"
+      ],
+      "commentsEnabled": false,
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured Image",
+          "type": "string"
+        },
+        {
+          "slug": "excerpt",
+          "label": "Summary",
+          "type": "text"
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        }
+      ]
+    },
+    {
+      "slug": "pages",
+      "label": "Pages",
+      "labelSingular": "Page",
+      "urlPattern": "/pages/{slug}",
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "search",
+        "seo"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        }
+      ]
+    }
+  ],
+  "taxonomies": [
+    {
+      "name": "product_category",
+      "label": "Product Categories",
+      "labelSingular": "Product Category",
+      "hierarchical": true,
+      "collections": [
+        "products"
+      ],
+      "terms": [
+        {
+          "slug": "robot-kits",
+          "label": "Robot Kits"
+        },
+        {
+          "slug": "parts-wheels",
+          "label": "Parts & Wheels"
+        },
+        {
+          "slug": "digital-files",
+          "label": "Digital Files"
+        },
+        {
+          "slug": "merch",
+          "label": "Merch"
+        }
+      ]
+    },
+    {
+      "name": "wiki_category",
+      "label": "Wiki Categories",
+      "labelSingular": "Wiki Category",
+      "hierarchical": true,
+      "collections": [
+        "wiki"
+      ],
+      "terms": [
+        {
+          "slug": "build-guides",
+          "label": "Kit Build Guides"
+        },
+        {
+          "slug": "combat-engineering",
+          "label": "Combat Engineering & Slicing"
+        }
+      ]
+    }
+  ],
+  "menus": [
+    {
+      "name": "primary",
+      "label": "Primary Navigation",
+      "items": [
+        {
+          "type": "custom",
+          "label": "Home",
+          "url": "/"
+        },
+        {
+          "type": "custom",
+          "label": "Products",
+          "url": "/products"
+        },
+        {
+          "type": "custom",
+          "label": "Wiki",
+          "url": "/wiki"
+        },
+        {
+          "type": "custom",
+          "label": "Calculator",
+          "url": "/calculator"
+        },
+        {
+          "type": "custom",
+          "label": "Blog",
+          "url": "/blog"
+        },
+        {
+          "type": "custom",
+          "label": "About",
+          "url": "/about"
+        },
+        {
+          "type": "custom",
+          "label": "Contact",
+          "url": "/contact"
+        }
+      ]
+    },
+    {
+      "name": "footer",
+      "label": "Footer Navigation",
+      "items": [
+        {
+          "type": "custom",
+          "label": "Products",
+          "url": "/products"
+        },
+        {
+          "type": "custom",
+          "label": "Engineering Wiki",
+          "url": "/wiki"
+        },
+        {
+          "type": "custom",
+          "label": "Combat Calculator",
+          "url": "/calculator"
+        },
+        {
+          "type": "custom",
+          "label": "Blog",
+          "url": "/blog"
+        },
+        {
+          "type": "custom",
+          "label": "About",
+          "url": "/about"
+        },
+        {
+          "type": "custom",
+          "label": "Returns and refunds",
+          "url": "/refund"
+        },
+        {
+          "type": "custom",
+          "label": "Contact",
+          "url": "/contact"
+        }
+      ]
+    }
+  ],
+  "content": {
+    "products": [
+      {
+        "id": "prod-tt-kit",
+        "slug": "tt-kit",
+        "status": "published",
+        "data": {
+          "title": "Tropical Trouble 3lb Combat Robot Kit",
+          "price": 140,
+          "badge": "coming_soon",
+          "badge_label": "Coming Soon",
+          "category_slug": "robot-kits",
+          "category_name": "Robot Kits",
+          "featured": true,
+          "featured_image": "/products/tt-kit-1.jpg",
+          "images_json": "[\"/products/tt-kit-1.jpg\",\"/products/tt-kit-2.jpg\",\"/products/tt-kit-3.png\",\"/products/tt-kit-4.jpg\",\"/products/tt-kit-5.jpg\"]",
+          "options_json": "[{\"name\":\"Receiver Option\",\"values\":[\"No Receiver (Bring Your Own)\",\"Include Radiomaster ER4 ELRS (+$20)\"]}]",
+          "excerpt": "Complete 3lb Beetleweight 4WD Vertical Spinner Combat Robot Kit.",
+          "description": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Tropical Trouble is an affordable, customizable, and competitive 3lb combat robot kit. Based on the 2024 MRCA Champion Pipeline Punch and placing in the Top 8 at NHRL March 2025, Tropical Trouble lowers the barrier to insect-weight combat robotics without compromising hitting power or durability.",
+                  "_key": "k_xgr96qe"
+                }
+              ],
+              "_key": "b_nrrext4"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Key Specifications",
+                  "_key": "k_vtxkz0q"
+                }
+              ],
+              "_key": "b_7uavjo2"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Weight Class: 3lb Beetleweight (SPARC and NHRL compliant)",
+                  "_key": "k_a4076wf"
+                }
+              ],
+              "_key": "b_pdzvkgn"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Drivetrain: 4WD cast 45A Urethane wheels with Repeat Max 2006 (7.4 MPH top speed)",
+                  "_key": "k_isjs0vh"
+                }
+              ],
+              "_key": "b_tfovcsu"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Weapon: 6\" effective diameter, 217 MPH tip speed driven by Repeat Robotics 2812 Hubmotor",
+                  "_key": "k_a45kb5r"
+                }
+              ],
+              "_key": "b_rlm3ghy"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Battery: Designed for GNB 4S 850mAh 120C LiHV — 3+ minutes continuous runtime",
+                  "_key": "k_134vpik"
+                }
+              ],
+              "_key": "b_pkm9l44"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Chassis: 100% 3D-printable 95A TPU unibody, TPU wheel guards, and modular forks",
+                  "_key": "k_9tljghx"
+                }
+              ],
+              "_key": "b_fgoa134"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "This listing contains 3D printed parts, a hardware kit (screws, hubmotor bolts & weapon lock), timing belts, and wheels. Estimated total build price is $440 depending on electronics.",
+                  "_key": "k_9gghqon"
+                }
+              ],
+              "_key": "b_j2tb2fu"
+            }
+          ],
+          "specs_json": "{\"Weight Class\":\"3lb Beetleweight\",\"Drivetrain\":\"4WD Indirect Belt Drive (Cast 45A Urethane)\",\"Drive Motors\":\"2x Repeat Max 2006 (Brushed/Brushless compatible)\",\"Weapon\":\"6\\\" AR500 Dual Disks (217 MPH tip speed)\",\"Weapon Motor\":\"Repeat Robotics 2812 800KV Hubmotor\",\"Chassis Material\":\"95A High-Flow TPU\",\"Battery Spec\":\"4S 850mAh 120C LiHV (XT30)\"}"
+        }
+      },
+      {
+        "id": "prod-tt-files",
+        "slug": "tt-kit-files",
+        "status": "published",
+        "data": {
+          "title": "Tropical Trouble Kit File Set",
+          "price": 50,
+          "badge": "coming_soon",
+          "badge_label": "Coming Soon",
+          "category_slug": "digital-files",
+          "category_name": "Digital Files",
+          "featured": true,
+          "featured_image": "/products/tt-files-1.png",
+          "images_json": "[\"/products/tt-files-1.png\"]",
+          "google_drive_url": "https://drive.google.com/drive/folders/1B_YOUR_CAD_FOLDER_ID",
+          "excerpt": "Complete STEP/STL CAD package, DXF weapon profiles, and Bambu Studio .3MF slicer projects (Instant Google Drive Delivery).",
+          "description": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Build your own Tropical Trouble 3lb beetleweight from scratch or customize the geometry for your own combat robot design! Upon checkout, you receive instant access to the complete digital engineering archive hosted on Google Drive.",
+                  "_key": "k_6a6olq2"
+                }
+              ],
+              "_key": "b_6oke59o"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Included in the Digital File Set",
+                  "_key": "k_epd22gz"
+                }
+              ],
+              "_key": "b_b3zo316"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Master CAD Assembly (.STEP): Parametric-ready assembly of chassis, uprights, disks, hub spacers, and forks.",
+                  "_key": "k_up4uszr"
+                }
+              ],
+              "_key": "b_mqse360"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Print-Ready STLs & Bambu Studio .3MF Projects: Pre-oriented plates with tuned modifier meshes ready for Bambu Lab A1 Mini, P1S, or X1C.",
+                  "_key": "k_4n1zns5"
+                }
+              ],
+              "_key": "b_mvk0n5r"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Waterjet / Laser Cut DXFs: Production DXF profiles for AR500 weapon disks and aluminum hub spacers.",
+                  "_key": "k_3c8tokl"
+                }
+              ],
+              "_key": "b_eu2ctwf"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Wheel Casting Molds: 3-part mold files for pouring 45A Vytaflex urethane tires onto TPU hubs.",
+                  "_key": "k_3l78c52"
+                }
+              ],
+              "_key": "b_ddbq7dn"
+            }
+          ],
+          "specs_json": "{\"File Formats\":\"STEP, STL, DXF, 3MF\",\"Minimum Print Bed\":\"180 x 180 mm (Bambu Lab A1 Mini)\",\"Delivery Method\":\"Instant Google Drive Download Link\",\"License\":\"Personal Non-Commercial Builder License\"}"
+        }
+      },
+      {
+        "id": "prod-tt-parts",
+        "slug": "tt-parts",
+        "status": "published",
+        "data": {
+          "title": "Tropical Trouble On-Demand 3D Printed Replacement Parts",
+          "price": 5,
+          "badge": "coming_soon",
+          "badge_label": "Coming Soon",
+          "category_slug": "parts-wheels",
+          "category_name": "Parts & Wheels",
+          "featured": true,
+          "featured_image": "/products/tt-parts-1.jpg",
+          "images_json": "[\"/products/tt-parts-1.jpg\",\"/products/tt-parts-2.jpg\",\"/products/tt-parts-3.jpg\",\"/products/tt-parts-4.jpg\",\"/products/tt-parts-5.jpg\"]",
+          "options_json": "[{\"name\":\"Replacement Part\",\"values\":[\"Fork Pair (TPU) — $5.00\",\"Weapon Upright Pair (TPU) — $12.00\",\"Wheel Guard Pair (TPU) — $15.00\",\"Top Lid (TPU) — $10.00\",\"Main Chassis Unibody (TPU) — $35.00\"]}]",
+          "excerpt": "Official factory-printed 95A TPU replacement parts for the Tropical Trouble kit.",
+          "description": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Need extra tournament spares before an event or don’t have a 3D printer yet? Order official factory-printed replacement TPU components for your Tropical Trouble 3lb combat robot.",
+                  "_key": "k_0akchw2"
+                }
+              ],
+              "_key": "b_rdc9faw"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "All parts are printed in impact-absorbing 95A High-Flow TPU using tuned solid modifier zones around weapon mounts and bearing seats.",
+                  "_key": "k_45y05fp"
+                }
+              ],
+              "_key": "b_aimprtl"
+            }
+          ]
+        }
+      },
+      {
+        "id": "prod-tt-wheels",
+        "slug": "tt-wheels",
+        "status": "published",
+        "data": {
+          "title": "Tropical Trouble Cast Urethane Wheels",
+          "price": 5,
+          "badge": "coming_soon",
+          "badge_label": "Coming Soon",
+          "category_slug": "parts-wheels",
+          "category_name": "Parts & Wheels",
+          "featured": false,
+          "featured_image": "/products/tt-wheels-1.jpg",
+          "images_json": "[\"/products/tt-wheels-1.jpg\"]",
+          "options_json": "[{\"name\":\"Wheel Type\",\"values\":[\"Front Indirect Driven Wheel (Single)\",\"Rear Direct Hub Wheel (Single)\",\"Full Set of 4 Wheels (2 Front + 2 Rear)\"]}]",
+          "excerpt": "High-grip 45A Vytaflex cast urethane wheels bonded to 3D-printed TPU hubs.",
+          "description": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Replacement cast 45A Vytaflex urethane tires molded onto interlocking 3D-printed TPU hubs with integrated HTD3M pulley teeth for the Tropical Trouble 4WD drivetrain.",
+                  "_key": "k_yhb3zdw"
+                }
+              ],
+              "_key": "b_ggr200e"
+            }
+          ]
+        }
+      },
+      {
+        "id": "prod-pp-tee",
+        "slug": "pipeline-punch-heavyweight-graphic-tee",
+        "status": "published",
+        "data": {
+          "title": "'Pipeline Punch' Heavyweight Graphic Tee",
+          "price": 25,
+          "badge": "coming_soon",
+          "badge_label": "Coming Soon",
+          "category_slug": "merch",
+          "category_name": "Merch",
+          "featured": false,
+          "featured_image": "/products/pp-tee-1.jpg",
+          "images_json": "[\"/products/pp-tee-1.jpg\",\"/products/pp-tee-2.jpg\"]",
+          "options_json": "[{\"name\":\"Size\",\"values\":[\"S\",\"M\",\"L\",\"XL\",\"2XL\",\"3XL\"]}]",
+          "excerpt": "Heavyweight cotton graphic tee celebrating the 2024 MRCA Champion Pipeline Punch.",
+          "description": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Rep the 2024 MRCA Champion and NHRL Top-8 beetleweight Pipeline Punch in the pits with this premium heavyweight tee.",
+                  "_key": "k_7ge9gp4"
+                }
+              ],
+              "_key": "b_7jqcafr"
+            }
+          ]
+        }
+      },
+      {
+        "id": "prod-lncr-tee",
+        "slug": "late-night-combat-robotics-logo-tee",
+        "status": "published",
+        "data": {
+          "title": "Late Night Combat Robotics Logo Tee",
+          "price": 23,
+          "badge": "coming_soon",
+          "badge_label": "Coming Soon",
+          "category_slug": "merch",
+          "category_name": "Merch",
+          "featured": false,
+          "featured_image": "/products/lncr-tee-1.jpg",
+          "images_json": "[\"/products/lncr-tee-1.jpg\",\"/products/lncr-tee-2.jpg\"]",
+          "options_json": "[{\"name\":\"Size\",\"values\":[\"S\",\"M\",\"L\",\"XL\",\"2XL\",\"3XL\"]}]",
+          "excerpt": "Classic Late Night Combat Robotics pit crew logo t-shirt.",
+          "description": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Official Late Night Combat Robotics emblem crew t-shirt in durable 100% combed ring-spun cotton.",
+                  "_key": "k_ca47q22"
+                }
+              ],
+              "_key": "b_0n4mvyu"
+            }
+          ]
+        }
+      }
+    ],
+    "wiki": [
+      {
+        "id": "wiki-tt-instructions",
+        "slug": "tropical-trouble-instructions",
+        "status": "published",
+        "data": {
+          "title": "Tropical Trouble Instructions Booklet",
+          "category": "Kit Build Guides",
+          "guide_version": "Version 1 Revision 2",
+          "updated_date": "November 20, 2025",
+          "cadasio_url": "https://instructions.online/?id=16518-tropical%20trouble%20kit%20rev%204",
+          "kit_url": "/products/tt-kit",
+          "featured_image": "/products/tt-kit-1.jpg",
+          "excerpt": "Complete bill of materials, Cadasio 3D hardware assembly, wiring diagram, smoke-stopper checklist, and Bambu Studio TPU/PLA slicer settings for the 3lb Tropical Trouble beetleweight kit.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "A Word on Safety",
+                  "_key": "k_vly43yt"
+                }
+              ],
+              "_key": "b_gn644yg"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Tropical Trouble, like all kinetic energy weaponized combat robots, can be extremely dangerous. The kit includes a secondary weapon bolt and nylock nut that acts as your dedicated weapon lock. Paint it high-visibility orange or add a bright ribbon. Never power on the robot without the weapon lock firmly installed.",
+                  "_key": "k_70arq1q"
+                }
+              ],
+              "_key": "b_6tqvphf"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Hardware Assembly & Interactive 3D Guide",
+                  "_key": "k_41wkani"
+                }
+              ],
+              "_key": "b_r7rk4xf"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Interactive 3D assembly instructions are available online at Cadasio (https://instructions.online/?id=16518-tropical%20trouble%20kit%20rev%204) where you can rotate, explode, and inspect every screw, bearing, and belt in 3D.",
+                  "_key": "k_5fz526n"
+                }
+              ],
+              "_key": "b_52v71xk"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Electronics & Wiring Layout",
+                  "_key": "k_lacspxw"
+                }
+              ],
+              "_key": "b_484qpl5"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Connect your Repeat AM32 Dual ESC to the 2x Repeat Max 2006 drive motors. Wire the HGLRC SPECTER 90A ESC to the Repeat 2812 800KV hubmotor. Use a ViFly ShortSaver V2 Smart Smoke Stopper before the initial power-on test to verify polarities and eliminate solder short risks.",
+                  "_key": "k_g6kp5u1"
+                }
+              ],
+              "_key": "b_21dwy5o"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Bambu Studio Slicing & Modifier Bodies",
+                  "_key": "k_o59w7m7"
+                }
+              ],
+              "_key": "b_yhilmfz"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Tropical Trouble chassis components fit directly on an 180x180mm Bambu Lab A1 Mini bed. Load the .3MF project to inherit tuned per-body infill modifiers (100% infill on weapon upright mounts and bearing seats, 25% gyroid infill on outer impact bumpers).",
+                  "_key": "k_0558lgf"
+                }
+              ],
+              "_key": "b_e8x0nqb"
+            }
+          ]
+        }
+      },
+      {
+        "id": "wiki-3dp-guide",
+        "slug": "3d-printing-bambu-a1-mini-slicing-guide",
+        "status": "published",
+        "data": {
+          "title": "3D Printing & Bambu A1 Mini Slicing Guide",
+          "category": "Combat Engineering & Slicing",
+          "guide_version": "Version 1 Revision 1",
+          "updated_date": "November 20, 2025",
+          "kit_url": "/products/tt-kit-files",
+          "featured_image": "/products/tt-files-1.png",
+          "excerpt": "Recommended 95A TPU infill densities, wall loop counts, modifier meshes, and print settings for beetleweight combat robots.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Combat 3D Printing Fundamentals",
+                  "_key": "k_u2pgrgm"
+                }
+              ],
+              "_key": "b_x6j2cko"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Thermoplastic Polyurethane (95A TPU) is the premier choice for beetleweight chassis. It bends, absorbs shock from 200+ MPH kinetic energy impacts, and returns to shape without catastrophic shattering.",
+                  "_key": "k_i021mqk"
+                }
+              ],
+              "_key": "b_4x5qeyv"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Recommended Slicer Parameters for 95A TPU",
+                  "_key": "k_cv127ux"
+                }
+              ],
+              "_key": "b_zi7rpiv"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Wall Loops: 5 to 7 perimeter walls for maximum inter-layer bonding.",
+                  "_key": "k_o54amjm"
+                }
+              ],
+              "_key": "b_grtuuyj"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Infill Pattern: Gyroid infill (25% for general chassis, 100% solid around motor mounts).",
+                  "_key": "k_1mhg21q"
+                }
+              ],
+              "_key": "b_7qug20k"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Printing Temperature: 225°C - 235°C on a textured PEI plate at 50°C.",
+                  "_key": "k_vzpj21a"
+                }
+              ],
+              "_key": "b_5yt26so"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Print Speed: 30-45 mm/s for consistent extrusion with zero stringing.",
+                  "_key": "k_0pbrkw6"
+                }
+              ],
+              "_key": "b_almsq06"
+            }
+          ]
+        }
+      }
+    ],
+    "posts": [
+      {
+        "id": "post-pipeline-to-tt",
+        "slug": "from-pipeline-punch-to-tropical-trouble",
+        "status": "published",
+        "data": {
+          "title": "From Pipeline Punch to Tropical Trouble: Lowering the Barrier to 3lb Combat Robotics",
+          "excerpt": "How we turned our MRCA Championship & NHRL Top-8 beetleweight architecture into an accessible, 100% 3D-printable combat robot kit.",
+          "featured_image": "/products/tt-kit-1.jpg",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "When I set out to design the Tropical Trouble 3lb beetleweight kit, the goal was simple: take the lessons learned from winning the 2024 MRCA Championship with Pipeline Punch and placing in the Top 8 at NHRL, and package them into a fully 3D-printable platform that any builder can maintain on a $180 Bambu Lab A1 Mini.",
+                  "_key": "k_f9p8xw1"
+                }
+              ],
+              "_key": "b_avvdw5y"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Why 100% 3D-Printed Construction?",
+                  "_key": "k_bwa2x5c"
+                }
+              ],
+              "_key": "b_4w0tjkq"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Traditional billet aluminum or carbon-fiber beetleweight kits are expensive to machine and punishing when a spare frame rail gets bent mid-tournament. By designing Tropical Trouble around a multi-zone TPU chassis with cast 45A Vytaflex urethane wheels and a 6\" Repeat Robotics 2812 hubmotor spinner (217 MPH tip speed), builders can print replacement chassis, uprights, wheel guards, and forks overnight before an event.",
+                  "_key": "k_c5myj6c"
+                }
+              ],
+              "_key": "b_4timawm"
+            },
+            {
+              "_type": "block",
+              "style": "h2",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Engineering Calculator Suite",
+                  "_key": "k_2ai6ofh"
+                }
+              ],
+              "_key": "b_qduh4i7"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Before modifying weapon diameters, pulley ratios, or LiHV cell counts, make sure to test your configuration in our native LNCR Combat Robotics Engineering Calculator Suite!",
+                  "_key": "k_x7088b7"
+                }
+              ],
+              "_key": "b_qtli81e"
+            }
+          ]
+        }
+      }
+    ],
+    "pages": [
+      {
+        "id": "page-about",
+        "slug": "about",
+        "status": "published",
+        "data": {
+          "title": "About Late Night Combat Robotics",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "I am a mechanical engineer specializing in product design.",
+                  "_key": "k_60efm2o"
+                }
+              ],
+              "_key": "b_jb4wx92"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "I founded Late Night Combat Robotics to use my engineering experience to lower barriers in combat robotics — designing competition-proven combat robot kits, open-source engineering calculators, and technical build documentation.",
+                  "_key": "k_9tm3o0v"
+                }
+              ],
+              "_key": "b_bj14sb0"
+            }
+          ]
+        }
+      },
+      {
+        "id": "page-contact",
+        "slug": "contact",
+        "status": "published",
+        "data": {
+          "title": "Contact",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Have questions about a combat robot kit, 3D printing profile, or upcoming tournament?",
+                  "_key": "k_erydvds"
+                }
+              ],
+              "_key": "b_ufmpafk"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Email: help@latenightcombat.com",
+                  "_key": "k_o0ri2kt"
+                }
+              ],
+              "_key": "b_7i2gtmm"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• Discord: Join the Late Night Combat Robotics Discord (https://discord.gg/JAwngFmVEq)",
+                  "_key": "k_24y86zo"
+                }
+              ],
+              "_key": "b_lphbfrw"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "• YouTube: @LateNightCombatRobotics (https://www.youtube.com/@LateNightCombatRobotics)",
+                  "_key": "k_ivxc2yc"
+                }
+              ],
+              "_key": "b_2j71baw"
+            }
+          ]
+        }
+      },
+      {
+        "id": "page-refund",
+        "slug": "refund",
+        "status": "published",
+        "data": {
+          "title": "Returns and refunds",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "All sales are final. Returns and refunds of fulfilled digital or physical purchases will not be accepted.",
+                  "_key": "k_d0rbr6x"
+                }
+              ],
+              "_key": "b_8ntphrr"
+            },
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "If there is an issue with your kit or order, please reach out to help@latenightcombat.com or message @meepmeepme on Discord and I will make it right.",
+                  "_key": "k_tjufsjx"
+                }
+              ],
+              "_key": "b_5kfs555"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

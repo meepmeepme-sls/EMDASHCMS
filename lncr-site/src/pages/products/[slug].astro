@@ -1,0 +1,230 @@
+---
+import { getEmDashEntry, getEmDashCollection, decodeSlug } from "emdash";
+import { PortableText } from "emdash/ui";
+import CosmosLayout from "../../layouts/CosmosLayout.astro";
+
+const slug = decodeSlug(Astro.params.slug);
+if (!slug) {
+  return Astro.rewrite("/404");
+}
+
+const { entry: product, cacheHint } = await getEmDashEntry("products", slug);
+if (!product) {
+  return Astro.rewrite("/404");
+}
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const { entries: relatedEntries } = await getEmDashCollection("products", { limit: 4 });
+const relatedProducts = relatedEntries.filter((p) => p.slug !== slug).slice(0, 3);
+
+const pData = product.data;
+let images: string[] = [];
+try {
+  images = pData.images_json ? JSON.parse(pData.images_json) : [pData.featured_image || "/images/lncr-logo.png"];
+} catch {
+  images = [pData.featured_image || "/images/lncr-logo.png"];
+}
+
+let options: Array<{ name: string; values: string[] }> = [];
+try {
+  options = pData.options_json ? JSON.parse(pData.options_json) : [];
+} catch {
+  options = [];
+}
+
+let specs: Record<string, string> = {};
+try {
+  specs = pData.specs_json ? JSON.parse(pData.specs_json) : {};
+} catch {
+  specs = {};
+}
+
+const badgeLabel = pData.badge_label || (pData.badge === "coming_soon" ? "Coming Soon" : "");
+const isComingSoon = pData.badge === "coming_soon";
+---
+
+<CosmosLayout title={pData.title} description={pData.excerpt || pData.title}>
+  <div class="content-wrapper" style="max-width:1240px; margin:0 auto 60px auto; padding:0 24px;">
+    <!-- Breadcrumb -->
+    <nav class="product-breadcrumb" aria-label="Breadcrumb" style="font-size:0.85rem; margin-bottom:24px; color:var(--text-color);">
+      <a href="/" style="color:var(--header-text-color); text-decoration:none;">Home</a> /
+      <a href="/products" style="color:var(--header-text-color); text-decoration:none;">Products</a> /
+      <span style="color:#6B7280;">{pData.title}</span>
+    </nav>
+
+    <!-- Product Layout Grid -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:48px; align-items:start; margin-bottom:60px;">
+      <!-- Gallery Column -->
+      <div class="product-gallery">
+        <div style="position:relative; aspect-ratio:1/1; background:#f9fafb; border:1px solid #3D4B59; overflow:hidden; margin-bottom:12px;">
+          {badgeLabel && (
+            <div style="position:absolute; top:16px; left:16px; background:#67C3E8; color:#1F2937; font-family:var(--primary-font); font-size:0.8rem; font-weight:700; padding:6px 12px; text-transform:uppercase; z-index:2;">
+              {badgeLabel}
+            </div>
+          )}
+          <img
+            id="main-product-image"
+            src={images[0]}
+            alt={pData.title}
+            style="width:100%; height:100%; object-fit:cover;"
+          />
+        </div>
+
+        {images.length > 1 && (
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            {images.map((img, idx) => (
+              <button
+                type="button"
+                class="thumb-btn"
+                data-img-src={img}
+                style="width:72px; height:72px; padding:0; border:1px solid #3D4B59; background:#fff; cursor:pointer; overflow:hidden;"
+                aria-label={`View photo ${idx + 1}`}
+              >
+                <img src={img} alt="" style="width:100%; height:100%; object-fit:cover;" />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <!-- Details Column -->
+      <div class="product-info" style="display:flex; flex-direction:column; gap:20px;">
+        <!-- Title and Price (Matching size per user requirement) -->
+        <div>
+          <h1 style="font-family:var(--primary-font); font-size:1.65rem; font-weight:700; color:var(--header-text-color); line-height:1.25; margin-bottom:8px;">
+            {pData.title}
+          </h1>
+          <div style="font-family:var(--primary-font); font-size:1.65rem; font-weight:700; color:var(--header-text-color);">
+            ${Number(pData.price).toFixed(2)}
+          </div>
+        </div>
+
+        {pData.excerpt && (
+          <p style="font-size:1rem; line-height:1.5; color:#374151; margin:0;">
+            {pData.excerpt}
+          </p>
+        )}
+
+        {/* Options Selector */}
+        {options.map((opt) => (
+          <div>
+            <label style="display:block; font-family:var(--primary-font); font-size:0.85rem; font-weight:700; color:var(--header-text-color); margin-bottom:6px;">
+              {opt.name}
+            </label>
+            <select style="width:100%; max-width:380px; height:42px; padding:0 12px; border:1px solid #3D4B59; background:#fff; font-size:0.9rem; font-family:var(--secondary-font); border-radius:0;">
+              {opt.values.map((v) => (
+                <option value={v}>{v}</option>
+              ))}
+            </select>
+          </div>
+        ))}
+
+        {/* Add to Cart / Coming Soon Action (Balanced size per user requirement) */}
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:8px;">
+          {isComingSoon ? (
+            <button
+              type="button"
+              disabled
+              style="background:#3D4B59; color:#CEDDFD; border:0; padding:12px 28px; font-family:var(--primary-font); font-size:0.9rem; font-weight:700; text-transform:uppercase; cursor:not-allowed; border-radius:0;"
+            >
+              Coming Soon
+            </button>
+          ) : (
+            <button
+              type="button"
+              class="add-to-cart-btn"
+              data-product-id={product.id}
+              data-title={pData.title}
+              data-price={pData.price}
+              style="background:#094AD8; color:#fff; border:0; padding:12px 28px; font-family:var(--primary-font); font-size:0.9rem; font-weight:700; text-transform:uppercase; cursor:pointer; border-radius:0;"
+            >
+              Add to Cart
+            </button>
+          )}
+
+          {pData.google_drive_url && (
+            <span style="font-size:0.85rem; color:#059669; font-weight:600;">
+              &check; Instant Google Drive delivery upon checkout
+            </span>
+          )}
+        </div>
+
+        {/* Specifications Table */}
+        {Object.keys(specs).length > 0 && (
+          <div style="margin-top:16px; border:1px solid #3D4B59; background:#fff; padding:16px;">
+            <h3 style="font-family:var(--primary-font); font-size:0.95rem; font-weight:700; color:var(--header-text-color); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">
+              Specifications
+            </h3>
+            <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+              <tbody>
+                {Object.entries(specs).map(([k, v]) => (
+                  <tr style="border-bottom:1px solid #E5E7EB;">
+                    <td style="padding:6px 0; font-weight:600; color:#374151; width:40%;">{k}</td>
+                    <td style="padding:6px 0; color:#4B5563;">{v}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Product Description */}
+        <div class="product-description" style="margin-top:16px; font-size:0.95rem; line-height:1.6; color:#374151;">
+          {pData.description && Array.isArray(pData.description) ? (
+            <PortableText value={pData.description} />
+          ) : (
+            <p>{pData.description}</p>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    {relatedProducts.length > 0 && (
+      <section style="margin-top:60px; padding-top:40px; border-top:1px solid #3D4B59;">
+        <h2 style="font-family:var(--primary-font); font-size:1.35rem; font-weight:700; color:var(--header-text-color); margin-bottom:24px; text-align:center;">
+          You Might Also Like
+        </h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:20px;">
+          {relatedProducts.map((rp) => (
+            <div style="background:#fff; border:1px solid #3D4B59;">
+              <a href={`/products/${rp.slug}`} style="text-decoration:none; color:inherit; display:flex; flex-direction:column;">
+                <div style="aspect-ratio:1/1; overflow:hidden; background:#f9fafb;">
+                  <img
+                    src={rp.data.featured_image || "/images/lncr-logo.png"}
+                    alt={rp.data.title}
+                    loading="lazy"
+                    style="width:100%; height:100%; object-fit:cover;"
+                  />
+                </div>
+                <div style="padding:14px;">
+                  <h3 style="font-family:var(--primary-font); font-size:0.9rem; font-weight:700; color:var(--header-text-color); margin-bottom:4px;">
+                    {rp.data.title}
+                  </h3>
+                  <div style="font-family:var(--primary-font); font-size:0.9rem; font-weight:700; color:var(--text-color);">
+                    ${Number(rp.data.price).toFixed(2)}
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <script>
+    // Gallery Switcher
+    const mainImg = document.getElementById('main-product-image') as HTMLImageElement;
+    const thumbBtns = document.querySelectorAll('.thumb-btn');
+    thumbBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetSrc = btn.getAttribute('data-img-src');
+        if (targetSrc && mainImg) {
+          mainImg.src = targetSrc;
+        }
+      });
+    });
+  </script>
+</CosmosLayout>

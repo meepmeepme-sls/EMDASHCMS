@@ -1,0 +1,317 @@
+---
+import { getSiteSettingsWithCacheHint, getMenuWithCacheHint } from "emdash";
+import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
+import { createPublicPageContext } from "emdash/page";
+import "../styles/cosmos.css";
+import "../styles/calculator.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  activeNav?: string;
+}
+
+const {
+  title,
+  description = "Combat Robot Kits, Engineering Wiki & Calculator for beetleweight combat robotics.",
+  image = "/images/lncr-og.png",
+  canonical,
+  activeNav = "",
+} = Astro.props;
+
+const [settingsResult, menuResult] = await Promise.all([
+  getSiteSettingsWithCacheHint(),
+  getMenuWithCacheHint("primary"),
+]);
+
+if (Astro.cache?.enabled) {
+  Astro.cache.set(settingsResult.cacheHint);
+  Astro.cache.set(menuResult.cacheHint);
+}
+
+const siteTitle = settingsResult.data?.title || "Late Night Combat Robotics";
+const siteTagline = settingsResult.data?.tagline || "Combat Robot Kits, Engineering Wiki & Calculator";
+const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
+
+const pageCtx = createPublicPageContext({
+  Astro,
+  kind: "custom",
+  pageType: "website",
+  title: fullTitle,
+  pageTitle: title,
+  description,
+  canonical,
+  image,
+  seo: { ogImage: image },
+  siteName: siteTitle,
+});
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isLoggedIn = !!Astro.locals.user;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href="/images/lncr-favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <EmDashHead page={pageCtx} />
+    <style>
+      :root {
+        --primary-font: "Lexend Exa", sans-serif;
+        --secondary-font: "Space Grotesk", sans-serif;
+        --background-color: #F3F4F6;
+        --text-color: #305FBD;
+        --header-text-color: #094AD8;
+        --button-background-color: #094AD8;
+        --button-hover-background-color: #284785;
+        --button-text-color: #F3F4F6;
+      }
+      body {
+        font-family: var(--secondary-font);
+        background-color: var(--background-color);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .site-main {
+        flex: 1 0 auto;
+      }
+      .admin-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #094AD8;
+        color: #fff !important;
+        font-family: var(--primary-font);
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+      }
+      .admin-pill:hover {
+        background: #05285A;
+      }
+      .cart-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 18px;
+        height: 18px;
+        background: #094AD8;
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        border-radius: 9px;
+        padding: 0 4px;
+        margin-left: 4px;
+      }
+    </style>
+  </head>
+  <body class="theme-light">
+    <EmDashBodyStart page={pageCtx} />
+
+    {/* Header Navigation (Big Cartel Cosmos Exact Structure) */}
+    <header class="header">
+      <div class="header-inner">
+        <!-- Mobile Navigation Button -->
+        <button
+          type="button"
+          class="icon-button mobile-nav-trigger"
+          aria-label="Open mobile menu"
+          id="open-nav-btn"
+        >
+          <svg aria-hidden="true" fill="currentColor" width="20" height="20" viewBox="0 0 20 20">
+            <path d="M2 4h16v2H2V4zm0 5h16v2H2V9zm0 5h16v2H2v-2z" />
+          </svg>
+        </button>
+
+        <!-- Brand Logo -->
+        <a href="/" class="header-logo" title="Late Night Combat Robotics Home">
+          <img src="/images/lncr-logo.png" alt="Late Night Combat Robotics" style="height: 38px; width: auto; object-fit: contain;" />
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="desktop-navigation" aria-label="Main Navigation">
+          <ul class="nav-links">
+            <li><a href="/" class={currentPath === "/" ? "is-active" : ""}>Home</a></li>
+            <li><a href="/products" class={currentPath.startsWith("/products") ? "is-active" : ""}>Products</a></li>
+            <li><a href="/wiki" class={currentPath.startsWith("/wiki") ? "is-active" : ""}>Engineering Wiki</a></li>
+            <li><a href="/calculator" class={currentPath.startsWith("/calculator") ? "is-active" : ""}>Combat Calculator</a></li>
+            <li><a href="/blog" class={currentPath.startsWith("/blog") ? "is-active" : ""}>Blog</a></li>
+            <li><a href="/about" class={currentPath === "/about" ? "is-active" : ""}>About</a></li>
+            <li><a href="/contact" class={currentPath === "/contact" ? "is-active" : ""}>Contact</a></li>
+          </ul>
+        </nav>
+
+        <!-- Header Actions: Search, Admin, Cart -->
+        <div class="header-actions" style="display:flex; align-items:center; gap:14px;">
+          <button
+            type="button"
+            class="icon-button search-trigger"
+            aria-label="Open Search"
+            id="open-search-btn"
+          >
+            <svg aria-hidden="true" fill="currentColor" width="18" height="18" viewBox="0 0.5 19.99 20.03">
+              <path d="M16.25 8.625C16.25 10.4219 15.6641 12.1016 14.6875 13.4297L19.6094 18.3906C20.1172 18.8594 20.1172 19.6797 19.6094 20.1484C19.1406 20.6562 18.3203 20.6562 17.8516 20.1484L12.8906 15.1875C11.5625 16.2031 9.88281 16.75 8.125 16.75C3.63281 16.75 0 13.1172 0 8.625C0 4.17188 3.63281 0.5 8.125 0.5C12.5781 0.5 16.25 4.17188 16.25 8.625ZM8.125 14.25C10.1172 14.25 11.9531 13.1953 12.9688 11.4375C13.9844 9.71875 13.9844 7.57031 12.9688 5.8125C11.9531 4.09375 10.1172 3 8.125 3C6.09375 3 4.25781 4.09375 3.24219 5.8125C2.22656 7.57031 2.22656 9.71875 3.24219 11.4375C4.25781 13.1953 6.09375 14.25 8.125 14.25Z"></path>
+            </svg>
+          </button>
+
+          <a href="/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin" class="admin-pill" title="EmDash CMS Admin UI">
+            EmDash Admin
+          </a>
+
+          <a href="/products" class="header-cart" aria-label="Cart">
+            <svg aria-hidden="true" fill="currentColor" width="20" height="20" viewBox="0 0 24 24">
+              <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+            <span class="cart-badge" id="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Modal -->
+    <div id="nav-modal" class="mobile-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.5);">
+      <div style="background:#F3F4F6; width:80%; max-width:320px; height:100%; padding:24px; display:flex; flex-direction:column; gap:20px; box-shadow: 2px 0 12px rgba(0,0,0,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <img src="/images/lncr-logo.png" alt="Late Night Combat Robotics" style="height:32px; width:auto;" />
+          <button type="button" id="close-nav-btn" class="icon-button" aria-label="Close menu" style="font-size:1.5rem; font-weight:700;">&times;</button>
+        </div>
+        <nav style="display:flex; flex-direction:column; gap:14px; font-family:var(--primary-font); font-size:1rem; font-weight:600;">
+          <a href="/" style="text-decoration:none; color:var(--header-text-color);">Home</a>
+          <a href="/products" style="text-decoration:none; color:var(--header-text-color);">Products</a>
+          <a href="/wiki" style="text-decoration:none; color:var(--header-text-color);">Engineering Wiki</a>
+          <a href="/calculator" style="text-decoration:none; color:var(--header-text-color);">Combat Calculator</a>
+          <a href="/blog" style="text-decoration:none; color:var(--header-text-color);">Blog</a>
+          <a href="/about" style="text-decoration:none; color:var(--header-text-color);">About</a>
+          <a href="/contact" style="text-decoration:none; color:var(--header-text-color);">Contact</a>
+          <a href="/refund" style="text-decoration:none; color:var(--header-text-color);">Returns &amp; Refunds</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="search-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; padding:20px;">
+      <div style="background:#F3F4F6; width:100%; max-width:540px; padding:24px; box-shadow:0 8px 30px rgba(0,0,0,0.3); border:1px solid #3D4B59;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h3 style="font-family:var(--primary-font); color:var(--header-text-color); font-size:1.1rem; margin:0;">Search Late Night Combat Robotics</h3>
+          <button type="button" id="close-search-btn" class="icon-button" style="font-size:1.5rem; font-weight:700;">&times;</button>
+        </div>
+        <form action="/search" method="get" style="display:flex; gap:8px;">
+          <input
+            type="search"
+            name="q"
+            placeholder="Search products, kits, wiki guides..."
+            required
+            style="flex:1; height:44px; padding:0 14px; border:1px solid #3D4B59; font-size:0.95rem; background:#fff; color:#000;"
+          />
+          <button
+            type="submit"
+            style="background:#094AD8; color:#fff; border:0; padding:0 18px; font-family:var(--primary-font); font-weight:700; cursor:pointer;"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="site-main">
+      <slot />
+    </main>
+
+    <!-- Footer (Cosmos Exact Structure) -->
+    <footer class="footer" style="background:#16181D; color:#CEDDFD; border-top:1px solid #2A2F3D; padding:48px 24px 32px 24px; margin-top:60px;">
+      <div style="max-width:1240px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:36px; margin-bottom:40px;">
+        <div>
+          <img src="/images/lncr-logo.png" alt="Late Night Combat Robotics" style="height:36px; width:auto; filter:brightness(0) invert(1); margin-bottom:14px;" />
+          <p style="font-size:0.9rem; line-height:1.6; color:#85A3E0; margin-bottom:14px;">
+            Affordable, competition-proven kits, technical documentation, and open-source design calculators for insect-weight combat robotics.
+          </p>
+          <div style="display:flex; gap:12px;">
+            <a href="https://discord.gg/JAwngFmVEq" target="_blank" rel="noopener" style="color:#CEDDFD; text-decoration:none; font-size:0.85rem; font-weight:600;">Discord &rarr;</a>
+            <a href="https://www.youtube.com/@LateNightCombatRobotics" target="_blank" rel="noopener" style="color:#CEDDFD; text-decoration:none; font-size:0.85rem; font-weight:600;">YouTube &rarr;</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family:var(--primary-font); color:#FFFFFF; font-size:0.95rem; font-weight:700; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.05em;">Store &amp; Products</h4>
+          <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
+            <li><a href="/products/tt-kit" style="color:#85A3E0; text-decoration:none;">Tropical Trouble 3lb Kit</a></li>
+            <li><a href="/products/tt-kit-files" style="color:#85A3E0; text-decoration:none;">Tropical Trouble CAD Files</a></li>
+            <li><a href="/products/tt-parts" style="color:#85A3E0; text-decoration:none;">Replacement 3D Printed Parts</a></li>
+            <li><a href="/products/tt-wheels" style="color:#85A3E0; text-decoration:none;">Cast Urethane Wheels</a></li>
+            <li><a href="/products" style="color:#85A3E0; text-decoration:none;">All Store Products &rarr;</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="font-family:var(--primary-font); color:#FFFFFF; font-size:0.95rem; font-weight:700; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.05em;">Engineering &amp; Tools</h4>
+          <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
+            <li><a href="/calculator" style="color:#85A3E0; text-decoration:none;">Combat Robotics Calculator</a></li>
+            <li><a href="/wiki" style="color:#85A3E0; text-decoration:none;">Engineering Wiki Hub</a></li>
+            <li><a href="/wiki/tropical-trouble-instructions" style="color:#85A3E0; text-decoration:none;">Tropical Trouble Manual</a></li>
+            <li><a href="/wiki/3d-printing-bambu-a1-mini-slicing-guide" style="color:#85A3E0; text-decoration:none;">3D Printing Slicing Guide</a></li>
+            <li><a href="/blog" style="color:#85A3E0; text-decoration:none;">Pipeline Punch Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="font-family:var(--primary-font); color:#FFFFFF; font-size:0.95rem; font-weight:700; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.05em;">Customer Service</h4>
+          <ul style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
+            <li><a href="/about" style="color:#85A3E0; text-decoration:none;">About LNCR</a></li>
+            <li><a href="/contact" style="color:#85A3E0; text-decoration:none;">Contact Support</a></li>
+            <li><a href="/refund" style="color:#85A3E0; text-decoration:none;">Returns &amp; Refunds</a></li>
+            <li><a href="/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin" style="color:#CEDDFD; text-decoration:none;">EmDash CMS Admin Login</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="max-width:1240px; margin:0 auto; padding-top:20px; border-top:1px solid #2A2F3D; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; font-size:0.8rem; color:#85A3E0; gap:12px;">
+        <p>&copy; {new Date().getFullYear()} Late Night Combat Robotics. All rights reserved.</p>
+        <p>Powered by <a href="https://emdashcms.com" target="_blank" rel="noopener" style="color:#CEDDFD; text-decoration:none; font-weight:600;">EmDash CMS</a> &amp; Astro</p>
+      </div>
+    </footer>
+
+    <!-- Interactive Navigation Scripts -->
+    <script>
+      const openNavBtn = document.getElementById('open-nav-btn');
+      const closeNavBtn = document.getElementById('close-nav-btn');
+      const navModal = document.getElementById('nav-modal');
+
+      const openSearchBtn = document.getElementById('open-search-btn');
+      const closeSearchBtn = document.getElementById('close-search-btn');
+      const searchModal = document.getElementById('search-modal');
+
+      if (openNavBtn && closeNavBtn && navModal) {
+        openNavBtn.addEventListener('click', () => { navModal.style.display = 'block'; });
+        closeNavBtn.addEventListener('click', () => { navModal.style.display = 'none'; });
+        navModal.addEventListener('click', (e) => {
+          if (e.target === navModal) navModal.style.display = 'none';
+        });
+      }
+
+      if (openSearchBtn && closeSearchBtn && searchModal) {
+        openSearchBtn.addEventListener('click', () => { searchModal.style.display = 'flex'; });
+        closeSearchBtn.addEventListener('click', () => { searchModal.style.display = 'none'; });
+        searchModal.addEventListener('click', (e) => {
+          if (e.target === searchModal) searchModal.style.display = 'none';
+        });
+      }
+    </script>
+
+    <EmDashBodyEnd page={pageCtx} />
+  </body>
+</html>

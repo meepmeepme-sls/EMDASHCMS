@@ -1,0 +1,303 @@
+/* ==========================================================================
+   LNCR COMBAT ROBOTICS CALCULATOR (COSMOS DESIGN SYSTEM ALIGNED)
+   Brings the engineering calculator into 100% visual harmony with the Store,
+   Wiki, and Blog. Uses Big Cartel Cosmos tokens, typography, and palette.
+   ========================================================================== */
+
+/* Main Page Container */
+.content-wrapper--calculator {
+  max-width: 1240px;
+  margin: 0 auto 60px auto;
+  padding: 0 var(--side-padding, 24px);
+}
+
+.calculator-page-header {
+  text-align: center;
+  max-width: 840px;
+  margin: 0 auto 32px auto;
+}
+
+.calculator-page-header .page-title {
+  color: var(--header-text-color, #094AD8);
+  font-family: var(--primary-font, "Lexend Exa", sans-serif);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .calculator-page-header .page-title {
+    font-size: 1.65rem;
+  }
+}
+
+.calculator-subtitle {
+  color: var(--text-color, #305FBD);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0 auto;
+}
+
+/* Calculator Root Container */
+.lncr-calculator-root {
+  width: 100%;
+}
+
+.calc-suite-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Top Toolbar & Subsystem Navigation */
+.calc-toolbar-container {
+  background: #FFFFFF;
+  border: 1px solid rgba(61, 75, 89, 0.2);
+  border-radius: var(--border-radius, 4px);
+  padding: 16px 20px;
+  box-shadow: 0 4px 14px rgba(9, 74, 216, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.calc-toolbar-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.calc-group-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calc-group-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #1E293B;
+  white-space: nowrap;
+}
+
+.calc-segmented-group {
+  display: inline-flex;
+  align-items: center;
+  background: #F1F5F9;
+  padding: 3px;
+  border-radius: var(--border-radius, 4px);
+  border: 1px solid #CBD5E1;
+  gap: 3px;
+}
+
+.calc-segmented-btn {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 6px 14px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  border-radius: calc(var(--border-radius, 4px) - 1px) !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.calc-segmented-btn:hover:not(.is-active) {
+  color: #094AD8 !important;
+  background: rgba(9, 74, 216, 0.06) !important;
+}
+
+.calc-segmented-btn.is-active {
+  background: #094AD8 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 4px rgba(9, 74, 216, 0.25);
+}
+
+.calc-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.calc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--border-radius, 4px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.calc-btn--primary {
+  background: #094AD8 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #094AD8 !important;
+}
+
+.calc-btn--primary:hover {
+  background: #073bb0 !important;
+  border-color: #073bb0 !important;
+}
+
+.calc-btn--subtle {
+  background: #FFFFFF !important;
+  color: #305FBD !important;
+  border: 1px solid #CBD5E1 !important;
+}
+
+.calc-btn--subtle:hover {
+  background: #F8FAFC !important;
+  border-color: #094AD8 !important;
+  color: #094AD8 !important;
+}
+
+.calc-btn--active {
+  background: rgba(9, 74, 216, 0.1) !important;
+  color: #094AD8 !important;
+  border: 1px solid #094AD8 !important;
+}
+
+/* Lower Sub-Tabs Bar */
+.calc-subtabs-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-top: 12px;
+  border-top: 1px solid #E2E8F0;
+  scrollbar-width: thin;
+}
+
+.calc-subtab-btn {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 8px 16px !important;
+  font-size: 0.86rem !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  border-radius: var(--border-radius, 4px) !important;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.calc-subtab-btn:hover:not(.is-active) {
+  color: #094AD8 !important;
+  background: #F1F5F9 !important;
+}
+
+.calc-subtab-btn.is-active {
+  background: #094AD8 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+/* Main Workspace */
+.calc-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Toast */
+.calc-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  background: #094AD8;
+  color: #FFFFFF;
+  padding: 12px 20px;
+  border-radius: var(--border-radius, 4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* Universal Styles for Calculator Cards & Panels */
+.calc-suite-container .bg-white,
+.calc-suite-container .dark\:bg-\[\#16181D\],
+.calc-suite-container .dark\:bg-\[\#1F232B\] {
+  background-color: #FFFFFF !important;
+  border-color: rgba(61, 75, 89, 0.2) !important;
+  border-radius: var(--border-radius, 4px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.calc-suite-container .border-\[\#CBD5E1\],
+.calc-suite-container .border-\[\#E2E8F0\],
+.calc-suite-container .dark\:border-\[\#2E3646\],
+.calc-suite-container .dark\:border-\[\#2D333F\] {
+  border-color: #CBD5E1 !important;
+}
+
+.calc-suite-container .text-\[\#0F172A\],
+.calc-suite-container .text-\[\#1E293B\],
+.calc-suite-container .dark\:text-\[\#CEDDFD\],
+.calc-suite-container .dark\:text-\[\#E2E4E9\] {
+  color: #0F172A !important;
+}
+
+.calc-suite-container .text-\[\#64748B\],
+.calc-suite-container .text-\[\#475569\],
+.calc-suite-container .dark\:text-\[\#85A3E0\],
+.calc-suite-container .dark\:text-\[\#94A3B8\] {
+  color: #475569 !important;
+}
+
+.calc-suite-container .text-\[\#094AD8\],
+.calc-suite-container .dark\:text-\[\#60A5FA\] {
+  color: #094AD8 !important;
+}
+
+/* Ensure all inputs and buttons inside calculator have proper sizing & borders */
+.calc-suite-container input[type="text"],
+.calc-suite-container input[type="number"],
+.calc-suite-container select {
+  border: 1px solid #CBD5E1 !important;
+  background-color: #FFFFFF !important;
+  border-radius: var(--border-radius, 4px) !important;
+  color: #0F172A !important;
+  padding: 8px 12px !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
+}
+
+.calc-suite-container input:focus,
+.calc-suite-container select:focus {
+  border-color: #094AD8 !important;
+  outline: 2px solid rgba(9, 74, 216, 0.2) !important;
+}
+
+/* Analysis Callouts & Results Highlights */
+.calc-suite-container .bg-blue-50,
+.calc-suite-container .bg-blue-50\/50,
+.calc-suite-container .dark\:bg-blue-950\/30 {
+  background-color: rgba(9, 74, 216, 0.04) !important;
+  border-color: rgba(9, 74, 216, 0.25) !important;
+  border-radius: var(--border-radius, 4px) !important;
+}
+
+/* Compliance Badges */
+.calc-suite-container .bg-emerald-500,
+.calc-suite-container .bg-emerald-600,
+.calc-suite-container .bg-green-500 {
+  background-color: #10B981 !important;
+  color: #FFFFFF !important;
+  border-radius: 0 !important;
+}

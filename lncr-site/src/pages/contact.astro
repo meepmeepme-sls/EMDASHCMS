@@ -1,0 +1,31 @@
+---
+import { getEmDashEntry } from "emdash";
+import { PortableText } from "emdash/ui";
+import CosmosLayout from "../layouts/CosmosLayout.astro";
+
+const { entry: page } = await getEmDashEntry("pages", "contact");
+---
+
+<CosmosLayout title="Contact" description="Get in touch with Late Night Combat Robotics regarding kit orders, 3D printing advice, and event sponsorships.">
+  <div class="content-wrapper" style="max-width:880px; margin:0 auto 60px auto; padding:0 24px;">
+    <article style="background:#fff; border:1px solid #3D4B59; padding:40px; margin-top:20px;">
+      <h1 style="font-family:var(--primary-font); font-size:2rem; font-weight:700; color:var(--header-text-color); margin-bottom:20px;">
+        Contact Us
+      </h1>
+      <div style="font-size:1rem; line-height:1.7; color:#374151;">
+        {page?.data?.content ? (
+          <PortableText value={page.data.content} />
+        ) : (
+          <div>
+            <p>Have questions about a combat robot kit, 3D printing profile, or upcoming tournament?</p>
+            <ul style="list-style:disc; margin-left:20px; display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+              <li><strong>Email:</strong> <a href="mailto:help@latenightcombat.com" style="color:#094AD8;">help@latenightcombat.com</a></li>
+              <li><strong>Discord:</strong> <a href="https://discord.gg/JAwngFmVEq" target="_blank" rel="noopener" style="color:#094AD8;">Join the Late Night Combat Robotics Discord</a></li>
+              <li><strong>YouTube:</strong> <a href="https://www.youtube.com/@LateNightCombatRobotics" target="_blank" rel="noopener" style="color:#094AD8;">@LateNightCombatRobotics</a></li>
+            </ul>
+          </div>
+        )}
+      </div>
+    </article>
+  </div>
+</CosmosLayout>

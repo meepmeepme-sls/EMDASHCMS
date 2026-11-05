@@ -1,0 +1,42 @@
+Vendor,Product,Variant,SKU,Motor_Type,Application,Stator_Size,Motor_KV,Output_KV_Effective,Gear_Reduction,Rated_Voltage,Mass_g,Notes
+Repeat Robotics,Compact 1806 Mk2 Planetary Gearmotor,Gearmotor,RR-01-3309,Brushless Outrunner,Drive,1806,2300,101.8,22.6:1,2-5S LiPo,42.0,Beetleweight drive gearmotor with 6mm hollow billet steel shaft
+Repeat Robotics,Compact Brushless 1806 Mk1,Motor with Gearbox,RR-01-3307,Brushless Outrunner,Drive,1806,2300,101.8,22.6:1,2-4S LiPo,44.5,Beetleweight drive gearmotor with 4mm steel shaft
+Repeat Robotics,Mini Pro 1106 Mk4.1,Gearmotor,RR-01-3261,Brushless Outrunner,Drive,1106,3500,154.9,22.6:1,2-4S LiPo,24.6,"Antweight planetary gearmotor, 4mm shaft"
+Repeat Robotics,Mini Pro Brushed,Gearmotor,RR-01-3264,Brushed DC (030),Drive,030,2298,101.7,22.6:1,2-4S LiPo,29.7,Antweight brushed planetary gearmotor; 1220 RPM @ 12V
+Repeat Robotics,Mini Brushed Mk2,4mm Shaft,RR-01-3257,Brushed DC (030),Drive,030,2298,101.7,22.6:1,2-4S LiPo,27.5,Antweight brushed planetary gearmotor
+Repeat Robotics,Pro Brushless 2006,2500kv (4S version) / Drive Gearmotor,RR-01-3319,Brushless Outrunner,Drive,2006,2500,92.6,27:1,4S LiPo,,Beetleweight high-torque drive gearmotor
+Repeat Robotics,Pro Brushless 2006,1900kv (6S version) / High Reduction Gearmotor,RR-01-3318,Brushless Outrunner,Drive,2006,1900,14.5,131:1,6S LiPo,,Beetleweight high reduction gearmotor
+Repeat Robotics,Belt Drive 2812,800KV,RR-02-3298,Brushless Outrunner,Weapon / Heavy Drive,2812,800,800.0,1:1 (Direct/Belt),2-8S LiPo,85.0,Weapon/heavy duty outrunner
+Repeat Robotics,Belt Drive 2812,1300KV,RR-02-3299,Brushless Outrunner,Weapon / Heavy Drive,2812,1300,1300.0,1:1 (Direct/Belt),2-6S LiPo,85.0,Weapon outrunner
+Repeat Robotics,Belt Drive 2812,1800KV,RR-02-3300,Brushless Outrunner,Weapon / Heavy Drive,2812,1800,1800.0,1:1 (Direct/Belt),2-6S LiPo,85.0,Weapon outrunner
+Repeat Robotics,Belt Drive 2812,2300KV,RR-02-3301,Brushless Outrunner,Weapon / Heavy Drive,2812,2300,2300.0,1:1 (Direct/Belt),2-5S LiPo,85.0,Weapon outrunner
+Repeat Robotics,Repeat 2822 Mk3,1100KV,RR-02-3267,Brushless Outrunner,Weapon (Horizontal),2822,1100,1100.0,1:1 (Direct),2-6S LiPo,46.0,Antweight horizontal weapon motor
+Repeat Robotics,Repeat 2822 Mk3,1800KV,RR-02-3268,Brushless Outrunner,Weapon (Vertical),2822,1800,1800.0,1:1 (Direct),2-4S LiPo,46.0,Antweight vertical weapon motor
+Repeat Robotics,Repeat 2822 Mk3,2300KV,RR-02-3269,Brushless Outrunner,Weapon (Drum),2822,2300,2300.0,1:1 (Direct),2-4S LiPo,46.0,Antweight drum weapon motor
+Repeat Robotics,2207 Antweight Hubmotor,1200KV / Hubmotor,RR-02-3271,Brushless Outrunner,Weapon (Hubmotor),2207,1200,1200.0,1:1 (Hubmotor),2-4S LiPo,144.0,Antweight battle-ready hubmotor assembly
+Repeat Robotics,2207 Antweight Hubmotor,1800KV / Hubmotor,RR-02-3272,Brushless Outrunner,Weapon (Hubmotor),2207,1800,1800.0,1:1 (Hubmotor),2-4S LiPo,144.0,Antweight battle-ready hubmotor assembly
+Repeat Robotics,2207 Antweight Hubmotor,2400KV / Hubmotor,RR-02-3273,Brushless Outrunner,Weapon (Hubmotor),2207,2400,2400.0,1:1 (Hubmotor),2-4S LiPo,144.0,Antweight battle-ready hubmotor assembly
+Repeat Robotics,2812 Beetleweight Hubmotor,800 / Hubmotor,RR-02-3285,Brushless Outrunner,Weapon (Hubmotor),2812,800,800.0,1:1 (Hubmotor),2-6S LiPo,,Beetleweight hubmotor assembly
+Repeat Robotics,2812 Beetleweight Hubmotor,1300 / Hubmotor,RR-02-3286,Brushless Outrunner,Weapon (Hubmotor),2812,1300,1300.0,1:1 (Hubmotor),2-6S LiPo,,Beetleweight hubmotor assembly
+Repeat Robotics,2812 Beetleweight Hubmotor,1800 / Hubmotor,RR-02-3287,Brushless Outrunner,Weapon (Hubmotor),2812,1800,1800.0,1:1 (Hubmotor),2-6S LiPo,,Beetleweight hubmotor assembly
+Just Cuz Robotics,DartBox V2 Drive (Viper),Viper Motor (4mm Shaft),ViperDriveV2-4mm,Brushed DC,Drive,130 Can Equivalent,2906,129.2,22.5:1,3S (12V),54.5,Lightweight 22mm planetary gearmotor for beetleweights
+Just Cuz Robotics,DartBox V2 Drive (Dragon),Dragon Motor (4mm Shaft),DragonDriveV2-4mm,Brushed DC,Drive,130 Can Equivalent,2906,129.2,22.5:1,3S (12V),57.0,50% more power than Viper for fast acceleration
+Just Cuz Robotics,DartBox V2 Gecko Drive,4mm Shaft,GECKO-DB-4MM,Brushed DC,Drive,130 Can Equivalent,2062,91.7,22.5:1,3S-6S LiPo,53.7,"Lower speed & current draw, optimized for 4S-6S operation"
+Just Cuz Robotics,Blitz Pro 2306 Gearmotor,5.2:1 Ratio 650kV (Drive),BLITZ_PRO_5.2_MK4_650_NEW,Brushless Outrunner,Drive,2306,650,125.0,5.2:1,3S-6S LiPo,,Bulletproof 24mm gearmotor with D-shaft pinion
+Just Cuz Robotics,Blitz Pro 2306 Gearmotor,27:1 Ratio 1500kV (High Reduction),HR_BLITZ_PRO_27_MK4_1500_NEW,Brushless Outrunner,Weapon / Arm / Actuator,2306,1500,55.6,27:1,3S-4S LiPo,,Hammersaw arm or high-torque actuator motor
+Just Cuz Robotics,Blitz Lite 1604 Gearmotors,2850KV (2S-6S),BLITZ LITE 20MM 2850KV SLOW,Brushless Outrunner,Drive,1604,2850,2850.0,Planetary,2-6S LiPo,,Peak power density brushless gearmotor
+Just Cuz Robotics,Blitz Lite 1604 Gearmotors,3800KV (2S-4S),BLITZ LITE 20MM 3800KV FAST,Brushless Outrunner,Drive,1604,3800,3800.0,Planetary,2-4S LiPo,,Peak power density brushless gearmotor
+Just Cuz Robotics,2306.5 Just 'Cuz Edition Brushless Motor,Standard,2306M1000,Brushless Outrunner,Drive / Weapon,2306.5,1000,1000.0,1:1,3S-8S LiPo,35.8,Drop-in replacement for high-voltage beetle drive
+Just Cuz Robotics,Cherry Bomb JCR-4935,1000kV Complete Motor,JCR-4935,Brushless Outrunner,Weapon (Heavy Duty),40 x 12mm,1000,1000.0,1:1,3S-6S LiPo,216.5,"Battle-hardened beetleweight weapon motor, 8mm 4140 shaft"
+Just Cuz Robotics,HMR-5022 Hammersaw Motor,1700kV,HMR-5022-1700-FAST,Brushless Outrunner,Weapon / Hammersaw,5022,1700,1700.0,1:1,3S-4S LiPo,,Beta hammersaw motor
+Just Cuz Robotics,Hybrid Hubmotor RDY-5735,750kV (Slow) / 950kV (Fast),Hybrid-5735-750kV-SLOW,Brushless Outrunner,Weapon (Hubmotor),5735,750,750.0,1:1 (Hubmotor),3S-4S LiPo,,Battle-ready hybrid hubmotor for beetleweights
+Just Cuz Robotics,RDY-5536 Hubmotor,900kV / 1200kV,RDY-5536-1200KV-V1.2,Brushless Outrunner,Weapon (Hubmotor),5536,1200,1200.0,1:1 (Hubmotor),3S-4S LiPo,,Battle-ready weapon hubmotor
+Just Cuz Robotics,RDY-MINI-5022-V2 Hubmotor,1100kV / 1700kV,RDY-MINI-5022-FAST-1700KV-V2-MOTOR,Brushless Outrunner,Weapon (Hubmotor),5022,1700,1700.0,1:1 (Hubmotor),3S-4S LiPo,,Antweight battle-ready weapon hubmotor
+Just Cuz Robotics,ZomBox 3520 Motor Combo,650kV BLDC,ZOMBOX-3520-MOTOR-GEARBOX-COMBO,Brushless Outrunner,Weapon / Drive (12lb/30lb),3520,650,112.1,5.8:1,3S-6S LiPo,,30lb/12lb heavy duty gearbox & custom 3520 motor
+Turnabot,Turnabot N10 Standard Kit Gearmotor,Standard,N10-STD,Brushed DC,Drive,N10 Can,223,223.0,1:1 (Output Speed),2S LiPo (7.4V),13.8,1650 RPM free speed at 2S
+Turnabot,Turnabot N20 High-Power Planetary,800 RPM @ 2S,N20-800,Brushed DC,Drive,N20 Can,3243,108.1,30:1,2S LiPo (7.4V),9.6,High-power N20 combat gearmotor
+Turnabot,Turnabot N20 High-Power Planetary,1400 RPM @ 2S,N20-1400,Brushed DC,Drive,N20 Can,5676,189.2,30:1,2S LiPo (7.4V),9.6,High-power N20 combat gearmotor
+Turnabot,Turnabot N20 High-Power Planetary,2000 RPM @ 2S,N20-2000,Brushed DC,Drive,N20 Can,8108,270.3,30:1,2S LiPo (7.4V),9.6,High-power N20 combat gearmotor
+Turnabot,Turnabot N20 High-Power Planetary,3000 RPM @ 2S,N20-3000,Brushed DC,Drive,N20 Can,12162,405.4,30:1,2S LiPo (7.4V),9.6,"High-power N20 combat gearmotor, exceeds typical antweight traction"
+Turnabot,Turnabot N30 High-Power Planetary,600 RPM @ 2S,N30-600,Brushed DC,Drive,N30 Can,2432,81.1,30:1,2S LiPo (7.4V),12.1,Heavy antweight / beetleweight N30 gearmotor
+Turnabot,Turnabot N30 High-Power Planetary,1000 RPM @ 2S,N30-1000,Brushed DC,Drive,N30 Can,4054,135.1,30:1,2S LiPo (7.4V),12.1,Heavy antweight / beetleweight N30 gearmotor

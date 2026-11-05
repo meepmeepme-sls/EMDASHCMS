@@ -1,0 +1,1071 @@
+/**
+ * Late Night Combat Robotics Calculator Suite - Engineering Constants & Presets
+ * Grounded in SPARC v1.7 Specifications and Level 5 Robotics motor libraries
+ */
+
+import type {
+  WeightClassInfo,
+  WeightClassId,
+  BatteryChemistryConfig,
+  BladeMoiPreset,
+  MotorPreset,
+  BeltPitchPreset,
+  LengthUnit,
+  GearboxPreset,
+  WeaponWhatIfFamily,
+} from '../types';
+
+export const NHRL_TIP_SPEED_LIMIT_MPH = 250;
+export const NHRL_TIP_SPEED_LIMIT_MS = 250 * 0.44704; // 111.76 m/s
+
+export const SPARC_MAX_UNAPPROVED_VOLTAGE = 48.0; // Volts DC (SPARC v1.7 section 4.2)
+
+export const WEIGHT_CLASSES: WeightClassInfo[] = [
+  {
+    id: 'ant',
+    name: 'Antweight (1 lb)',
+    shortName: 'Ant',
+    pluralName: 'Ants',
+    weightGrams: 454,
+    weightLbs: 1.0,
+    description: 'SPARC / NHRL standard 1-pound class (includes Open & Plastic Ant).',
+    recommendedS: [2, 4],
+    maxVoltageWarningThreshold: SPARC_MAX_UNAPPROVED_VOLTAGE,
+  },
+  {
+    id: 'beetle',
+    name: 'Beetleweight (3 lb)',
+    shortName: 'Beetle',
+    pluralName: 'Beetles',
+    weightGrams: 1361,
+    weightLbs: 3.0,
+    description: 'Premier combat class at NHRL. High energy density and destructive power.',
+    recommendedS: [3, 6],
+    maxVoltageWarningThreshold: SPARC_MAX_UNAPPROVED_VOLTAGE,
+  },
+  {
+    id: 'bigbot',
+    name: 'Big Bots (12/30 lb)',
+    shortName: 'Big Bot',
+    pluralName: 'Big Bots',
+    weightGrams: 13608,
+    weightLbs: 30.0,
+    description: 'Hobbyweight (12 lb) and Featherweight (30 lb) maximum weight classes at NHRL.',
+    recommendedS: [4, 16],
+    maxVoltageWarningThreshold: SPARC_MAX_UNAPPROVED_VOLTAGE,
+  },
+];
+
+export const BATTERY_CHEMISTRIES: Record<string, BatteryChemistryConfig> = {
+  lipo: {
+    id: 'lipo',
+    label: 'LiPo',
+    nominalPerCell: 3.7,
+    maxPerCell: 4.2,
+  },
+  lihv: {
+    id: 'lihv',
+    label: 'LiHV',
+    nominalPerCell: 3.8,
+    maxPerCell: 4.35,
+  },
+  nimh: {
+    id: 'nimh',
+    label: 'NiMH',
+    nominalPerCell: 1.2,
+    maxPerCell: 1.4,
+  },
+};
+
+export const BLADE_MOI_PRESETS: BladeMoiPreset[] = [];
+
+// Motor Presets from Repeat Robotics and Extended Brands (No underlines)
+export const MOTOR_PRESETS: MotorPreset[] = [
+  // ==========================================
+  // 1. REPEAT ROBOTICS (DEFAULT)
+  // ==========================================
+  {
+    id: 'rr_compact_1806_mk2',
+    name: 'Repeat Robotics Compact 1806 Mk2 Gearmotor 2300KV 2-5S LiPo',
+    category: 'drive',
+    weightClasses: ['ant', 'beetle'],
+    kv: 2300,
+    gearRatio: 22.6,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.085,
+    maxAmps: 25,
+    massGrams: 42.0,
+    notes: 'Beetleweight Antweight drive gearmotor 6mm hollow billet steel shaft',
+  },
+  {
+    id: 'rr_compact_1806_mk1',
+    name: 'Repeat Robotics Compact Brushless 1806 Mk1 2300KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2300,
+    gearRatio: 22.6,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.088,
+    maxAmps: 22,
+    massGrams: 44.5,
+    notes: 'Beetleweight drive gearmotor 4mm steel shaft',
+  },
+  {
+    id: 'rr_mini_pro_1106_mk41',
+    name: 'Repeat Robotics Mini Pro 1106 Mk4.1 3500KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 3500,
+    gearRatio: 22.6,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.12,
+    maxAmps: 15,
+    massGrams: 24.6,
+    notes: 'Antweight planetary gearmotor 4mm shaft',
+  },
+  {
+    id: 'rr_mini_pro_brushed',
+    name: 'Repeat Robotics Mini Pro Brushed 2298KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 2298,
+    gearRatio: 22.6,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.25,
+    maxAmps: 10,
+    massGrams: 29.7,
+    notes: 'Antweight brushed planetary gearmotor 1220 RPM at 12V',
+  },
+  {
+    id: 'rr_mini_brushed_mk2',
+    name: 'Repeat Robotics Mini Brushed Mk2 2298KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 2298,
+    gearRatio: 22.6,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.25,
+    maxAmps: 10,
+    massGrams: 27.5,
+    notes: 'Antweight brushed planetary gearmotor',
+  },
+  {
+    id: 'rr_pro_brushless_2006_4s',
+    name: 'Repeat Robotics Pro Brushless 2006 Drive 2500KV 4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2500,
+    gearRatio: 27.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.065,
+    maxAmps: 30,
+    notes: 'Beetleweight high-torque drive gearmotor',
+  },
+  {
+    id: 'rr_belt_drive_2812_800',
+    name: 'Repeat Robotics Belt Drive 2812 800KV 2-8S LiPo',
+    category: 'both',
+    weightClasses: ['beetle', 'bigbot'],
+    kv: 800,
+    gearRatio: 1.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.05,
+    maxAmps: 45,
+    massGrams: 85.0,
+    notes: '12lb 30lb Drive / Beetleweight outrunner',
+  },
+  {
+    id: 'rr_belt_drive_2812_1300',
+    name: 'Repeat Robotics Belt Drive 2812 1300KV 2-6S LiPo',
+    category: 'both',
+    weightClasses: ['beetle', 'bigbot'],
+    kv: 1300,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.038,
+    maxAmps: 55,
+    massGrams: 85.0,
+    notes: '12lb 30lb Drive / Beetleweight outrunner',
+  },
+  {
+    id: 'rr_belt_drive_2812_1800',
+    name: 'Repeat Robotics Belt Drive 2812 1800KV 2-6S LiPo',
+    category: 'both',
+    weightClasses: ['beetle', 'bigbot'],
+    kv: 1800,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.032,
+    maxAmps: 65,
+    massGrams: 85.0,
+    notes: '12lb 30lb Drive / Beetleweight outrunner',
+  },
+  {
+    id: 'rr_belt_drive_2812_2300',
+    name: 'Repeat Robotics Belt Drive 2812 2300KV 2-5S LiPo',
+    category: 'both',
+    weightClasses: ['beetle', 'bigbot'],
+    kv: 2300,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.026,
+    maxAmps: 75,
+    massGrams: 85.0,
+    notes: '12lb 30lb Drive / Beetleweight outrunner',
+  },
+  {
+    id: 'rr_magnum_gearmotor_3536',
+    name: 'Repeat Robotics Repeat Magnum Gearmotor (3536 Motor) 1400KV Up to 6S LiPo',
+    category: 'drive',
+    weightClasses: ['bigbot'],
+    kv: 1400,
+    gearRatio: 19.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.035,
+    maxAmps: 60,
+    notes: 'Repeat Magnum 19:1 gearmotor with 3536 motor for Big Bots',
+  },
+  {
+    id: 'rr_ultra_mk2_gearmotor_2830',
+    name: 'Repeat Robotics Ultra Mk2 Drive Gearmotor (2830 Motor) 1450KV 2-6S LiPo',
+    category: 'drive',
+    weightClasses: ['bigbot'],
+    kv: 1450,
+    gearRatio: 14.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.045,
+    maxAmps: 45,
+    notes: 'Repeat Ultra Mk2 14:1 gearmotor with 2830 motor for Big Bots',
+  },
+  {
+    id: 'rr_repeat_2822_mk3_1100',
+    name: 'Repeat Robotics Repeat 2822 Mk3 1100KV 2-6S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 1100,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.075,
+    maxAmps: 35,
+    massGrams: 46.0,
+    notes: 'Antweight horizontal weapon motor / Direct Motor',
+  },
+  {
+    id: 'rr_repeat_2822_mk3_1800',
+    name: 'Repeat Robotics Repeat 2822 Mk3 1800KV 2-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 1800,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.05,
+    maxAmps: 45,
+    massGrams: 46.0,
+    notes: 'Antweight vertical weapon motor / Direct Motor',
+  },
+  {
+    id: 'rr_repeat_2822_mk3_2300',
+    name: 'Repeat Robotics Repeat 2822 Mk3 2300KV 2-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 2300,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.038,
+    maxAmps: 50,
+    massGrams: 46.0,
+    notes: 'Antweight drum weapon motor / Direct Motor',
+  },
+  {
+    id: 'rr_2207_hub_1200',
+    name: 'Repeat Robotics 2207 Antweight Hubmotor 1200KV 2-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 1200,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.08,
+    maxAmps: 30,
+    massGrams: 144.0,
+    notes: 'Antweight hubmotor assembly',
+  },
+  {
+    id: 'rr_2207_hub_1800',
+    name: 'Repeat Robotics 2207 Antweight Hubmotor 1800KV 2-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 1800,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.055,
+    maxAmps: 35,
+    massGrams: 144.0,
+    notes: 'Antweight hubmotor assembly',
+  },
+  {
+    id: 'rr_2207_hub_2400',
+    name: 'Repeat Robotics 2207 Antweight Hubmotor 2400KV 2-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 2400,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.042,
+    maxAmps: 40,
+    massGrams: 144.0,
+    notes: 'Antweight hubmotor assembly',
+  },
+  {
+    id: 'rr_2812_hub_800',
+    name: 'Repeat Robotics 2812 Beetleweight Hubmotor 800KV 2-6S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle'],
+    kv: 800,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.06,
+    maxAmps: 40,
+    notes: 'Beetleweight hubmotor assembly',
+  },
+  {
+    id: 'rr_2812_hub_1300',
+    name: 'Repeat Robotics 2812 Beetleweight Hubmotor 1300KV 2-6S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle'],
+    kv: 1300,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.045,
+    maxAmps: 50,
+    notes: 'Beetleweight hubmotor assembly',
+  },
+  {
+    id: 'rr_2812_hub_1800',
+    name: 'Repeat Robotics 2812 Beetleweight Hubmotor 1800KV 2-6S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle', 'bigbot'],
+    kv: 1800,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.035,
+    maxAmps: 60,
+    notes: 'Beetleweight hubmotor assembly',
+  },
+
+  // ==========================================
+  // 2. CUSTOM MOTOR OPTION
+  // ==========================================
+  {
+    id: 'custom',
+    name: 'Custom Motor Manual Spec',
+    category: 'both',
+    weightClasses: ['ant', 'beetle', 'bigbot'],
+    kv: 1400,
+    gearRatio: 1.0,
+    internalResistanceOhms: 0.05,
+    ratedVoltage: 14.8,
+    maxAmps: 30,
+    notes: 'Manually specify custom KV internal resistance and parameters',
+  },
+
+  // ==========================================
+  // 3. EXTENDED BRANDS
+  // ==========================================
+  {
+    id: 'fingertech_silver_spark',
+    name: 'FingerTech Silver Spark Gearmotor 1573KV 2S-3S LiPo',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 1573,
+    gearRatio: 33.3,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.35,
+    maxAmps: 5,
+    notes: 'Gearmotor 11 to 1 up to 600 to 1',
+  },
+  {
+    id: 'fingertech_gold_spark',
+    name: 'FingerTech Gold Spark Gearmotor 1573KV 2S-3S LiPo',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 1573,
+    gearRatio: 33.3,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.35,
+    maxAmps: 5,
+    notes: 'Gearmotor 20 to 1 up to 360 to 1',
+  },
+  {
+    id: 'fingertech_megaspark_2300',
+    name: 'FingerTech Mega Spark FT1806 2300KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2300,
+    gearRatio: 22.6,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.08,
+    maxAmps: 20,
+    notes: 'Planetary Gearmotor',
+  },
+  {
+    id: 'fingertech_megaspark_750',
+    name: 'FingerTech Mega Spark FT1806 750KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 750,
+    gearRatio: 22.6,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.1,
+    maxAmps: 15,
+    notes: 'Planetary Gearmotor',
+  },
+  {
+    id: 'fingertech_d2822_1100',
+    name: 'FingerTech D2822 Brushless Outrunner 1100KV 2S-3S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 1100,
+    gearRatio: 1.0,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.08,
+    maxAmps: 25,
+    notes: 'Belt Drive Motor',
+  },
+  {
+    id: 'fingertech_d2822_2600',
+    name: 'FingerTech D2822/8 Brushless Outrunner 2600KV 2S-3S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 2600,
+    gearRatio: 1.0,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.05,
+    maxAmps: 30,
+    notes: 'Belt Drive Motor',
+  },
+  {
+    id: 'fingertech_s2838_2970',
+    name: 'FingerTech S2838 Brushless Inrunner 2970KV 2S-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle'],
+    kv: 2970,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.04,
+    maxAmps: 40,
+    notes: 'Belt Drive Motor',
+  },
+  {
+    id: 'ranglebox_mars_25',
+    name: 'Ranglebox Mars 25 to 1 Gearbox plus RB1806 Assembly 2000KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2000,
+    gearRatio: 25.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.08,
+    maxAmps: 25,
+    notes: 'Gearmotor 25 to 1',
+  },
+  {
+    id: 'ranglebox_saturn_19',
+    name: 'Ranglebox Saturn 19 to 1 Gearbox plus RB4250 Assembly 1000KV 2-6S LiPo',
+    category: 'drive',
+    weightClasses: ['bigbot'],
+    kv: 1000,
+    gearRatio: 19.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.04,
+    maxAmps: 50,
+    notes: 'Gearmotor 19 to 1 for 12lb 30lb',
+  },
+  {
+    id: 'rectified_22_brushed',
+    name: 'Rectified Robotics 22mm Brushed Drive 800KV 2S-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 800,
+    gearRatio: 22.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.15,
+    maxAmps: 15,
+    notes: 'Gearmotor 22 to 1',
+  },
+  {
+    id: 'rectified_22_brushless',
+    name: 'Rectified Robotics 22mm Brushless Drive 2300KV 2S-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2300,
+    gearRatio: 22.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.08,
+    maxAmps: 25,
+    notes: 'Gearmotor 22 to 1',
+  },
+  {
+    id: 'rectified_24_brushless',
+    name: 'Rectified Robotics 24mm Brushless Drive 2100KV 2S-6S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2100,
+    gearRatio: 27.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.06,
+    maxAmps: 30,
+    notes: 'Gearmotor 27 to 1',
+  },
+  {
+    id: 'therobodome_megalodon_1806',
+    name: 'The RoboDome Megalodon 1806 Beetleweight Brushless Gearmotor 2300KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2300,
+    gearRatio: 25.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.08,
+    maxAmps: 25,
+    notes: 'Beetleweight brushless planetary gearmotor (25:1 reduction)',
+  },
+  {
+    id: 'therobodome_megalodon_2005',
+    name: 'The RoboDome Megalodon 2005 Beetleweight Brushless Gearmotor 1900KV 2-6S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 1900,
+    gearRatio: 25.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.07,
+    maxAmps: 30,
+    notes: 'Beetleweight brushless planetary gearmotor (25:1 reduction)',
+  },
+  {
+    id: 'turnabot_n10_std',
+    name: 'Turnabot N10 Standard Kit 223KV 2S LiPo 7.4V',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 223,
+    gearRatio: 1.0,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.45,
+    maxAmps: 5,
+    notes: 'Gearmotor 1 to 1',
+  },
+  {
+    id: 'turnabot_n20_800',
+    name: 'Turnabot N20 High-Power 800 RPM 3243KV 2S LiPo 7.4V',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 3243,
+    gearRatio: 30.0,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.35,
+    maxAmps: 7,
+    notes: 'Gearmotor 30 to 1',
+  },
+  {
+    id: 'turnabot_n20_1400',
+    name: 'Turnabot N20 High-Power 1400 RPM 5676KV 2S LiPo 7.4V',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 5676,
+    gearRatio: 30.0,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.30,
+    maxAmps: 8,
+    notes: 'Gearmotor 30 to 1',
+  },
+  {
+    id: 'turnabot_n20_2000',
+    name: 'Turnabot N20 High-Power 2000 RPM 8108KV 2S LiPo 7.4V',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 8108,
+    gearRatio: 30.0,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.25,
+    maxAmps: 10,
+    notes: 'Gearmotor 30 to 1',
+  },
+  {
+    id: 'turnabot_n20_3000',
+    name: 'Turnabot N20 High-Power 3000 RPM 12162KV 2S LiPo 7.4V',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 12162,
+    gearRatio: 30.0,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.20,
+    maxAmps: 12,
+    notes: 'Gearmotor 30 to 1',
+  },
+  {
+    id: 'turnabot_n30_600',
+    name: 'Turnabot N30 High-Power 600 RPM 2432KV 2S LiPo 7.4V',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 2432,
+    gearRatio: 30.0,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.30,
+    maxAmps: 9,
+    notes: 'Gearmotor 30 to 1',
+  },
+  {
+    id: 'turnabot_n30_1000',
+    name: 'Turnabot N30 High-Power 1000 RPM 4054KV 2S LiPo 7.4V',
+    category: 'drive',
+    weightClasses: ['ant'],
+    kv: 4054,
+    gearRatio: 30.0,
+    ratedVoltage: 7.4,
+    internalResistanceOhms: 0.22,
+    maxAmps: 11,
+    notes: 'Gearmotor 30 to 1',
+  },
+  {
+    id: 'jcr_2306_5_custom',
+    name: 'Just Cuz Robotics 2306.5 Just Cuz Edition 1000KV 3S-8S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle'],
+    kv: 1000,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.06,
+    maxAmps: 35,
+    notes: 'Belt Drive Motor for Beetleweight',
+  },
+  {
+    id: 'jcr_cherry_bomb_4935',
+    name: 'Just Cuz Robotics Cherry Bomb JCR-4935 1000KV 3S-6S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle', 'bigbot'],
+    kv: 1000,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.025,
+    maxAmps: 80,
+    notes: 'Belt Drive Motor for Beetleweight',
+  },
+  {
+    id: 'jcr_hmr_5022',
+    name: 'Just Cuz Robotics HMR-5022 Hammersaw Motor 1700KV 3S-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 1700,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.035,
+    maxAmps: 60,
+    notes: 'Belt Drive Motor for Antweight',
+  },
+  {
+    id: 'jcr_hybrid_hub_5735',
+    name: 'Just Cuz Robotics Hybrid Hubmotor RDY-5735 750KV 3S-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle'],
+    kv: 750,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.065,
+    maxAmps: 45,
+    notes: 'Hubmotor',
+  },
+  {
+    id: 'jcr_rdy_5536_hub',
+    name: 'Just Cuz Robotics RDY-5536 Hubmotor 1200KV 3S-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['beetle'],
+    kv: 1200,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.045,
+    maxAmps: 55,
+    notes: 'Hubmotor',
+  },
+  {
+    id: 'jcr_rdy_mini_5022_v2',
+    name: 'Just Cuz Robotics RDY-MINI-5022-V2 Hubmotor 1700KV 3S-4S LiPo',
+    category: 'weapon',
+    weightClasses: ['ant'],
+    kv: 1700,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.04,
+    maxAmps: 50,
+    notes: 'Antweight hubmotor',
+  },
+  {
+    id: 'jcr_dartbox_v2_viper',
+    name: 'Just Cuz Robotics DartBox V2 Drive Viper 2906KV 3S 12V',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2906,
+    gearRatio: 22.5,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.15,
+    maxAmps: 20,
+    notes: 'Gearmotor 22.5 to 1',
+  },
+  {
+    id: 'jcr_dartbox_v2_dragon',
+    name: 'Just Cuz Robotics DartBox V2 Drive Dragon 2906KV 3S 12V',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2906,
+    gearRatio: 22.5,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.12,
+    maxAmps: 25,
+    notes: 'Gearmotor 22.5 to 1',
+  },
+  {
+    id: 'jcr_dartbox_v2_gecko',
+    name: 'Just Cuz Robotics DartBox V2 Gecko Drive 2062KV 3S-6S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2062,
+    gearRatio: 22.5,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.18,
+    maxAmps: 18,
+    notes: 'Gearmotor 22.5 to 1',
+  },
+  {
+    id: 'jcr_blitz_pro_2306_drive',
+    name: 'Just Cuz Robotics Blitz Pro 2306 Gearmotor 650KV 3S-6S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 650,
+    gearRatio: 5.2,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.075,
+    maxAmps: 30,
+    notes: 'Gearmotor 5.2 to 1',
+  },
+  {
+    id: 'jcr_blitz_lite_1604_2850',
+    name: 'Just Cuz Robotics Blitz Lite 1604 Gearmotors Slow 2850KV 2-6S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 2850,
+    gearRatio: 1.0,
+    ratedVoltage: 14.8,
+    internalResistanceOhms: 0.09,
+    maxAmps: 20,
+    notes: 'Gearmotor Planetary',
+  },
+  {
+    id: 'jcr_blitz_lite_1604_3800',
+    name: 'Just Cuz Robotics Blitz Lite 1604 Gearmotors Fast 3800KV 2-4S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 3800,
+    gearRatio: 1.0,
+    ratedVoltage: 11.1,
+    internalResistanceOhms: 0.07,
+    maxAmps: 25,
+    notes: 'Gearmotor Planetary',
+  },
+  {
+    id: 'jcr_zombox_3520',
+    name: 'Just Cuz Robotics ZomBox 3520 Motor Combo 650KV 3S-6S LiPo',
+    category: 'both',
+    weightClasses: ['bigbot'],
+    kv: 650,
+    gearRatio: 5.8,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.035,
+    maxAmps: 70,
+    notes: 'Gearmotor 5.8 to 1 for 12lb 30lb',
+  },
+];
+
+export const BELT_PITCH_PRESETS: BeltPitchPreset[] = [
+  {
+    id: 'gt2',
+    name: 'GT2 (2.0 mm Pitch Belt)',
+    pitchMm: 2.0,
+    type: 'belt',
+    description: 'Standard for Fairyweights, Antweights, and light Beetle drive systems.',
+  },
+  {
+    id: 'gt3',
+    name: 'GT3 / 3GT (3.0 mm Pitch Belt)',
+    pitchMm: 3.0,
+    type: 'belt',
+    description: 'Popular high-torque belt for Beetleweight drivetrains and light weapons.',
+  },
+  {
+    id: 'htd3m',
+    name: 'HTD 3M (3.0 mm Pitch Belt)',
+    pitchMm: 3.0,
+    type: 'belt',
+    description: 'Curvilinear tooth profile offering high shear resistance for Beetle weapons.',
+  },
+  {
+    id: 'htd5m',
+    name: 'HTD 5M (5.0 mm Pitch Belt)',
+    pitchMm: 5.0,
+    type: 'belt',
+    description: 'Heavy duty weapon drive belt for Beetleweights and Big Bots (12/30 lb).',
+  },
+  {
+    id: 'chain25',
+    name: '#25 Roller Chain (1/4" / 6.35 mm Pitch)',
+    pitchMm: 6.35,
+    type: 'chain',
+    description: 'Standard steel roller chain for high-shock Beetle and Big Bot drives.',
+  },
+  {
+    id: 'chain35',
+    name: '#35 Roller Chain (3/8" / 9.525 mm Pitch)',
+    pitchMm: 9.525,
+    type: 'chain',
+    description: 'Heavy-duty roller chain for Big Bot (12/30 lb) primary weapons.',
+  },
+  {
+    id: 'xl',
+    name: 'XL (1/5" / 5.08 mm Pitch Belt)',
+    pitchMm: 5.08,
+    type: 'belt',
+    description: 'Standard imperial trapezoidal belt (0.200" pitch) common in mid-weight and heavy combat systems.',
+  },
+  {
+    id: 'custom',
+    name: 'Custom Pitch',
+    pitchMm: 3.0,
+    type: 'belt',
+    description: 'User-specified tooth pitch distance.',
+  },
+];
+
+export interface PulleyReductionPreset {
+  id: string;
+  name: string;
+  ratio: number;
+  description?: string;
+}
+
+export const WEAPON_PULLEY_PRESETS: PulleyReductionPreset[] = [
+  {
+    id: 'custom',
+    name: 'Custom',
+    ratio: 1.0,
+    description: 'Manual pulley reduction entry or direct drive',
+  },
+  {
+    id: 'repeat_vbelt_hub_25mm',
+    name: 'Repeat V-belt Hub -  25mm V-belt Pulley',
+    ratio: 1.44,
+    description: 'Repeat Robotics V-belt Hub with 25mm V-belt Pulley (1.44:1 reduction)',
+  },
+];
+
+export const BIGBOT_GEARBOX_PRESETS: GearboxPreset[] = [
+  {
+    id: 'repeat_magnum_gearbox',
+    name: 'Repeat Magnum Gearbox Only (19:1)',
+    ratio: 19.0,
+    brand: 'Repeat Robotics',
+    weightClasses: ['bigbot'],
+    description: 'Planetary Gearbox 19:1',
+  },
+  {
+    id: 'repeat_ultra_mk2_14',
+    name: 'Ultra Mk2 Gearbox Only - Standard (14:1)',
+    ratio: 14.0,
+    brand: 'Repeat Robotics',
+    weightClasses: ['bigbot'],
+    description: 'Planetary Gearbox Standard 14:1',
+  },
+  {
+    id: 'repeat_ultra_mk2_51',
+    name: 'Ultra Mk2 Gearbox Only - High Reduction (51:1)',
+    ratio: 51.0,
+    brand: 'Repeat Robotics',
+    weightClasses: ['bigbot'],
+    description: 'Planetary Gearbox High Reduction 51:1',
+  },
+  {
+    id: 'ranglebox_saturn_19',
+    name: 'Ranglebox Saturn Gearbox (19:1)',
+    ratio: 19.0,
+    brand: 'Ranglebox',
+    weightClasses: ['bigbot'],
+    description: 'Planetary Standard 19:1 (12mm shaft)',
+  },
+  {
+    id: 'hivetech_hivedrive_14',
+    name: 'HiveTech HiveDrive (14:1)',
+    ratio: 14.0,
+    brand: 'HiveTech',
+    weightClasses: ['bigbot'],
+    description: 'Precision Planetary 14:1 (3/8" Hex)',
+  },
+  {
+    id: 'hivetech_hivedrive_27',
+    name: 'HiveTech HiveDrive (27:1)',
+    ratio: 27.0,
+    brand: 'HiveTech',
+    weightClasses: ['bigbot'],
+    description: 'Precision Planetary 27:1 (3/8" Hex)',
+  },
+  {
+    id: 'hivetech_beebox_14',
+    name: 'HiveTech BeeBox (14:1)',
+    ratio: 14.0,
+    brand: 'HiveTech',
+    weightClasses: ['bigbot'],
+    description: 'MOD 0.6 Planetary 14:1 (1/2" Hex)',
+  },
+  {
+    id: 'hivetech_beebox_27',
+    name: 'HiveTech BeeBox (27:1)',
+    ratio: 27.0,
+    brand: 'HiveTech',
+    weightClasses: ['bigbot'],
+    description: 'MOD 0.6 Planetary 27:1 (1/2" Hex)',
+  },
+  {
+    id: 'direct_drive',
+    name: 'Direct Drive (1:1)',
+    ratio: 1.0,
+    brand: 'Generic',
+    weightClasses: ['bigbot'],
+    description: 'Direct Drive 1:1',
+  },
+  {
+    id: 'custom',
+    name: 'Custom Ratio',
+    ratio: 1.0,
+    brand: 'Custom',
+    weightClasses: ['bigbot'],
+    description: 'Custom ratio specification',
+  },
+];
+
+export const RECOMMENDED_CELL_COUNTS: Record<WeightClassId, number[]> = {
+  ant: [2, 3, 4],
+  beetle: [3, 4, 5, 6],
+  bigbot: [4, 5, 6, 7, 8, 10, 12, 14, 16],
+};
+
+export interface WeightClassDefaults {
+  driveMotorPresetId: string;
+  driveKv: number;
+  driveGearRatio: number;
+  driveGearboxPresetId?: string;
+  driveCellCount?: number;
+  weaponMotorPresetId: string;
+  weaponKv: number;
+  weaponGearRatio: number;
+  weaponCellCount?: number;
+  effectiveDiameter: number;
+  effectiveDiameterUnit: LengthUnit;
+  moiKgM2: number;
+}
+
+export function getWeightClassDefaults(wc: WeightClassId): WeightClassDefaults {
+  switch (wc) {
+    case 'ant':
+      return {
+        driveMotorPresetId: 'rr_mini_pro_1106_mk41',
+        driveKv: 3500,
+        driveGearRatio: 22.6,
+        driveCellCount: 3,
+        weaponMotorPresetId: 'rr_2207_hub_1800',
+        weaponKv: 1800,
+        weaponGearRatio: 1.0,
+        weaponCellCount: 3,
+        effectiveDiameter: 3,
+        effectiveDiameterUnit: 'in',
+        moiKgM2: 0.000085,
+      };
+    case 'bigbot':
+      return {
+        driveMotorPresetId: 'rr_magnum_gearmotor_3536',
+        driveKv: 1400,
+        driveGearRatio: 19.0,
+        driveGearboxPresetId: 'repeat_magnum_gearbox',
+        driveCellCount: 6,
+        weaponMotorPresetId: 'rr_2812_hub_1800',
+        weaponKv: 1800,
+        weaponGearRatio: 1.0,
+        weaponCellCount: 6,
+        effectiveDiameter: 10,
+        effectiveDiameterUnit: 'in',
+        moiKgM2: 0.078,
+      };
+    case 'beetle':
+    default:
+      return {
+        driveMotorPresetId: 'rr_pro_brushless_2006_4s',
+        driveKv: 2500,
+        driveGearRatio: 27.0,
+        driveCellCount: 4,
+        weaponMotorPresetId: 'rr_2812_hub_1300',
+        weaponKv: 1300,
+        weaponGearRatio: 1.0,
+        weaponCellCount: 4,
+        effectiveDiameter: 5,
+        effectiveDiameterUnit: 'in',
+        moiKgM2: 0.00088,
+      };
+  }
+}
+
+/**
+ * Automatically groups weapon motor presets into families with multiple KV variants.
+ * Follows LNCR preset ordering: Repeat Robotics -> Alphabetical -> Just Cuz Robotics last.
+ */
+export function getWeaponMotorFamilies(): WeaponWhatIfFamily[] {
+  const familyMap = new Map<string, WeaponWhatIfFamily>();
+  const weaponMotors = MOTOR_PRESETS.filter((m) => m.category === 'weapon');
+
+  const getFamilyName = (name: string): string => {
+    let clean = name.replace(/\s+\d+KV.*$/i, '').trim();
+    clean = clean.replace(/\/8\b/, '');
+    return clean;
+  };
+
+  weaponMotors.forEach((motor) => {
+    const familyName = getFamilyName(motor.name);
+    if (!familyMap.has(familyName)) {
+      let brand = 'Other';
+      if (familyName.toLowerCase().startsWith('repeat robotics')) brand = 'Repeat Robotics';
+      else if (familyName.toLowerCase().startsWith('just cuz')) brand = 'Just Cuz Robotics';
+      else if (familyName.toLowerCase().startsWith('fingertech')) brand = 'FingerTech';
+
+      const id = familyName.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+      familyMap.set(familyName, {
+        id,
+        name: familyName,
+        brand,
+        variants: [],
+      });
+    }
+    familyMap.get(familyName)!.variants.push({
+      id: motor.id,
+      name: motor.name,
+      kv: motor.kv,
+    });
+  });
+
+  const families = Array.from(familyMap.values());
+  families.forEach((f) => f.variants.sort((a, b) => a.kv - b.kv));
+
+  // Sort families: Repeat Robotics first, then Alphabetical, then Just Cuz Robotics strictly last
+  return families.sort((a, b) => {
+    const aRepeat = a.brand === 'Repeat Robotics';
+    const bRepeat = b.brand === 'Repeat Robotics';
+    const aJcr = a.brand === 'Just Cuz Robotics';
+    const bJcr = b.brand === 'Just Cuz Robotics';
+
+    if (aRepeat && !bRepeat) return -1;
+    if (!aRepeat && bRepeat) return 1;
+    if (aJcr && !bJcr) return 1;
+    if (!aJcr && bJcr) return -1;
+    return a.name.localeCompare(b.name);
+  });
+}

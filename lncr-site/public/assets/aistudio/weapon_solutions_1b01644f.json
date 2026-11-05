@@ -1,0 +1,178 @@
+[
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Belt Drive 2812 (800KV)",
+    "KV": "800",
+    "Recommended Voltage": "2-8S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Belt Drive 2812 (1300KV)",
+    "KV": "1300",
+    "Recommended Voltage": "2-6S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Belt Drive 2812 (1800KV)",
+    "KV": "1800",
+    "Recommended Voltage": "2-6S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Belt Drive 2812 (2300KV)",
+    "KV": "2300",
+    "Recommended Voltage": "2-5S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Repeat 2822 Mk3 (1100KV)",
+    "KV": "1100",
+    "Recommended Voltage": "2-6S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive / Direct Motor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Repeat 2822 Mk3 (1800KV)",
+    "KV": "1800",
+    "Recommended Voltage": "2-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive / Direct Motor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Repeat 2822 Mk3 (2300KV)",
+    "KV": "2300",
+    "Recommended Voltage": "2-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive / Direct Motor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "2207 Antweight Hubmotor (1200KV)",
+    "KV": "1200",
+    "Recommended Voltage": "2-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "2207 Antweight Hubmotor (1800KV)",
+    "KV": "1800",
+    "Recommended Voltage": "2-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "2207 Antweight Hubmotor (2400KV)",
+    "KV": "2400",
+    "Recommended Voltage": "2-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "2812 Beetleweight Hubmotor (800KV)",
+    "KV": "800",
+    "Recommended Voltage": "2-6S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "2812 Beetleweight Hubmotor (1300KV)",
+    "KV": "1300",
+    "Recommended Voltage": "2-6S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "2812 Beetleweight Hubmotor (1800KV)",
+    "KV": "1800",
+    "Recommended Voltage": "2-6S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Just Cuz Robotics",
+    "Motor Name": "2306.5 Just 'Cuz Edition",
+    "KV": "1000",
+    "Recommended Voltage": "3S-8S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Just Cuz Robotics",
+    "Motor Name": "Cherry Bomb JCR-4935",
+    "KV": "1000",
+    "Recommended Voltage": "3S-6S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Just Cuz Robotics",
+    "Motor Name": "HMR-5022 Hammersaw Motor",
+    "KV": "1700",
+    "Recommended Voltage": "3S-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Antweight"
+  },
+  {
+    "Brand": "Just Cuz Robotics",
+    "Motor Name": "Hybrid Hubmotor RDY-5735 (750/950KV)",
+    "KV": "750-950",
+    "Recommended Voltage": "3S-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Just Cuz Robotics",
+    "Motor Name": "RDY-5536 Hubmotor (900/1200KV)",
+    "KV": "900-1200",
+    "Recommended Voltage": "3S-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "Just Cuz Robotics",
+    "Motor Name": "RDY-MINI-5022-V2 Hubmotor (1100/1700KV)",
+    "KV": "1100-1700",
+    "Recommended Voltage": "3S-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Hubmotor",
+    "Recommended Weightclass": "Antweight"
+  },
+  {
+    "Brand": "FingerTech",
+    "Motor Name": "D2822 Brushless Outrunner (1100KV)",
+    "KV": "1100",
+    "Recommended Voltage": "2S-3S LiPo (7.4V-11.1V)",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "FingerTech",
+    "Motor Name": "D2822/8 Brushless Outrunner (2600KV)",
+    "KV": "2600",
+    "Recommended Voltage": "2S-3S LiPo (7.4V-11.1V)",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Antweight / Fairy"
+  },
+  {
+    "Brand": "FingerTech",
+    "Motor Name": "S2838 Brushless Inrunner (2970KV)",
+    "KV": "2970",
+    "Recommended Voltage": "2S-4S LiPo",
+    "Type (hubmotor, belt drive motor)": "Belt Drive Motor",
+    "Recommended Weightclass": "Beetleweight"
+  }
+]

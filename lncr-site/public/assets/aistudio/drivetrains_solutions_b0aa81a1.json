@@ -1,0 +1,389 @@
+[
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Compact 1806 Mk2",
+    "KV":"2300",
+    "Recommended Voltage":"2-5S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.6:1",
+    "Recommended Weightclass":"Beetleweight \/ Antweight"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Compact Brushless 1806 Mk1",
+    "KV":"2300",
+    "Recommended Voltage":"2-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.6:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Mini Pro 1106 Mk4.1",
+    "KV":"3500",
+    "Recommended Voltage":"2-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.6:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Mini Pro Brushed",
+    "KV":"2298",
+    "Recommended Voltage":"2-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.6:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Mini Brushed Mk2",
+    "KV":"2298",
+    "Recommended Voltage":"2-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.6:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Pro Brushless 2006 (Drive)",
+    "KV":"2500",
+    "Recommended Voltage":"4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"27:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Belt Drive 2812 (800KV)",
+    "KV":"800",
+    "Recommended Voltage":"2-8S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Outrunner \/ Belt Drive",
+    "Reduction (if applicable)":"1:1",
+    "Recommended Weightclass":"12lb \/ 30lb (Drive)"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Belt Drive 2812 (1300KV)",
+    "KV":"1300",
+    "Recommended Voltage":"2-6S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Outrunner \/ Belt Drive",
+    "Reduction (if applicable)":"1:1",
+    "Recommended Weightclass":"12lb \/ 30lb (Drive)"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Belt Drive 2812 (1800KV)",
+    "KV":"1800",
+    "Recommended Voltage":"2-6S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Outrunner \/ Belt Drive",
+    "Reduction (if applicable)":"1:1",
+    "Recommended Weightclass":"12lb \/ 30lb (Drive)"
+  },
+  {
+    "Brand":"Repeat Robotics",
+    "Motor Name":"Belt Drive 2812 (2300KV)",
+    "KV":"2300",
+    "Recommended Voltage":"2-5S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Outrunner \/ Belt Drive",
+    "Reduction (if applicable)":"1:1",
+    "Recommended Weightclass":"12lb \/ 30lb (Drive)"
+  },
+  {
+    "Brand":"Just Cuz Robotics",
+    "Motor Name":"DartBox V2 Drive (Viper)",
+    "KV":"2906",
+    "Recommended Voltage":"3S (12V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.5:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Just Cuz Robotics",
+    "Motor Name":"DartBox V2 Drive (Dragon)",
+    "KV":"2906",
+    "Recommended Voltage":"3S (12V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.5:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Just Cuz Robotics",
+    "Motor Name":"DartBox V2 Gecko Drive",
+    "KV":"2062",
+    "Recommended Voltage":"3S-6S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22.5:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Just Cuz Robotics",
+    "Motor Name":"Blitz Pro 2306 Gearmotor",
+    "KV":"650",
+    "Recommended Voltage":"3S-6S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"5.2:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Just Cuz Robotics",
+    "Motor Name":"Blitz Lite 1604 Gearmotors (Slow)",
+    "KV":"2850",
+    "Recommended Voltage":"2-6S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"Planetary",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Just Cuz Robotics",
+    "Motor Name":"Blitz Lite 1604 Gearmotors (Fast)",
+    "KV":"3800",
+    "Recommended Voltage":"2-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"Planetary",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Just Cuz Robotics",
+    "Motor Name":"ZomBox 3520 Motor Combo",
+    "KV":"650",
+    "Recommended Voltage":"3S-6S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"5.8:1",
+    "Recommended Weightclass":"12lb \/ 30lb"
+  },
+  {
+    "Brand":"Turnabot",
+    "Motor Name":"Turnabot N10 Standard Kit",
+    "KV":"223",
+    "Recommended Voltage":"2S LiPo (7.4V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"1:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Turnabot",
+    "Motor Name":"Turnabot N20 High-Power (800 RPM)",
+    "KV":"3243",
+    "Recommended Voltage":"2S LiPo (7.4V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"30:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Turnabot",
+    "Motor Name":"Turnabot N20 High-Power (1400 RPM)",
+    "KV":"5676",
+    "Recommended Voltage":"2S LiPo (7.4V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"30:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Turnabot",
+    "Motor Name":"Turnabot N20 High-Power (2000 RPM)",
+    "KV":"8108",
+    "Recommended Voltage":"2S LiPo (7.4V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"30:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Turnabot",
+    "Motor Name":"Turnabot N20 High-Power (3000 RPM)",
+    "KV":"12162",
+    "Recommended Voltage":"2S LiPo (7.4V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"30:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Turnabot",
+    "Motor Name":"Turnabot N30 High-Power (600 RPM)",
+    "KV":"2432",
+    "Recommended Voltage":"2S LiPo (7.4V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"30:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"Turnabot",
+    "Motor Name":"Turnabot N30 High-Power (1000 RPM)",
+    "KV":"4054",
+    "Recommended Voltage":"2S LiPo (7.4V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"30:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"FingerTech",
+    "Motor Name":"Silver Spark Gearmotor",
+    "KV":"1573",
+    "Recommended Voltage":"2S-3S LiPo (Nominal 6V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"11:1 - 600:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"FingerTech",
+    "Motor Name":"Gold Spark Gearmotor",
+    "KV":"1573",
+    "Recommended Voltage":"2S-3S LiPo (Nominal 6V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"20:1 - 360:1",
+    "Recommended Weightclass":"Antweight \/ Fairy"
+  },
+  {
+    "Brand":"FingerTech",
+    "Motor Name":"Mega Spark FT1806 (2300KV)",
+    "KV":"2300",
+    "Recommended Voltage":"2-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"Planetary",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"FingerTech",
+    "Motor Name":"Mega Spark FT1806 (750KV)",
+    "KV":"750",
+    "Recommended Voltage":"2-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"Planetary",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Ranglebox",
+    "Motor Name":"Mars 25:1 Gearbox + RB1806 Assembly",
+    "KV":"2000",
+    "Recommended Voltage":"2-4S LiPo (6-17V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"25:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Ranglebox",
+    "Motor Name":"Saturn 19:1 Gearbox + RB4250 Assembly",
+    "KV":"1000",
+    "Recommended Voltage":"2-6S LiPo (8-24V)",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"19:1",
+    "Recommended Weightclass":"12lb \/ 30lb"
+  },
+  {
+    "Brand":"Rectified Robotics",
+    "Motor Name":"22mm Brushed Drive",
+    "KV":"800 (Output)",
+    "Recommended Voltage":"2S-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Rectified Robotics",
+    "Motor Name":"22mm Brushless Drive",
+    "KV":"2300",
+    "Recommended Voltage":"2S-4S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"22:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand":"Rectified Robotics",
+    "Motor Name":"24mm Brushless Drive",
+    "KV":"2100",
+    "Recommended Voltage":"2S-6S LiPo",
+    "Motor\/Gearmotor\/Gearbox":"Gearmotor",
+    "Reduction (if applicable)":"27:1",
+    "Recommended Weightclass":"Beetleweight"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Repeat Magnum Gearbox Only",
+    "KV": "N/A (Gearbox Only)",
+    "Recommended Voltage": "N/A",
+    "Motor/Gearmotor/Gearbox": "Planetary Gearbox",
+    "Reduction (if applicable)": "19:1",
+    "Recommended Weightclass": "big bot"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Repeat Magnum Gearmotor (3536 Motor)",
+    "KV": "1400",
+    "Recommended Voltage": "Up to 6S LiPo",
+    "Motor/Gearmotor/Gearbox": "Gearmotor",
+    "Reduction (if applicable)": "19:1",
+    "Recommended Weightclass": "big bot"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Ultra Mk2 Gearbox Only",
+    "KV": "N/A (Gearbox Only)",
+    "Recommended Voltage": "N/A",
+    "Motor/Gearmotor/Gearbox": "Planetary Gearbox",
+    "Reduction (if applicable)": "14:1 (Standard) / 51:1 (High Reduction)",
+    "Recommended Weightclass": "big bot"
+  },
+  {
+    "Brand": "Repeat Robotics",
+    "Motor Name": "Ultra Mk2 Drive Gearmotor (2830 Motor)",
+    "KV": "1450",
+    "Recommended Voltage": "2-6S LiPo",
+    "Motor/Gearmotor/Gearbox": "Gearmotor",
+    "Reduction (if applicable)": "14:1",
+    "Recommended Weightclass": "big bots"
+  },
+  {
+    "Brand": "Ranglebox",
+    "Motor Name": "Saturn Planetary Gearbox Only",
+    "KV": "N/A (Gearbox Only)",
+    "Recommended Voltage": "N/A",
+    "Motor/Gearmotor/Gearbox": "Planetary Standard",
+    "Reduction (if applicable)": "19:1",
+    "Recommended Weightclass": "big bot",
+    "input_shaft_options": "Integrated with RB4250 / standard motor shaft",
+    "output_shaft_size": "12 mm",
+    "output_shaft_shape": "Cylindrical with 4mm keyslot and M5 end thread"
+  },
+  {
+    "Brand": "HiveTech",
+    "Motor Name": "HiveDrive Precision Planetary Gearbox",
+    "KV": "N/A (Gearbox Only)",
+    "Recommended Voltage": "N/A",
+    "Motor/Gearmotor/Gearbox": "Precision Planetary",
+    "Reduction (if applicable)": "14:1 / 27:1",
+    "Recommended Weightclass": "big bot",
+    "input_shaft_options": "Pinions available for 3.175mm (1/8\"), 4mm, and 5mm motor shafts",
+    "output_shaft_size": "3/8 inch",
+    "output_shaft_shape": "Hex"
+  },
+  {
+    "Brand": "HiveTech",
+    "Motor Name": "BeeBox MOD 0.6 Planetary Gearbox",
+    "KV": "N/A (Gearbox Only)",
+    "Recommended Voltage": "N/A",
+    "Motor/Gearmotor/Gearbox": "MOD 0.6",
+    "Reduction (if applicable)": "14:1 / 27:1",
+    "Recommended Weightclass": "big bot",
+    "input_shaft_options": "Pinions available for 3.175mm (1/8\"), 4mm, and 5mm motor shafts",
+    "output_shaft_size": "1/2 inch",
+    "output_shaft_shape": "Hex (Rounded)"
+  },
+  {
+    "Brand": "The RoboDome",
+    "Motor Name": "Megalodon 1806 Beetleweight Brushless Gearmotor",
+    "KV": "2300",
+    "Recommended Voltage": "2-4S LiPo",
+    "Motor/Gearmotor/Gearbox": "Gearmotor",
+    "Reduction (if applicable)": "25:1",
+    "Recommended Weightclass": "Beetleweight"
+  },
+  {
+    "Brand": "The RoboDome",
+    "Motor Name": "Megalodon 2005 Beetleweight Brushless Gearmotor",
+    "KV": "1900",
+    "Recommended Voltage": "2-6S LiPo",
+    "Motor/Gearmotor/Gearbox": "Gearmotor",
+    "Reduction (if applicable)": "25:1",
+    "Recommended Weightclass": "Beetleweight"
+  }
+]

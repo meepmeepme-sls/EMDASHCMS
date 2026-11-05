@@ -1,0 +1,78 @@
+---
+import { getEmDashEntry, decodeSlug } from "emdash";
+import { PortableText } from "emdash/ui";
+import CosmosLayout from "../../layouts/CosmosLayout.astro";
+
+const slug = decodeSlug(Astro.params.slug);
+if (!slug) {
+  return Astro.rewrite("/404");
+}
+
+const { entry: post, cacheHint } = await getEmDashEntry("posts", slug);
+if (!post) {
+  return Astro.rewrite("/404");
+}
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+const pData = post.data;
+---
+
+<CosmosLayout title={pData.title} description={pData.excerpt || pData.title}>
+  <div class="content-wrapper" style="max-width:880px; margin:0 auto 60px auto; padding:0 24px;">
+    <!-- Breadcrumb -->
+    <nav class="product-breadcrumb" aria-label="Breadcrumb" style="font-size:0.85rem; margin-bottom:24px; color:var(--text-color);">
+      <a href="/" style="color:var(--header-text-color); text-decoration:none;">Home</a> /
+      <a href="/blog" style="color:var(--header-text-color); text-decoration:none;">Blog</a> /
+      <span style="color:#6B7280;">{pData.title}</span>
+    </nav>
+
+    <article style="background:#fff; border:1px solid #3D4B59; padding:40px;">
+      <header style="margin-bottom:28px; border-bottom:1px solid #E5E7EB; padding-bottom:20px;">
+        <h1 style="font-family:var(--primary-font); font-size:1.85rem; font-weight:700; color:var(--header-text-color); line-height:1.25; margin-bottom:12px;">
+          {pData.title}
+        </h1>
+        {pData.excerpt && (
+          <p style="font-size:1.05rem; line-height:1.5; color:#4B5563; margin:0;">
+            {pData.excerpt}
+          </p>
+        )}
+      </header>
+
+      <!-- Embedded YouTube Fight Video if from-pipeline-punch-to-tropical-trouble -->
+      {slug === "from-pipeline-punch-to-tropical-trouble" && (
+        <div style="position:relative; aspect-ratio:16/9; margin-bottom:32px; border:1px solid #3D4B59; overflow:hidden;">
+          <iframe
+            src="https://www.youtube.com/embed/nfh8qXnf3j0"
+            title="Tropical Trouble at 2025 SEMO St Charles Quad Con"
+            style="width:100%; height:100%; border:0;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      )}
+
+      <!-- Article Body -->
+      <div class="blog-body" style="font-size:1rem; line-height:1.75; color:#374151;">
+        {pData.content && Array.isArray(pData.content) ? (
+          <PortableText value={pData.content} />
+        ) : (
+          <p>{pData.content}</p>
+        )}
+      </div>
+
+      <!-- Action Footer -->
+      <div style="margin-top:40px; padding-top:24px; border-top:1px solid #E5E7EB; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+        <a href="/blog" style="color:#094AD8; font-weight:600; text-decoration:none;">
+          &larr; Back to all posts
+        </a>
+        <a
+          href="/calculator"
+          class="button"
+          style="background:#094AD8; color:#fff; font-family:var(--primary-font); font-size:0.8rem; font-weight:700; text-transform:uppercase; padding:8px 18px; text-decoration:none; border-radius:0;"
+        >
+          Try the LNCR Calculator &rarr;
+        </a>
+      </div>
+    </article>
+  </div>
+</CosmosLayout>

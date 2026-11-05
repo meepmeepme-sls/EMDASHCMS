@@ -1,0 +1,24 @@
+---
+import CosmosLayout from "../layouts/CosmosLayout.astro";
+import CalculatorApp from "../components/calculator/App";
+---
+
+<CosmosLayout
+  title="Combat Robotics Engineering Calculator"
+  description="Native 7-in-1 combat robotics calculation suite for Drivetrain, Weapon KE & Tip Speed, Spin-Up, Capacitance, Battery Runtime, and Center Distance."
+>
+  <div class="content-wrapper content-wrapper--calculator" style="max-width:1240px; margin:0 auto 60px auto; padding:0 24px;">
+    <header class="calculator-page-header" style="text-align:center; max-width:840px; margin:0 auto 32px auto; padding-top:20px;">
+      <h1 class="page-title" style="font-family:var(--primary-font); font-size:2.2rem; font-weight:700; color:var(--header-text-color); margin-bottom:10px;">
+        Combat Robotics Engineering Calculator
+      </h1>
+      <p class="calculator-subtitle" style="color:var(--text-color); font-size:1rem; line-height:1.5;">
+        Interactive engineering calculation suite adhering to SPARC v1.7 specifications and NHRL weight classes (1lb Ant, 3lb Beetle, 12lb Hobby, 30lb Feather).
+      </p>
+    </header>
+
+    <div class="lncr-calculator-root">
+      <CalculatorApp client:load />
+    </div>
+  </div>
+</CosmosLayout>

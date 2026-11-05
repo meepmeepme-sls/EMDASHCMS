@@ -1,0 +1,138 @@
+---
+import { getEmDashCollection } from "emdash";
+import CosmosLayout from "../layouts/CosmosLayout.astro";
+
+const q = (Astro.url.searchParams.get("q") || "").trim().toLowerCase();
+
+const [productsResult, wikiResult, postsResult] = await Promise.all([
+  getEmDashCollection("products", { limit: 50 }),
+  getEmDashCollection("wiki", { limit: 20 }),
+  getEmDashCollection("posts", { limit: 20 }),
+]);
+
+const matchingProducts = q
+  ? productsResult.entries.filter(
+      (p) =>
+        p.data.title.toLowerCase().includes(q) ||
+        (p.data.excerpt && p.data.excerpt.toLowerCase().includes(q))
+    )
+  : [];
+
+const matchingGuides = q
+  ? wikiResult.entries.filter(
+      (g) =>
+        g.data.title.toLowerCase().includes(q) ||
+        (g.data.excerpt && g.data.excerpt.toLowerCase().includes(q))
+    )
+  : [];
+
+const matchingPosts = q
+  ? postsResult.entries.filter(
+      (post) =>
+        post.data.title.toLowerCase().includes(q) ||
+        (post.data.excerpt && post.data.excerpt.toLowerCase().includes(q))
+    )
+  : [];
+
+const totalResults = matchingProducts.length + matchingGuides.length + matchingPosts.length;
+---
+
+<CosmosLayout title={`Search: ${q || "All"}`} description="Search results across Late Night Combat Robotics store products, wiki guides, and blog posts.">
+  <div class="content-wrapper" style="max-width:960px; margin:0 auto 60px auto; padding:0 24px;">
+    <header style="text-align:center; margin-bottom:36px; padding-top:20px;">
+      <h1 style="font-family:var(--primary-font); font-size:2rem; font-weight:700; color:var(--header-text-color); margin-bottom:8px;">
+        Search Results
+      </h1>
+      <p style="color:var(--text-color); font-size:1rem;">
+        {q ? `Showing ${totalResults} results for "${q}"` : "Please enter a search query."}
+      </p>
+    </header>
+
+    <!-- Search input -->
+    <form action="/search" method="get" style="display:flex; gap:8px; max-width:600px; margin:0 auto 40px auto;">
+      <input
+        type="search"
+        name="q"
+        value={q}
+        placeholder="Search products, kits, guides..."
+        required
+        style="flex:1; height:44px; padding:0 14px; border:1px solid #3D4B59; font-size:0.95rem; background:#fff; color:#000;"
+      />
+      <button
+        type="submit"
+        style="background:#094AD8; color:#fff; border:0; padding:0 20px; font-family:var(--primary-font); font-weight:700; cursor:pointer;"
+      >
+        Search
+      </button>
+    </form>
+
+    {totalResults === 0 && q && (
+      <div style="background:#fff; border:1px solid #3D4B59; padding:40px; text-align:center;">
+        <p style="font-size:1.1rem; color:var(--header-text-color); margin-bottom:12px;">No matching results found for "{q}".</p>
+        <p style="color:#6B7280; font-size:0.9rem;">Try searching for "Tropical Trouble", "kit", "wheels", "wiring", or "slicing".</p>
+      </div>
+    )}
+
+    {matchingProducts.length > 0 && (
+      <div style="margin-bottom:36px;">
+        <h2 style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:16px;">
+          Store Products ({matchingProducts.length})
+        </h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:16px;">
+          {matchingProducts.map((p) => (
+            <div style="background:#fff; border:1px solid #3D4B59; padding:14px;">
+              <a href={`/products/${p.slug}`} style="text-decoration:none; color:inherit;">
+                <h3 style="font-family:var(--primary-font); font-size:0.95rem; font-weight:700; color:var(--header-text-color); margin-bottom:4px;">
+                  {p.data.title}
+                </h3>
+                <div style="font-family:var(--primary-font); font-size:0.9rem; font-weight:700; color:var(--text-color);">
+                  ${Number(p.data.price).toFixed(2)}
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {matchingGuides.length > 0 && (
+      <div style="margin-bottom:36px;">
+        <h2 style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:16px;">
+          Engineering Wiki Guides ({matchingGuides.length})
+        </h2>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          {matchingGuides.map((g) => (
+            <div style="background:#fff; border:1px solid #3D4B59; padding:16px;">
+              <a href={`/wiki/${g.slug}`} style="text-decoration:none; color:inherit;">
+                <h3 style="font-family:var(--primary-font); font-size:1.05rem; font-weight:700; color:var(--header-text-color); margin-bottom:4px;">
+                  {g.data.title}
+                </h3>
+                <p style="font-size:0.85rem; color:#4B5563; margin:0;">{g.data.excerpt}</p>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {matchingPosts.length > 0 && (
+      <div>
+        <h2 style="font-family:var(--primary-font); font-size:1.25rem; font-weight:700; color:var(--header-text-color); margin-bottom:16px;">
+          Blog Posts ({matchingPosts.length})
+        </h2>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          {matchingPosts.map((post) => (
+            <div style="background:#fff; border:1px solid #3D4B59; padding:16px;">
+              <a href={`/blog/${post.slug}`} style="text-decoration:none; color:inherit;">
+                <h3 style="font-family:var(--primary-font); font-size:1.05rem; font-weight:700; color:var(--header-text-color); margin-bottom:4px;">
+                  {post.data.title}
+                </h3>
+                <p style="font-size:0.85rem; color:#4B5563; margin:0;">{post.data.excerpt}</p>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</CosmosLayout>
