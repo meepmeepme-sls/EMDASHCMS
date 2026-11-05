@@ -1056,6 +1056,10 @@ h1, h2, h3, h4, h5, h6 {
 #main .content-wrapper--product {
   max-width: calc(1200px + calc(var(--side-padding) * 2));
 }
+#main .content-wrapper--calculator {
+  max-width: calc(1440px + calc(var(--side-padding) * 2));
+  width: 100%;
+}
 #main .content-wrapper--cart h1.page-title {
   margin-bottom: 48px;
 }
@@ -3324,7 +3328,7 @@ a.gallery-link {
   font-weight: 700;
 }
 
-input, textarea {
+.contact-form input, .contact-form textarea {
   border-radius: var(--border-radius);
   background: var(--background-color);
   border: 1px solid var(--text-color);

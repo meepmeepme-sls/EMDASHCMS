@@ -122,7 +122,7 @@ const DirectVoltageInput: React.FC<DirectVoltageInputProps> = ({
                 setLocalVal(String(p));
                 onChangeVoltage(p);
               }}
-              className={`px-2 py-0.5 text-xs font-mono rounded-none transition-all cursor-pointer whitespace-nowrap ${
+              className={`h-7 min-w-[36px] px-2 flex items-center justify-center text-xs font-mono rounded-none transition-all cursor-pointer whitespace-nowrap ${
                 isActive
                   ? 'bg-[#094AD8] text-white font-bold shadow-2xs'
                   : 'bg-[#F1F5F9] dark:bg-[#1F232B] text-[#64748B] dark:text-[#85A3E0] border border-[#CBD5E1] dark:border-[#333C4D] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -274,7 +274,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                 role="switch"
                 aria-checked={hasWeaponBattery}
                 onClick={() => onChangeHasWeaponBattery(!hasWeaponBattery)}
-                className={`px-2.5 py-1 text-xs font-semibold font-mono rounded-none cursor-pointer transition-colors border ${
+                className={`h-7 min-w-[40px] px-2.5 inline-flex items-center justify-center text-xs font-semibold font-mono rounded-none cursor-pointer transition-colors border ${
                   hasWeaponBattery
                     ? 'bg-[#094AD8] text-white border-[#094AD8] shadow-2xs'
                     : 'bg-[#F1F5F9] dark:bg-[#16181D] text-[#64748B] dark:text-[#85A3E0] border-[#CBD5E1] dark:border-[#2E3646] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -289,7 +289,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
           <button
             type="button"
             onClick={toggleMinimized}
-            className="px-2.5 py-1 text-xs font-semibold font-mono rounded-none cursor-pointer transition-colors border border-[#CBD5E1] dark:border-[#333C4D] bg-[#F8FAFC] dark:bg-[#16181D] text-[#0F172A] dark:text-[#CEDDFD] hover:border-[#094AD8] dark:hover:border-[#60A5FA] shadow-2xs"
+            className="h-7 min-w-[76px] px-2.5 inline-flex items-center justify-center text-xs font-semibold font-mono rounded-none cursor-pointer transition-colors border border-[#CBD5E1] dark:border-[#333C4D] bg-[#F8FAFC] dark:bg-[#16181D] text-[#0F172A] dark:text-[#CEDDFD] hover:border-[#094AD8] dark:hover:border-[#60A5FA] shadow-2xs"
             aria-label={isMinimized ? 'Expand battery tab' : 'Minimize battery tab'}
             title={isMinimized ? 'Expand battery configuration' : 'Minimize battery configuration'}
           >
@@ -313,7 +313,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                   <button
                     type="button"
                     onClick={() => onChangeUseDirectVoltage && onChangeUseDirectVoltage(false)}
-                    className={`px-3 py-1 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                    className={`h-8 px-3.5 inline-flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                       !useDirectVoltage
                         ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
                         : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -331,7 +331,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                         }
                       }
                     }}
-                    className={`px-3 py-1 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                    className={`h-8 px-3.5 inline-flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                       useDirectVoltage
                         ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
                         : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -359,7 +359,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                             key={chem}
                             type="button"
                             onClick={() => onChangeChemistry(chem)}
-                            className={`py-1.5 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                            className={`h-8 flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                               active
                                 ? 'bg-white dark:bg-[#094AD8] text-[#094AD8] dark:text-white shadow-2xs font-bold'
                                 : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-white/50 dark:hover:bg-[#1F232B]'
@@ -382,7 +382,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                       <button
                         type="button"
                         onClick={() => onChangeVoltageState('nominal')}
-                        className={`py-1.5 text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap px-1.5 text-center ${
+                        className={`h-8 flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap px-1.5 text-center ${
                           voltageState === 'nominal'
                             ? 'bg-white dark:bg-[#094AD8] text-[#094AD8] dark:text-white shadow-2xs font-bold'
                             : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-white/50 dark:hover:bg-[#1F232B]'
@@ -394,7 +394,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                       <button
                         type="button"
                         onClick={() => onChangeVoltageState('max')}
-                        className={`py-1.5 text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap px-1.5 text-center ${
+                        className={`h-8 flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap px-1.5 text-center ${
                           voltageState === 'max'
                             ? 'bg-white dark:bg-[#094AD8] text-[#094AD8] dark:text-white shadow-2xs font-bold'
                             : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-white/50 dark:hover:bg-[#1F232B]'
@@ -425,9 +425,9 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                             key={s}
                             type="button"
                             onClick={() => onChangeCellCount(s)}
-                            className={`flex-1 min-w-[28px] py-1.5 text-xs font-mono font-bold rounded-none transition-all cursor-pointer ${
+                            className={`flex-1 min-w-[28px] h-8 flex items-center justify-center text-xs font-mono font-bold rounded-none transition-all cursor-pointer ${
                               active
-                                ? 'bg-[#094AD8] text-white shadow-2xs ring-1 ring-white/20'
+                                ? 'bg-[#094AD8] text-white shadow-2xs border border-[#094AD8] ring-1 ring-white/20'
                                 : isRecommended
                                 ? 'bg-[#F8FAFC] dark:bg-[#16181D] text-[#0F172A] dark:text-[#CEDDFD] border border-[#CBD5E1] dark:border-[#2E3646] hover:bg-[#E2E8F0] dark:hover:bg-[#262C38]'
                                 : 'bg-[#F8FAFC]/50 dark:bg-[#16181D]/50 text-[#94A3B8] dark:text-[#85A3E0]/40 border border-[#E2E8F0] dark:border-[#2E3646]/50 hover:text-[#475569] dark:hover:text-[#85A3E0]'
@@ -473,7 +473,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                     <button
                       type="button"
                       onClick={() => onChangeVoltageState('nominal')}
-                      className={`py-1.5 px-4 text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap text-center ${
+                      className={`h-8 flex items-center justify-center py-1 px-4 text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap text-center ${
                         voltageState === 'nominal'
                           ? 'bg-white dark:bg-[#094AD8] text-[#094AD8] dark:text-white shadow-2xs font-bold'
                           : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -484,7 +484,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                     <button
                       type="button"
                       onClick={() => onChangeVoltageState('max')}
-                      className={`py-1.5 px-4 text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap text-center ${
+                      className={`h-8 flex items-center justify-center py-1 px-4 text-xs font-semibold rounded-none transition-all cursor-pointer whitespace-nowrap text-center ${
                         voltageState === 'max'
                           ? 'bg-white dark:bg-[#094AD8] text-[#094AD8] dark:text-white shadow-2xs font-bold'
                           : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -517,7 +517,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                       <button
                         type="button"
                         onClick={() => onChangeUseDirectVoltage && onChangeUseDirectVoltage(false)}
-                        className={`px-2 py-0.5 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                        className={`h-7 px-2.5 inline-flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                           !useDirectVoltage
                             ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
                             : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -535,7 +535,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                             }
                           }
                         }}
-                        className={`px-2 py-0.5 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                        className={`h-7 px-2.5 inline-flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                           useDirectVoltage
                             ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
                             : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -562,7 +562,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                                 key={chem}
                                 type="button"
                                 onClick={() => onChangeChemistry(chem)}
-                                className={`py-1 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                                className={`h-7 flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                                   active
                                     ? 'bg-white dark:bg-[#094AD8] text-[#094AD8] dark:text-white shadow-2xs font-bold'
                                     : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -594,9 +594,9 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                                 key={s}
                                 type="button"
                                 onClick={() => onChangeCellCount(s)}
-                                className={`flex-1 min-w-[26px] py-1 text-xs font-mono font-bold rounded-none transition-all cursor-pointer ${
+                                className={`flex-1 min-w-[26px] h-7 flex items-center justify-center text-xs font-mono font-bold rounded-none transition-all cursor-pointer ${
                                   active
-                                    ? 'bg-[#094AD8] text-white shadow-2xs ring-1 ring-white/20'
+                                    ? 'bg-[#094AD8] text-white shadow-2xs border border-[#094AD8] ring-1 ring-white/20'
                                     : 'bg-[#F1F5F9] dark:bg-[#1F232B] text-[#0F172A] dark:text-[#CEDDFD] border border-[#CBD5E1] dark:border-[#333C4D] hover:bg-[#E2E8F0] dark:hover:bg-[#262C38]'
                                 }`}
                               >
@@ -637,7 +637,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                         onClick={() =>
                           onChangeUseWeaponDirectVoltage && onChangeUseWeaponDirectVoltage(false)
                         }
-                        className={`px-2 py-0.5 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                        className={`h-7 px-2.5 inline-flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                           !useWeaponDirectVoltage
                             ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
                             : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -655,7 +655,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                             }
                           }
                         }}
-                        className={`px-2 py-0.5 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                        className={`h-7 px-2.5 inline-flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                           useWeaponDirectVoltage
                             ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
                             : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -684,7 +684,7 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                                 onClick={() =>
                                   onChangeWeaponChemistry && onChangeWeaponChemistry(chem)
                                 }
-                                className={`py-1 text-xs font-semibold rounded-none transition-all cursor-pointer ${
+                                className={`h-7 flex items-center justify-center text-xs font-semibold rounded-none transition-all cursor-pointer ${
                                   active
                                     ? 'bg-white dark:bg-[#094AD8] text-[#094AD8] dark:text-white shadow-2xs font-bold'
                                     : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
@@ -718,9 +718,9 @@ export const BatteryVoltageBar: React.FC<BatteryVoltageBarProps> = ({
                                 onClick={() =>
                                   onChangeWeaponCellCount && onChangeWeaponCellCount(s)
                                 }
-                                className={`flex-1 min-w-[26px] py-1 text-xs font-mono font-bold rounded-none transition-all cursor-pointer ${
+                                className={`flex-1 min-w-[26px] h-7 flex items-center justify-center text-xs font-mono font-bold rounded-none transition-all cursor-pointer ${
                                   active
-                                    ? 'bg-[#094AD8] text-white shadow-2xs ring-1 ring-white/20'
+                                    ? 'bg-[#094AD8] text-white shadow-2xs border border-[#094AD8] ring-1 ring-white/20'
                                     : 'bg-[#F1F5F9] dark:bg-[#1F232B] text-[#0F172A] dark:text-[#CEDDFD] border border-[#CBD5E1] dark:border-[#333C4D] hover:bg-[#E2E8F0] dark:hover:bg-[#262C38]'
                                 }`}
                               >

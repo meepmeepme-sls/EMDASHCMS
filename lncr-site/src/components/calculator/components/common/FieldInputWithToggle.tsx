@@ -14,6 +14,8 @@ import {
   massToKg,
   moiToKgM2,
   kgM2ToUnit,
+  speedToMs,
+  msToUnit,
 } from '../../utils/conversions';
 
 type AnyUnit = LengthUnit | MassUnit | SpeedUnit | EnergyUnit | MoiUnit | string;
@@ -95,15 +97,38 @@ export const FieldInputWithToggle: React.FC<FieldInputWithToggleProps> = ({
         else if (targetUnit === 'oz') precision = 2;
         convertedVal = Number(converted.toFixed(precision));
       } else if (
-        ['kg*m^2', 'g*cm^2', 'lb*in^2'].includes(unit) &&
-        ['kg*m^2', 'g*cm^2', 'lb*in^2'].includes(targetUnit)
+        ['kg*m^2', 'g*cm^2', 'lb*in^2', 'oz*in^2'].includes(unit) &&
+        ['kg*m^2', 'g*cm^2', 'lb*in^2', 'oz*in^2'].includes(targetUnit)
       ) {
         const inKgM2 = moiToKgM2(value, unit as MoiUnit);
         const converted = kgM2ToUnit(inKgM2, targetUnit as MoiUnit);
         let precision = 5;
         if (targetUnit === 'g*cm^2') precision = 1;
+        else if (targetUnit === 'oz*in^2') precision = 2;
         else if (targetUnit === 'lb*in^2') precision = 3;
         else if (targetUnit === 'kg*m^2') precision = 6;
+        convertedVal = Number(converted.toFixed(precision));
+      } else if (
+        ['mΩ', 'Ω'].includes(unit) &&
+        ['mΩ', 'Ω'].includes(targetUnit)
+      ) {
+        convertedVal = targetUnit === 'mΩ' ? value * 1000 : value / 1000;
+        const precision = targetUnit === 'mΩ' ? 1 : 4;
+        convertedVal = Number(convertedVal.toFixed(precision));
+      } else if (
+        ['mΩ/cell', 'Ω/cell'].includes(unit) &&
+        ['mΩ/cell', 'Ω/cell'].includes(targetUnit)
+      ) {
+        convertedVal = targetUnit === 'mΩ/cell' ? value * 1000 : value / 1000;
+        const precision = targetUnit === 'mΩ/cell' ? 1 : 4;
+        convertedVal = Number(convertedVal.toFixed(precision));
+      } else if (
+        ['m/s', 'mph', 'ft/s', 'km/h'].includes(unit) &&
+        ['m/s', 'mph', 'ft/s', 'km/h'].includes(targetUnit)
+      ) {
+        const inMs = speedToMs(value, unit as SpeedUnit);
+        const converted = msToUnit(inMs, targetUnit as SpeedUnit);
+        const precision = targetUnit === 'm/s' ? 2 : 2;
         convertedVal = Number(converted.toFixed(precision));
       }
     }
@@ -203,7 +228,7 @@ export const FieldInputWithToggle: React.FC<FieldInputWithToggleProps> = ({
           placeholder={placeholder}
           autoComplete="off"
           spellCheck="false"
-          className="w-full bg-transparent px-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono tabular-nums outline-none placeholder-[#94A3B8] dark:placeholder-[#424957]"
+          className="min-w-0 w-full bg-transparent px-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono tabular-nums outline-none placeholder-[#94A3B8] dark:placeholder-[#424957]"
         />
 
         {units && units.length > 1 ? (
@@ -215,7 +240,7 @@ export const FieldInputWithToggle: React.FC<FieldInputWithToggleProps> = ({
                   key={u}
                   type="button"
                   onClick={() => handleUnitToggle(u)}
-                  className={`px-2 py-1 text-[11px] font-mono font-semibold rounded-none transition-colors whitespace-nowrap cursor-pointer ${
+                  className={`h-7 min-w-[28px] px-2 inline-flex items-center justify-center text-[11px] font-mono font-semibold rounded-none transition-colors whitespace-nowrap cursor-pointer ${
                     isActive
                       ? 'bg-[#094AD8] text-white shadow-2xs'
                       : 'bg-[#F1F5F9] dark:bg-[#1F232B] text-[#475569] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#2A303C]'

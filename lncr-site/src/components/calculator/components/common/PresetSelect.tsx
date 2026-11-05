@@ -196,14 +196,14 @@ export const PresetSelect: React.FC<PresetSelectProps> = ({
           onClick={() => {
             if (!isOpen) setIsOpen(true);
           }}
-          className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none pl-3 pr-16 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] shadow-2xs"
+          className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none pl-3 pr-16 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] focus:ring-2 focus:ring-[#094AD8]/20 shadow-2xs transition-all"
           aria-label={ariaLabel}
           aria-autocomplete="list"
           aria-expanded={isOpen}
           role="combobox"
         />
 
-        <div className="absolute right-2 flex items-center gap-1">
+        <div className="absolute right-1.5 flex items-center gap-0.5">
           {isSearching && searchQuery && (
             <button
               type="button"
@@ -212,7 +212,7 @@ export const PresetSelect: React.FC<PresetSelectProps> = ({
                 setHighlightedIndex(-1);
                 inputRef.current?.focus();
               }}
-              className="text-xs text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white px-1 font-mono cursor-pointer"
+              className="h-7 w-7 flex items-center justify-center text-xs text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#E2E8F0] dark:hover:bg-[#262C38] rounded-none font-mono cursor-pointer transition-colors"
               title="Clear search"
             >
               ✕
@@ -231,7 +231,7 @@ export const PresetSelect: React.FC<PresetSelectProps> = ({
                 inputRef.current?.focus();
               }
             }}
-            className="text-[10px] text-[#64748B] dark:text-[#85A3E0] px-1 font-mono cursor-pointer select-none"
+            className="h-7 w-7 flex items-center justify-center text-[10px] text-[#64748B] dark:text-[#85A3E0] hover:bg-[#E2E8F0] dark:hover:bg-[#262C38] rounded-none font-mono cursor-pointer select-none transition-colors"
             title={isOpen ? 'Close presets list' : 'Open presets list'}
           >
             {isOpen ? '▲' : '▼'}
@@ -274,7 +274,7 @@ export const PresetSelect: React.FC<PresetSelectProps> = ({
                         data-highlighted={isHighlighted}
                         onClick={() => handleSelect(opt.id)}
                         onMouseEnter={() => setHighlightedIndex(thisIdx)}
-                        className={`w-full text-left px-3 py-1.5 text-xs font-mono transition-colors cursor-pointer block truncate ${
+                        className={`w-full min-h-[32px] flex items-center text-left px-3 py-1.5 text-xs font-mono transition-colors cursor-pointer truncate ${
                           isSelected
                             ? 'bg-[#094AD8] text-white font-bold'
                             : isHighlighted

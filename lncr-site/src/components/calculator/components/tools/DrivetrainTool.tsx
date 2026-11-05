@@ -44,7 +44,8 @@ const DecimalRatioInput: React.FC<{
   value: number;
   onChange: (val: number) => void;
   title: string;
-}> = ({ label, value, onChange, title }) => {
+  step?: number;
+}> = ({ label, value, onChange, title, step = 1 }) => {
   const [text, setText] = useState<string>(isNaN(value) ? '1' : value.toString());
   const [focused, setFocused] = useState<boolean>(false);
 
@@ -54,9 +55,29 @@ const DecimalRatioInput: React.FC<{
     }
   }, [value, focused]);
 
+  const commitValue = (raw: string) => {
+    const parsed = parseFloat(raw);
+    if (isNaN(parsed) || parsed <= 0) {
+      setText(value.toString());
+    } else {
+      onChange(parsed);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const current = parseFloat(text) || 1;
+      const delta = e.key === 'ArrowUp' ? step : -step;
+      const next = Math.max(0.1, Number((current + delta).toFixed(2)));
+      setText(next.toString());
+      onChange(next);
+    }
+  };
+
   return (
-    <div className="relative">
-      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold text-[#64748B] dark:text-[#85A3E0] select-none pointer-events-none">
+    <div className="relative flex items-center bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none focus-within:border-[#094AD8] focus-within:ring-2 focus-within:ring-[#094AD8]/20 shadow-2xs transition-all">
+      <span className="pl-2.5 pr-1 text-[10px] font-mono font-bold text-[#64748B] dark:text-[#85A3E0] select-none pointer-events-none shrink-0">
         {label}:
       </span>
       <input
@@ -66,13 +87,9 @@ const DecimalRatioInput: React.FC<{
         onFocus={() => setFocused(true)}
         onBlur={() => {
           setFocused(false);
-          const parsed = parseFloat(text);
-          if (isNaN(parsed) || parsed <= 0) {
-            setText(value.toString());
-          } else {
-            onChange(parsed);
-          }
+          commitValue(text);
         }}
+        onKeyDown={handleKeyDown}
         onChange={(e) => {
           const val = e.target.value;
           if (/^[0-9]*\.?[0-9]*$/.test(val)) {
@@ -83,7 +100,7 @@ const DecimalRatioInput: React.FC<{
             }
           }
         }}
-        className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none pl-11 pr-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] tabular-nums"
+        className="w-full bg-transparent pr-2.5 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none tabular-nums"
         title={title}
       />
     </div>
@@ -122,7 +139,6 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
   );
   const currentClass = WEIGHT_CLASSES.find((w) => w.id === weightClass) || WEIGHT_CLASSES[0];
   const speedUnit = state.speedUnit || 'ft/s';
-  const isFtPerSec = speedUnit === 'ft/s';
 
   const filteredMotors = MOTOR_PRESETS.filter((m) => {
     const isCategoryMatch = m.category === 'drive' || m.category === 'both';
@@ -393,7 +409,8 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
                   <button
                     type="button"
                     onClick={() => onChange({ ...state, manualRpmOverride: null })}
-                    className="text-[11px] text-[#094AD8] hover:underline font-semibold cursor-pointer"
+                    className="h-6 px-2 inline-flex items-center justify-center text-[10px] font-mono font-bold uppercase rounded-none border border-[#CBD5E1] dark:border-[#2E3646] bg-[#F1F5F9] dark:bg-[#16181D] text-[#094AD8] dark:text-[#60A5FA] hover:bg-[#E2E8F0] dark:hover:bg-[#262C38] transition-colors cursor-pointer"
+                    title="Clear manual RPM override and revert to KV × Voltage"
                   >
                     Clear Override
                   </button>
@@ -407,129 +424,173 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
                   const val = e.target.value === '' ? null : parseFloat(e.target.value);
                   onChange({ ...state, manualRpmOverride: val });
                 }}
-                className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none px-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] placeholder-[#94A3B8] dark:placeholder-[#424957] shadow-2xs"
+                className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none px-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] focus:ring-2 focus:ring-[#094AD8]/20 placeholder-[#94A3B8] dark:placeholder-[#424957] shadow-2xs transition-all"
               />
             </div>
 
-            {/* Gearbox & External Reduction Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Primary Gearbox Reduction */}
-              <div className="flex flex-col gap-3">
-                {weightClass === 'bigbot' && (
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
-                      Gearbox Preset (Big Bots)
-                    </label>
-                    <select
-                      value={activeGearboxPreset}
-                      onChange={(e) => handleGearboxPresetChange(e.target.value)}
-                      className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none px-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] shadow-2xs cursor-pointer"
-                    >
-                      {repeatGearboxPresets.length > 0 && (
-                        <optgroup label="Repeat Robotics">
-                          {repeatGearboxPresets.map((gb) => (
-                            <option key={gb.id} value={gb.id}>
-                              {gb.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      )}
-
-                      {extendedPreset && rangleboxGearboxPresets.length > 0 && (
-                        <optgroup label="Ranglebox">
-                          {rangleboxGearboxPresets.map((gb) => (
-                            <option key={gb.id} value={gb.id}>
-                              {gb.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      )}
-
-                      {extendedPreset && hiveTechGearboxPresets.length > 0 && (
-                        <optgroup label="HiveTech">
-                          {hiveTechGearboxPresets.map((gb) => (
-                            <option key={gb.id} value={gb.id}>
-                              {gb.name}
-                            </option>
-                          ))}
-                        </optgroup>
-                      )}
-
-                      <optgroup label="Direct / Custom">
-                        <option value="direct_drive">Direct Drive (1:1)</option>
-                        <option value="custom">Custom Ratio</option>
-                      </optgroup>
-
-                      {!extendedPreset &&
-                        (rangleboxGearboxPresets.some((p) => p.id === activeGearboxPreset) ||
-                          hiveTechGearboxPresets.some((p) => p.id === activeGearboxPreset)) && (
-                          <optgroup label="Active Selection">
-                            <option value={activeGearboxPreset}>
-                              {BIGBOT_GEARBOX_PRESETS.find((p) => p.id === activeGearboxPreset)?.name ||
-                                'Custom Ratio'}
-                            </option>
-                          </optgroup>
-                        )}
-                    </select>
-                  </div>
-                )}
-
-                <FieldInputWithToggle
-                  label="Gearbox Reduction (:1)"
-                  value={state.gearRatio}
-                  unit=":1"
-                  onChangeValue={handleGearRatioChange}
-                  step={0.5}
-                  min={0.5}
-                  max={250}
-                  helperText="Internal planetary/spur reduction (e.g. 14 for 14:1)"
-                />
+            {/* Section 2: Gearbox & External Reduction */}
+            <div className="pt-4 border-t border-[#E2E8F0] dark:border-[#2E3646] flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#475569] dark:text-[#85A3E0]">
+                  Gearbox & External Reduction
+                </h4>
+                <span className="text-[11px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
+                  Total Drive Ratio:{' '}
+                  <strong className="text-[#094AD8] dark:text-[#60A5FA] font-bold">
+                    {results.totalRatio.toFixed(2)}:1
+                  </strong>
+                </span>
               </div>
 
-              {/* External Reduction (Belt / Chain / Secondary Gears) */}
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
-                    External Reduction (Belt/Gear Ratio)
-                  </label>
-                  <span className="text-[11px] font-mono text-[#094AD8] dark:text-[#60A5FA] font-bold">
-                    {results.externalRatio.toFixed(2)}:1
+              {/* Gearbox & External Reduction Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Primary Gearbox Reduction */}
+                <div className="flex flex-col gap-3">
+                  {weightClass === 'bigbot' && (
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
+                        Gearbox Preset (Big Bots)
+                      </label>
+                      <select
+                        value={activeGearboxPreset}
+                        onChange={(e) => handleGearboxPresetChange(e.target.value)}
+                        className="w-full bg-[#F8FAFC] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] rounded-none px-3 py-2 text-sm text-[#0F172A] dark:text-[#CEDDFD] font-mono outline-none focus:border-[#094AD8] focus:ring-2 focus:ring-[#094AD8]/20 shadow-2xs cursor-pointer transition-all"
+                      >
+                        {repeatGearboxPresets.length > 0 && (
+                          <optgroup label="Repeat Robotics">
+                            {repeatGearboxPresets.map((gb) => (
+                              <option key={gb.id} value={gb.id}>
+                                {gb.name}
+                              </option>
+                            ))}
+                          </optgroup>
+                        )}
+
+                        {extendedPreset && rangleboxGearboxPresets.length > 0 && (
+                          <optgroup label="Ranglebox">
+                            {rangleboxGearboxPresets.map((gb) => (
+                              <option key={gb.id} value={gb.id}>
+                                {gb.name}
+                              </option>
+                            ))}
+                          </optgroup>
+                        )}
+
+                        {extendedPreset && hiveTechGearboxPresets.length > 0 && (
+                          <optgroup label="HiveTech">
+                            {hiveTechGearboxPresets.map((gb) => (
+                              <option key={gb.id} value={gb.id}>
+                                {gb.name}
+                              </option>
+                            ))}
+                          </optgroup>
+                        )}
+
+                        <optgroup label="Direct / Custom">
+                          <option value="direct_drive">Direct Drive (1:1)</option>
+                          <option value="custom">Custom Ratio</option>
+                        </optgroup>
+
+                        {!extendedPreset &&
+                          (rangleboxGearboxPresets.some((p) => p.id === activeGearboxPreset) ||
+                            hiveTechGearboxPresets.some((p) => p.id === activeGearboxPreset)) && (
+                            <optgroup label="Active Selection">
+                              <option value={activeGearboxPreset}>
+                                {BIGBOT_GEARBOX_PRESETS.find((p) => p.id === activeGearboxPreset)?.name ||
+                                  'Custom Ratio'}
+                              </option>
+                            </optgroup>
+                          )}
+                      </select>
+                    </div>
+                  )}
+
+                  <FieldInputWithToggle
+                    label="Gearbox Reduction (:1)"
+                    value={state.gearRatio}
+                    unit=":1"
+                    onChangeValue={handleGearRatioChange}
+                    step={0.5}
+                    min={0.5}
+                    max={250}
+                    helperText="Internal planetary/spur reduction (e.g. 14 for 14:1)"
+                  />
+                </div>
+
+                {/* External Reduction (Belt / Chain / Secondary Gears) */}
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
+                      External Reduction
+                    </label>
+                    <div className="flex items-center gap-2">
+                      {((state.externalInputTeeth ?? 1) !== 1 || (state.externalOutputTeeth ?? 1) !== 1) && (
+                        <button
+                          type="button"
+                          onClick={() => onChange({ ...state, externalInputTeeth: 1, externalOutputTeeth: 1 })}
+                          className="text-[10px] font-mono font-semibold text-[#64748B] dark:text-[#85A3E0] hover:text-[#094AD8] dark:hover:text-[#60A5FA] cursor-pointer"
+                          title="Reset external ratio to 1:1 direct drive"
+                        >
+                          1:1 Direct
+                        </button>
+                      )}
+                      <span className="text-[11px] font-mono text-[#094AD8] dark:text-[#60A5FA] font-bold">
+                        {results.externalRatio.toFixed(2)}:1
+                      </span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <DecimalRatioInput
+                      label="IN"
+                      value={state.externalInputTeeth ?? 1}
+                      onChange={(val) => onChange({ ...state, externalInputTeeth: val })}
+                      title="Driver ratio or tooth count (e.g. 1 or 15)"
+                    />
+                    <DecimalRatioInput
+                      label="OUT"
+                      value={state.externalOutputTeeth ?? 1}
+                      onChange={(val) => onChange({ ...state, externalOutputTeeth: val })}
+                      title="Driven ratio or tooth count (e.g. 2.5 or 30)"
+                    />
+                  </div>
+                  <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
+                    Gearbox {results.gearboxRatio.toFixed(1)}:1 × External {results.externalRatio.toFixed(2)}:1
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <DecimalRatioInput
-                    label="IN"
-                    value={state.externalInputTeeth ?? 1}
-                    onChange={(val) => onChange({ ...state, externalInputTeeth: val })}
-                    title="Driver ratio or tooth count (e.g. 1 or 15)"
-                  />
-                  <DecimalRatioInput
-                    label="OUT"
-                    value={state.externalOutputTeeth ?? 1}
-                    onChange={(val) => onChange({ ...state, externalOutputTeeth: val })}
-                    title="Driven ratio or tooth count (e.g. 2.5 or 30)"
-                  />
-                </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
-                  Total Drive Ratio: <strong>{results.totalRatio.toFixed(2)}:1</strong> (Gearbox × External)
-                </span>
               </div>
             </div>
 
-            {/* Wheel Diameter with Unit Toggle */}
-            <FieldInputWithToggle
-              label="Wheel Outer Diameter"
-              value={state.wheelDiameter}
-              unit={state.wheelDiameterUnit}
-              units={['mm', 'in']}
-              onChangeValue={(val) => onChange({ ...state, wheelDiameter: val })}
-              onChangeValueAndUnit={(val, unit: LengthUnit) =>
-                onChange({ ...state, wheelDiameter: val, wheelDiameterUnit: unit })
-              }
-              step={state.wheelDiameterUnit === 'in' ? 0.125 : 1}
-              min={state.wheelDiameterUnit === 'in' ? 0.2 : 5}
-              helperText="Outer tire contact diameter"
-            />
+            {/* Section 3: Wheel & Traction */}
+            <div className="pt-4 border-t border-[#E2E8F0] dark:border-[#2E3646] flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#475569] dark:text-[#85A3E0]">
+                  Wheel & Traction
+                </h4>
+                <span className="text-[11px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
+                  Circumference:{' '}
+                  <strong className="text-[#0F172A] dark:text-[#CEDDFD]">
+                    {state.wheelDiameterUnit === 'in'
+                      ? `${(results.wheelCircumferenceMm / 25.4).toFixed(2)} in`
+                      : `${results.wheelCircumferenceMm.toFixed(1)} mm`}
+                  </strong>
+                </span>
+              </div>
+
+              {/* Wheel Diameter with Unit Toggle */}
+              <FieldInputWithToggle
+                label="Wheel Outer Diameter"
+                value={state.wheelDiameter}
+                unit={state.wheelDiameterUnit}
+                units={['mm', 'in']}
+                onChangeValue={(val) => onChange({ ...state, wheelDiameter: val })}
+                onChangeValueAndUnit={(val, unit: LengthUnit) =>
+                  onChange({ ...state, wheelDiameter: val, wheelDiameterUnit: unit })
+                }
+                step={state.wheelDiameterUnit === 'in' ? 0.125 : 1}
+                min={state.wheelDiameterUnit === 'in' ? 0.2 : 5}
+                helperText="Outer tire contact diameter"
+              />
+            </div>
           </div>
         </div>
 
@@ -549,44 +610,52 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
                   Theoretical Speed
                 </span>
                 <div className="flex items-center border border-[#CBD5E1] dark:border-[#333C4D] bg-[#F1F5F9] dark:bg-[#1C2028] p-0.5">
-                  <button
-                    type="button"
-                    onClick={() => onChange({ ...state, speedUnit: 'ft/s' })}
-                    className={`px-2 py-0.5 text-[10px] font-semibold font-mono rounded-none cursor-pointer transition-colors ${
-                      isFtPerSec
-                        ? 'bg-[#094AD8] text-white shadow-2xs'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
-                    }`}
-                  >
-                    ft/s
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onChange({ ...state, speedUnit: 'mph' })}
-                    className={`px-2 py-0.5 text-[10px] font-semibold font-mono rounded-none cursor-pointer transition-colors ${
-                      !isFtPerSec
-                        ? 'bg-[#094AD8] text-white shadow-2xs'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
-                    }`}
-                  >
-                    mph
-                  </button>
+                  {(['ft/s', 'mph', 'm/s'] as const).map((unit) => {
+                    const isActive = speedUnit === unit;
+                    return (
+                      <button
+                        key={unit}
+                        type="button"
+                        onClick={() => onChange({ ...state, speedUnit: unit })}
+                        className={`h-6 px-2.5 inline-flex items-center justify-center text-[11px] font-semibold font-mono rounded-none cursor-pointer transition-colors ${
+                          isActive
+                            ? 'bg-[#094AD8] text-white shadow-2xs'
+                            : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
+                        }`}
+                      >
+                        {unit}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
               <div className="flex items-baseline gap-2 flex-wrap">
                 <span className="text-4xl sm:text-5xl font-extrabold font-mono text-[#094AD8] dark:text-white tabular-nums">
-                  {isFtPerSec
+                  {speedUnit === 'ft/s'
                     ? results.theoreticalSpeedFts.toFixed(2)
-                    : results.theoreticalSpeedMph.toFixed(2)}
+                    : speedUnit === 'mph'
+                    ? results.theoreticalSpeedMph.toFixed(2)
+                    : results.theoreticalSpeedMs.toFixed(2)}
                 </span>
-                <span className="text-lg font-mono font-bold text-[#0F172A] dark:text-[#094AD8]">
-                  {isFtPerSec ? 'ft/s' : 'mph'}
+                <span className="text-lg font-mono font-bold text-[#0F172A] dark:text-[#60A5FA]">
+                  {speedUnit}
                 </span>
               </div>
               <div className="text-sm font-mono text-[#64748B] dark:text-[#85A3E0] mt-0.5">
-                {isFtPerSec
+                {speedUnit === 'ft/s'
                   ? `${results.theoreticalSpeedMph.toFixed(2)} mph · ${results.theoreticalSpeedMs.toFixed(2)} m/s`
-                  : `${results.theoreticalSpeedMs.toFixed(2)} m/s · ${results.theoreticalSpeedFts.toFixed(2)} ft/s`}
+                  : speedUnit === 'mph'
+                  ? `${results.theoreticalSpeedFts.toFixed(2)} ft/s · ${results.theoreticalSpeedMs.toFixed(2)} m/s`
+                  : `${results.theoreticalSpeedFts.toFixed(2)} ft/s · ${results.theoreticalSpeedMph.toFixed(2)} mph`}
+                {' · '}
+                <span className="text-[#0F172A] dark:text-[#CEDDFD]">
+                  ~85% loaded:{' '}
+                  {speedUnit === 'ft/s'
+                    ? `${results.loadedSpeedFts.toFixed(2)} ft/s`
+                    : speedUnit === 'mph'
+                    ? `${results.loadedSpeedMph.toFixed(2)} mph`
+                    : `${results.loadedSpeedMs.toFixed(2)} m/s`}
+                </span>
               </div>
             </div>
 
@@ -601,7 +670,10 @@ export const DrivetrainTool: React.FC<DrivetrainToolProps> = ({
                   <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">RPM</span>
                 </span>
                 <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70 mt-0.5">
-                  {results.wheelCircumferenceMm.toFixed(1)} mm travel per rotation
+                  {state.wheelDiameterUnit === 'in'
+                    ? `${(results.wheelCircumferenceMm / 25.4).toFixed(2)} in`
+                    : `${results.wheelCircumferenceMm.toFixed(1)} mm`}{' '}
+                  travel per rotation
                 </span>
               </div>
 
