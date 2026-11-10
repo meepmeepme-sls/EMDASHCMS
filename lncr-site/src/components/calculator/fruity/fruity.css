@@ -65,7 +65,11 @@ html.fruity.dark body {
   background-color: #010d1a;
 }
 
-html.fruity #root > div {
+html.fruity #root,
+html.fruity #root > div,
+html.fruity #root astro-island,
+html.fruity #root astro-island > div,
+html.fruity #root .min-h-screen {
   position: relative;
   background: transparent !important;
   color: var(--fa-ink);
