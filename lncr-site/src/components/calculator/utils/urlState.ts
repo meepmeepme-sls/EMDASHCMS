@@ -4,7 +4,18 @@
  * Adheres to Option 1: Delta-Encoding + Short Key Aliases with 100% Backwards Compatibility.
  */
 
-import type { ToolType, WeightClassId, BatteryChemistry, VoltageState, DrivetrainState, WeaponState, SpinUpState, CenterDistanceState, BatteryRuntimeState, CapacitanceState } from '../types';
+import {
+  ToolType,
+  WeightClassId,
+  BatteryChemistry,
+  VoltageState,
+  DrivetrainState,
+  WeaponState,
+  SpinUpState,
+  CenterDistanceState,
+  BatteryRuntimeState,
+  CapacitanceState,
+} from '../types';
 import { getWeightClassDefaults } from './constants';
 
 export interface GlobalAppState {

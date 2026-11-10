@@ -131,8 +131,8 @@
     "KV":"2850",
     "Recommended Voltage":"2-6S LiPo",
     "Motor\/Gearmotor\/Gearbox":"Gearmotor",
-    "Reduction (if applicable)":"Planetary",
-    "Recommended Weightclass":"Beetleweight"
+    "Reduction (if applicable)":"29:1",
+    "Recommended Weightclass":"Beetleweight \/ Antweight"
   },
   {
     "Brand":"Just Cuz Robotics",
@@ -140,8 +140,8 @@
     "KV":"3800",
     "Recommended Voltage":"2-4S LiPo",
     "Motor\/Gearmotor\/Gearbox":"Gearmotor",
-    "Reduction (if applicable)":"Planetary",
-    "Recommended Weightclass":"Beetleweight"
+    "Reduction (if applicable)":"29:1",
+    "Recommended Weightclass":"Beetleweight \/ Antweight"
   },
   {
     "Brand":"Just Cuz Robotics",

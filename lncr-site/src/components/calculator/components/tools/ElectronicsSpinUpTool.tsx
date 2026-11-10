@@ -5,7 +5,13 @@
  */
 
 import React, { useState } from 'react';
-import type { SpinUpState, BatteryChemistry, VoltageState, WeightClassId, MoiUnit } from '../../types';
+import {
+  SpinUpState,
+  BatteryChemistry,
+  VoltageState,
+  WeightClassId,
+  MoiUnit,
+} from '../../types';
 import { computeSpinUp } from '../../utils/calculations';
 import { kgM2ToUnit, moiToKgM2 } from '../../utils/conversions';
 import { FieldInputWithToggle } from '../common/FieldInputWithToggle';
@@ -95,34 +101,6 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
   );
 
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const [resistanceUnit, setResistanceUnit] = useState<'mΩ' | 'Ω'>('mΩ');
-
-  const timeHorizon = state.timeHorizonSec || 3.5;
-
-  // Kinetic energy and speed at simulation time horizon
-  const timeTo80PercentSec = -results.tauSec * Math.log(0.2); // ~1.6094 * tau
-  const effectiveMoiKgM2 = isUseWeaponTabMoi
-    ? weaponTabMoiKgM2
-    : state.moiUnit
-    ? moiToKgM2(state.moi ?? state.moiKgM2, state.moiUnit)
-    : state.moiKgM2;
-  const safeMoi = Math.max(effectiveMoiKgM2, 0.000001);
-
-  const rpmAtHorizon = results.freeRpm * (1 - Math.exp(-timeHorizon / Math.max(results.tauSec, 0.0001)));
-  const radSAtHorizon = (rpmAtHorizon * 2 * Math.PI) / 60.0;
-  const energyAtHorizonJoules = 0.5 * safeMoi * Math.pow(radSAtHorizon, 2);
-  const percentEnergyAtHorizon = Math.min(
-    100,
-    (energyAtHorizonJoules / Math.max(results.maxStoredEnergyJoules, 0.0001)) * 100
-  );
-
-  // Electrical inrush and running current metrics
-  const peakInrushCurrentAmps = results.stallCurrentAmps;
-  // Typical no-load steady-state running current for combat brushless systems (motor idling with belt friction):
-  const steadyStateCurrentAmps = Math.min(
-    Math.max(1.2, results.packVoltage * 0.12),
-    peakInrushCurrentAmps * 0.05
-  );
 
   // SVG dimensions
   const svgWidth = 600;
@@ -132,7 +110,7 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
   const chartW = svgWidth - padding.left - padding.right;
   const chartH = svgHeight - padding.top - padding.bottom;
 
-  const maxTime = results.curvePoints[results.curvePoints.length - 1]?.timeSec || timeHorizon;
+  const maxTime = results.curvePoints[results.curvePoints.length - 1]?.timeSec || 3.5;
   const maxRpm = Math.max(results.freeRpm, 100);
 
   const getX = (t: number) => padding.left + (t / maxTime) * chartW;
@@ -147,12 +125,6 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
   const areaD = `${pathD} L ${getX(maxTime)} ${padding.top + chartH} L ${padding.left} ${padding.top + chartH} Z`;
 
   const hoveredPoint = hoverIndex !== null ? results.curvePoints[hoverIndex] : null;
-
-  // Dynamic time markers for SVG grid
-  const timeMarkers = Array.from(
-    { length: Math.floor(maxTime) },
-    (_, i) => i + 1
-  ).filter((t) => t < maxTime - 0.2);
 
   return (
     <div className="flex flex-col gap-6">
@@ -195,39 +167,34 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
 
       {/* Main Split Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Resistance & Powertrain Parameters */}
+        {/* Left Column: Resistance & Inertia Parameters */}
         <div className="lg:col-span-6 flex flex-col gap-5">
           <div className="bg-white dark:bg-[#1F232B] border border-[#E2E8F0] dark:border-[#2E3646] shadow-2xs rounded-none p-5 flex flex-col gap-5 transition-colors">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-[#2E3646] flex-wrap gap-2">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-[#2E3646]">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-[#0F172A] dark:text-[#CEDDFD]">
-                  System Resistance &amp; Powertrain
+                  System Resistance & Powertrain
                 </h3>
               </div>
               <span className="text-xs font-mono text-[#64748B] dark:text-[#85A3E0]">
-                R_sys:{' '}
-                <strong className="text-[#0F172A] dark:text-[#CEDDFD]">
-                  {resistanceUnit === 'mΩ'
-                    ? `${(results.systemResistanceOhms * 1000).toFixed(1)} mΩ`
-                    : `${results.systemResistanceOhms.toFixed(4)} Ω`}
-                </strong>
+                R_sys: {results.systemResistanceOhms.toFixed(4)} Ω
               </span>
             </div>
 
             {/* Motor KV Source Selector */}
             <div className="p-3.5 rounded-none bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] flex flex-col gap-2.5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
                   Motor KV
                 </span>
-                <div className="flex items-center p-0.5 bg-[#F1F5F9] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] self-start sm:self-auto">
+                <div className="flex items-center gap-1">
                   <button
                     type="button"
                     onClick={() => onChange({ ...state, useWeaponTabMotorKv: true })}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-none cursor-pointer transition-all whitespace-nowrap ${
+                    className={`px-2 py-0.5 text-[11px] font-semibold rounded-none cursor-pointer ${
                       isUseWeaponTabMotorKv
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
+                        ? 'bg-[#094AD8] text-white shadow-2xs'
+                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
                     }`}
                   >
                     From Weapon Tab ({weaponTabMotorKv} RPM/V)
@@ -241,10 +208,10 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
                         motorKv: state.motorKv || weaponTabMotorKv,
                       })
                     }
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-none cursor-pointer transition-all whitespace-nowrap ${
+                    className={`px-2 py-0.5 text-[11px] font-semibold rounded-none cursor-pointer ${
                       !isUseWeaponTabMotorKv
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
+                        ? 'bg-[#094AD8] text-white shadow-2xs'
+                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
                     }`}
                   >
                     Custom
@@ -267,18 +234,18 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
 
             {/* Gear Reduction Ratio Source Selector */}
             <div className="p-3.5 rounded-none bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] flex flex-col gap-2.5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
                   Gear Reduction Ratio
                 </span>
-                <div className="flex items-center p-0.5 bg-[#F1F5F9] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] self-start sm:self-auto">
+                <div className="flex items-center gap-1">
                   <button
                     type="button"
                     onClick={() => onChange({ ...state, useWeaponTabGearRatio: true })}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-none cursor-pointer transition-all whitespace-nowrap ${
+                    className={`px-2 py-0.5 text-[11px] font-semibold rounded-none cursor-pointer ${
                       isUseWeaponTabGearRatio
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
+                        ? 'bg-[#094AD8] text-white shadow-2xs'
+                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
                     }`}
                   >
                     From Weapon Tab ({weaponTabGearRatio}:1)
@@ -292,10 +259,10 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
                         gearRatio: state.gearRatio || weaponTabGearRatio,
                       })
                     }
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-none cursor-pointer transition-all whitespace-nowrap ${
+                    className={`px-2 py-0.5 text-[11px] font-semibold rounded-none cursor-pointer ${
                       !isUseWeaponTabGearRatio
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
+                        ? 'bg-[#094AD8] text-white shadow-2xs'
+                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
                     }`}
                   >
                     Custom
@@ -318,73 +285,29 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
 
             {/* Inertia Source Selector */}
             <div className="p-3.5 rounded-none bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] flex flex-col gap-2.5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
-                    Mass Moment of Inertia (MOI)
-                  </span>
-                  {/* Inline MOI Unit Selector */}
-                  <div className="flex items-center gap-0.5">
-                    {(['kg*m^2', 'g*cm^2', 'lb*in^2'] as MoiUnit[]).map((u) => {
-                      const active = (state.moiUnit || 'kg*m^2') === u;
-                      return (
-                        <button
-                          key={u}
-                          type="button"
-                          onClick={() => {
-                            const currentUnit = state.moiUnit || 'kg*m^2';
-                            const currentKgM2 = isUseWeaponTabMoi
-                              ? weaponTabMoiKgM2
-                              : (state.moiKgM2 ?? moiToKgM2(state.moi || 0, currentUnit));
-                            const newMoiVal = kgM2ToUnit(currentKgM2, u);
-                            onChange({
-                              ...state,
-                              moiUnit: u,
-                              moi: newMoiVal,
-                              moiKgM2: currentKgM2,
-                            });
-                          }}
-                          className={`px-1.5 py-0.5 text-[10px] font-mono font-semibold rounded-none cursor-pointer transition-colors ${
-                            active
-                              ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                              : 'bg-[#F1F5F9] dark:bg-[#16181D] text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] border border-[#CBD5E1] dark:border-[#2E3646]'
-                          }`}
-                          title={`Switch MOI unit to ${u}`}
-                        >
-                          {u}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="flex items-center p-0.5 bg-[#F1F5F9] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646] self-start sm:self-auto">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
+                  Mass Moment of Inertia (MOI)
+                </span>
+                <div className="flex items-center gap-1">
                   <button
                     type="button"
                     onClick={() => onChange({ ...state, useWeaponTabMoi: true })}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-none cursor-pointer transition-all whitespace-nowrap ${
+                    className={`px-2 py-0.5 text-[11px] font-semibold rounded-none cursor-pointer ${
                       isUseWeaponTabMoi
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
+                        ? 'bg-[#094AD8] text-white shadow-2xs'
+                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
                     }`}
                   >
-                    From Weapon Tab (
-                    {kgM2ToUnit(weaponTabMoiKgM2, state.moiUnit || 'kg*m^2').toFixed(
-                      (state.moiUnit || 'kg*m^2') === 'g*cm^2'
-                        ? 1
-                        : (state.moiUnit || 'kg*m^2') === 'lb*in^2'
-                        ? 3
-                        : 5
-                    )}{' '}
-                    {state.moiUnit || 'kg*m^2'})
+                    From Weapon Tab ({kgM2ToUnit(weaponTabMoiKgM2, state.moiUnit || 'kg*m^2').toFixed((state.moiUnit || 'kg*m^2') === 'g*cm^2' ? 1 : (state.moiUnit || 'kg*m^2') === 'lb*in^2' ? 3 : 5)} {state.moiUnit || 'kg*m^2'})
                   </button>
                   <button
                     type="button"
                     onClick={() => onChange({ ...state, useWeaponTabMoi: false })}
-                    className={`px-2.5 py-1 text-xs font-semibold rounded-none cursor-pointer transition-all whitespace-nowrap ${
+                    className={`px-2 py-0.5 text-[11px] font-semibold rounded-none cursor-pointer ${
                       !isUseWeaponTabMoi
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
+                        ? 'bg-[#094AD8] text-white shadow-2xs'
+                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD]'
                     }`}
                   >
                     Custom
@@ -394,7 +317,7 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
 
               {!isUseWeaponTabMoi && (
                 <FieldInputWithToggle
-                  label="Custom Blade Inertia (MOI)"
+                  label="Custom Weapon Inertia (J)"
                   value={state.moi ?? kgM2ToUnit(state.moiKgM2, state.moiUnit || 'kg*m^2')}
                   unit={state.moiUnit || 'kg*m^2'}
                   units={['kg*m^2', 'g*cm^2', 'lb*in^2']}
@@ -429,85 +352,36 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
 
             {/* Electrical Resistances */}
             <div className="flex flex-col gap-3 pt-2 border-t border-[#E2E8F0] dark:border-[#2E3646]">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <span className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
-                  Circuit &amp; Battery Resistances (Rm, Rbat, Rwire)
-                </span>
-                {/* Global Resistance Unit Switcher */}
-                <div className="flex items-center p-0.5 bg-[#F1F5F9] dark:bg-[#16181D] border border-[#CBD5E1] dark:border-[#2E3646]">
-                  <button
-                    type="button"
-                    onClick={() => setResistanceUnit('mΩ')}
-                    className={`px-2 py-0.5 text-xs font-mono font-semibold rounded-none cursor-pointer transition-all ${
-                      resistanceUnit === 'mΩ'
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
-                    }`}
-                  >
-                    mΩ
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setResistanceUnit('Ω')}
-                    className={`px-2 py-0.5 text-xs font-mono font-semibold rounded-none cursor-pointer transition-all ${
-                      resistanceUnit === 'Ω'
-                        ? 'bg-[#094AD8] text-white shadow-2xs font-bold'
-                        : 'text-[#64748B] dark:text-[#85A3E0] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#1F232B]'
-                    }`}
-                  >
-                    Ω
-                  </button>
-                </div>
-              </div>
-
+              <span className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
+                Circuit & Battery Resistances (Ohms)
+              </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <FieldInputWithToggle
-                  label="Motor Resistance (Rm)"
-                  value={
-                    resistanceUnit === 'mΩ'
-                      ? Number((state.motorResistance * 1000).toFixed(1))
-                      : state.motorResistance
-                  }
-                  unit={resistanceUnit}
-                  onChangeValue={(val) => {
-                    const ohmVal = resistanceUnit === 'mΩ' ? val / 1000 : val;
-                    onChange({ ...state, motorResistance: Math.max(0.0001, ohmVal) });
-                  }}
-                  step={resistanceUnit === 'mΩ' ? 5 : 0.005}
-                  min={resistanceUnit === 'mΩ' ? 0.5 : 0.0005}
+                  label="Motor Phase Ri"
+                  value={state.motorResistance}
+                  unit="Ω"
+                  onChangeValue={(val) => onChange({ ...state, motorResistance: val })}
+                  step={0.005}
+                  min={0.001}
                   helperText="Winding phase-to-phase resistance"
                 />
                 <FieldInputWithToggle
-                  label="Battery Ri (Rbat)"
-                  value={
-                    resistanceUnit === 'mΩ'
-                      ? Number((state.batteryResistancePerCell * 1000).toFixed(1))
-                      : state.batteryResistancePerCell
-                  }
-                  unit={resistanceUnit === 'mΩ' ? 'mΩ/cell' : 'Ω/cell'}
-                  onChangeValue={(val) => {
-                    const ohmVal = resistanceUnit === 'mΩ' ? val / 1000 : val;
-                    onChange({ ...state, batteryResistancePerCell: Math.max(0.0001, ohmVal) });
-                  }}
-                  step={resistanceUnit === 'mΩ' ? 1 : 0.001}
-                  min={resistanceUnit === 'mΩ' ? 0.1 : 0.0001}
-                  helperText="Typically 4–10 mΩ/cell"
+                  label="Battery Cell Ri"
+                  value={state.batteryResistancePerCell}
+                  unit="Ω/cell"
+                  onChangeValue={(val) => onChange({ ...state, batteryResistancePerCell: val })}
+                  step={0.001}
+                  min={0.001}
+                  helperText="Typically 0.004–0.010 Ω/cell"
                 />
                 <FieldInputWithToggle
-                  label="ESC &amp; Wiring (Rwire)"
-                  value={
-                    resistanceUnit === 'mΩ'
-                      ? Number((state.escWiringResistance * 1000).toFixed(1))
-                      : state.escWiringResistance
-                  }
-                  unit={resistanceUnit}
-                  onChangeValue={(val) => {
-                    const ohmVal = resistanceUnit === 'mΩ' ? val / 1000 : val;
-                    onChange({ ...state, escWiringResistance: Math.max(0.0001, ohmVal) });
-                  }}
-                  step={resistanceUnit === 'mΩ' ? 1 : 0.001}
-                  min={resistanceUnit === 'mΩ' ? 0.1 : 0.0001}
-                  helperText="MOSFET RDS(on) + wire/plug resistance"
+                  label="ESC & Harness"
+                  value={state.escWiringResistance}
+                  unit="Ω"
+                  onChangeValue={(val) => onChange({ ...state, escWiringResistance: val })}
+                  step={0.001}
+                  min={0.001}
+                  helperText="MOSFET RDS(on) + connectors"
                 />
               </div>
             </div>
@@ -516,41 +390,27 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
             <div className="grid grid-cols-3 gap-2 p-3 bg-[#F8FAFC] dark:bg-[#16181D] rounded-none border border-[#E2E8F0] dark:border-[#2E3646]">
               <div>
                 <span className="text-[10px] uppercase font-mono text-[#64748B] dark:text-[#85A3E0]">
+                  Stall Current
+                </span>
+                <div className="text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums">
+                  {results.stallCurrentAmps.toFixed(0)} <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">A</span>
+                </div>
+              </div>
+              <div>
+                <span className="text-[10px] uppercase font-mono text-[#64748B] dark:text-[#85A3E0]">
                   Stall Torque
                 </span>
-                <div className="text-base sm:text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums">
-                  {results.stallTorqueNm.toFixed(2)}{' '}
-                  <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">N·m</span>
+                <div className="text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums">
+                  {results.stallTorqueNm.toFixed(2)} <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">N·m</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
-                  {results.stallTorqueOzIn.toFixed(0)} oz·in
-                </span>
               </div>
-
               <div>
                 <span className="text-[10px] uppercase font-mono text-[#64748B] dark:text-[#85A3E0]">
                   Torque Const (Kt)
                 </span>
-                <div className="text-base sm:text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums">
-                  {(results.ktNmPerAmp * 1000).toFixed(1)}{' '}
-                  <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">mN·m/A</span>
+                <div className="text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums">
+                  {(results.ktNmPerAmp * 1000).toFixed(1)} <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">mN·m/A</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
-                  {results.ktNmPerAmp.toFixed(4)} N·m/A
-                </span>
-              </div>
-
-              <div>
-                <span className="text-[10px] uppercase font-mono text-[#64748B] dark:text-[#85A3E0]">
-                  Time Constant (τ)
-                </span>
-                <div className="text-base sm:text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums">
-                  {results.tauSec.toFixed(3)}{' '}
-                  <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">s</span>
-                </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
-                  63.2% spin-up speed
-                </span>
               </div>
             </div>
           </div>
@@ -559,84 +419,18 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
         {/* Right Column: Spin-Up Curve & Time Benchmarks */}
         <div className="lg:col-span-6 flex flex-col gap-5">
           <div className="bg-white dark:bg-[#1F232B] border border-[#E2E8F0] dark:border-[#2E3646] shadow-2xs rounded-none p-5 flex flex-col gap-4 transition-colors">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-[#2E3646] flex-wrap gap-2">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E2E8F0] dark:border-[#2E3646]">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-[#0F172A] dark:text-[#CEDDFD]">
                   Asymptotic Spin-Up Curve
                 </h3>
               </div>
-              <div className="flex items-center gap-3 font-mono text-xs">
-                <span className="text-[#64748B] dark:text-[#85A3E0]">
-                  Free Speed:{' '}
-                  <strong className="text-[#0F172A] dark:text-[#CEDDFD]">
-                    {results.freeRpm.toFixed(0)} RPM
-                  </strong>
-                </span>
-                <span className="text-[#0F172A] dark:text-[#CEDDFD]">
-                  95% Spin-Up:{' '}
-                  <strong className="text-[#094AD8] dark:text-[#60A5FA]">
-                    {results.timeTo95PercentSec.toFixed(2)}s
-                  </strong>
-                </span>
-              </div>
-            </div>
-
-            {/* Time Horizon Slider Controls and Quick Presets */}
-            <div className="p-3 bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] rounded-none flex flex-col gap-2.5">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-[#1E293B] dark:text-[#CEDDFD]">
-                    Simulation Time Horizon
-                  </span>
-                  <span className="text-xs font-mono font-bold text-[#094AD8] dark:text-[#60A5FA]">
-                    {timeHorizon.toFixed(1)}s
-                  </span>
-                </div>
-
-                {/* Preset Buttons (2s, 3s, 4s, 5s) */}
-                <div className="flex items-center gap-1 flex-wrap">
-                  <span className="text-[10px] uppercase font-mono text-[#64748B] dark:text-[#85A3E0]/70 mr-1 select-none">
-                    Presets:
-                  </span>
-                  {[2, 3, 4, 5].map((preset) => {
-                    const isActive = Math.abs(timeHorizon - preset) < 0.05;
-                    return (
-                      <button
-                        key={preset}
-                        type="button"
-                        onClick={() => onChange({ ...state, timeHorizonSec: preset })}
-                        className={`px-2 py-0.5 text-xs font-mono rounded-none transition-all cursor-pointer ${
-                          isActive
-                            ? 'bg-[#094AD8] text-white font-bold shadow-2xs'
-                            : 'bg-white dark:bg-[#1F232B] text-[#64748B] dark:text-[#85A3E0] border border-[#CBD5E1] dark:border-[#2E3646] hover:text-[#0F172A] dark:hover:text-[#CEDDFD] hover:bg-[#E2E8F0] dark:hover:bg-[#262C38]'
-                        }`}
-                        title={`Set time horizon to ${preset} seconds`}
-                      >
-                        {preset}s
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Horizon Slider */}
-              <div className="flex items-center gap-3">
-                <input
-                  type="range"
-                  min="1.0"
-                  max="6.0"
-                  step="0.1"
-                  value={timeHorizon}
-                  onChange={(e) => {
-                    const val = parseFloat(e.target.value);
-                    if (!isNaN(val) && val > 0) {
-                      onChange({ ...state, timeHorizonSec: val });
-                    }
-                  }}
-                  className="w-full accent-[#094AD8] cursor-pointer h-1.5 bg-[#CBD5E1] dark:bg-[#2E3646] rounded-none appearance-none"
-                  aria-label="Simulation time horizon in seconds"
-                />
-              </div>
+              <span className="text-xs font-mono text-[#0F172A] dark:text-[#CEDDFD]">
+                95% Spin-Up:{' '}
+                <strong className="text-[#094AD8]">
+                  {results.timeTo95PercentSec.toFixed(2)}s
+                </strong>
+              </span>
             </div>
 
             {/* Interactive SVG Chart */}
@@ -676,7 +470,7 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
                 })}
 
                 {/* Vertical Grid lines (Time markers) */}
-                {timeMarkers.map((t) => {
+                {[1, 2, 3, 4, 5].filter((t) => t < maxTime).map((t) => {
                   const x = getX(t);
                   return (
                     <g key={t}>
@@ -704,22 +498,11 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
                   );
                 })}
 
-                {/* 80% Combat Benchmark Line */}
-                <line
-                  x1={getX(Math.min(timeTo80PercentSec, maxTime))}
-                  y1={padding.top}
-                  x2={getX(Math.min(timeTo80PercentSec, maxTime))}
-                  y2={padding.top + chartH}
-                  stroke="#3B82F6"
-                  strokeWidth="1.2"
-                  strokeDasharray="3 2"
-                />
-
                 {/* 95% Reference Line */}
                 <line
-                  x1={getX(Math.min(results.timeTo95PercentSec, maxTime))}
+                  x1={getX(results.timeTo95PercentSec)}
                   y1={padding.top}
-                  x2={getX(Math.min(results.timeTo95PercentSec, maxTime))}
+                  x2={getX(results.timeTo95PercentSec)}
                   y2={padding.top + chartH}
                   stroke="#F59E0B"
                   strokeWidth="1.5"
@@ -751,7 +534,7 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
                   return (
                     <rect
                       key={idx}
-                      x={x - chartW / results.curvePoints.length / 2}
+                      x={x - (chartW / results.curvePoints.length) / 2}
                       y={padding.top}
                       width={chartW / results.curvePoints.length}
                       height={chartH}
@@ -799,90 +582,45 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
                   <span>
                     KE: <strong>{hoveredPoint.energyJoules.toFixed(0)} J</strong>
                   </span>
-                  <span>
-                    ({hoveredPoint.percentage.toFixed(0)}%)
-                  </span>
                 </div>
               )}
             </div>
 
-            {/* Spin-Up Telemetry Cards Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-              {/* Card 1: Time to 80% Speed */}
-              <div className="bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] rounded-none p-3 flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase text-[#64748B] dark:text-[#85A3E0]">
-                    80% Speed (Combat)
-                  </span>
-                  <div className="text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums mt-0.5">
-                    {timeTo80PercentSec.toFixed(2)}s
-                  </div>
-                </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70 mt-1">
-                  {(results.freeRpm * 0.8).toFixed(0)} RPM
+            {/* Key Time-to-Speed Benchmarks */}
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] rounded-none p-3 flex flex-col">
+                <span className="text-[10px] font-mono uppercase text-[#64748B] dark:text-[#85A3E0]">
+                  63.2% Speed (1τ)
+                </span>
+                <span className="text-xl font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums mt-1">
+                  {results.timeTo63PercentSec.toFixed(2)}s
+                </span>
+                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
+                  {(results.freeRpm * 0.632).toFixed(0)} RPM
                 </span>
               </div>
 
-              {/* Card 2: Time to 95% Speed */}
-              <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 rounded-none p-3 flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase text-amber-900 dark:text-amber-300 font-bold">
-                    95% Spin-Up (3τ)
-                  </span>
-                  <div className="text-lg font-bold font-mono text-amber-800 dark:text-amber-300 tabular-nums mt-0.5">
-                    {results.timeTo95PercentSec.toFixed(2)}s
-                  </div>
-                </div>
-                <span className="text-[10px] font-mono text-amber-700 dark:text-amber-400/80 mt-1">
+              <div className="bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] rounded-none p-3 flex flex-col">
+                <span className="text-[10px] font-mono uppercase text-[#64748B] dark:text-[#85A3E0]">
+                  86.5% Speed (2τ)
+                </span>
+                <span className="text-xl font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums mt-1">
+                  {results.timeTo86PercentSec.toFixed(2)}s
+                </span>
+                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70">
+                  {(results.freeRpm * 0.865).toFixed(0)} RPM
+                </span>
+              </div>
+
+              <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 rounded-none p-3 flex flex-col">
+                <span className="text-[10px] font-mono uppercase text-amber-900 dark:text-amber-300 font-bold">
+                  95.0% Spin-Up (3τ)
+                </span>
+                <span className="text-xl font-bold font-mono text-amber-800 dark:text-amber-300 tabular-nums mt-1">
+                  {results.timeTo95PercentSec.toFixed(2)}s
+                </span>
+                <span className="text-[10px] font-mono text-amber-700 dark:text-amber-400/80">
                   {(results.freeRpm * 0.95).toFixed(0)} RPM
-                </span>
-              </div>
-
-              {/* Card 3: Peak Inrush Current */}
-              <div className="bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] rounded-none p-3 flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase text-[#64748B] dark:text-[#85A3E0]">
-                    Peak Inrush Current
-                  </span>
-                  <div className="text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums mt-0.5">
-                    {peakInrushCurrentAmps.toFixed(0)}{' '}
-                    <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">A</span>
-                  </div>
-                </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70 mt-1">
-                  Stall load at t=0
-                </span>
-              </div>
-
-              {/* Card 4: Steady State Current */}
-              <div className="bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] rounded-none p-3 flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase text-[#64748B] dark:text-[#85A3E0]">
-                    Steady State Current
-                  </span>
-                  <div className="text-lg font-bold font-mono text-[#0F172A] dark:text-[#CEDDFD] tabular-nums mt-0.5">
-                    {steadyStateCurrentAmps.toFixed(1)}{' '}
-                    <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">A</span>
-                  </div>
-                </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70 mt-1">
-                  Free spin idle load
-                </span>
-              </div>
-
-              {/* Card 5: Kinetic Energy at Horizon */}
-              <div className="bg-[#F8FAFC] dark:bg-[#16181D] border border-[#E2E8F0] dark:border-[#2E3646] rounded-none p-3 flex flex-col justify-between col-span-2 sm:col-span-1">
-                <div>
-                  <span className="text-[10px] font-mono uppercase text-[#64748B] dark:text-[#85A3E0]">
-                    KE @ {timeHorizon.toFixed(1)}s Horizon
-                  </span>
-                  <div className="text-lg font-bold font-mono text-[#094AD8] dark:text-[#60A5FA] tabular-nums mt-0.5">
-                    {energyAtHorizonJoules.toFixed(0)}{' '}
-                    <span className="text-xs text-[#64748B] dark:text-[#85A3E0]">J</span>
-                  </div>
-                </div>
-                <span className="text-[10px] font-mono text-[#64748B] dark:text-[#85A3E0]/70 mt-1">
-                  {percentEnergyAtHorizon.toFixed(0)}% max ({results.maxStoredEnergyJoules.toFixed(0)} J)
                 </span>
               </div>
             </div>
@@ -892,20 +630,14 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
               <div className="flex items-center gap-1.5 font-semibold text-[#0F172A] dark:text-[#CEDDFD] mb-1">
                 <span>Spin-Up Combat Strategy</span>
               </div>
-              In combat robotics, an 80% spin-up time under{' '}
-              <strong className="text-[#0F172A] dark:text-white">2.0 to 2.5 seconds</strong> allows
-              you to recover lethal striking power between impacts before the opponent can pin you
-              against the arena hazards.
+              In combat robotics, a spin-up time under <strong className="text-[#0F172A] dark:text-white">2.5 seconds</strong> allows you to recover full striking power between hits before the opponent can pin you against the arena walls.
             </div>
           </div>
         </div>
       </div>
 
-      {/* SPARC v1.7 48V & High Current Compliance Warning Box */}
-      <SparcVoltageWarningBox
-        packVoltage={results.packVoltage}
-        inrushCurrentAmps={peakInrushCurrentAmps}
-      />
+      {/* SPARC v1.7 48V Warning Box at the bottom */}
+      <SparcVoltageWarningBox packVoltage={results.packVoltage} />
     </div>
   );
 };

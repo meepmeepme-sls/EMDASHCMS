@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import "tailwindcss";
+@source "./**/*.{ts,tsx}";
+@source "../../pages/calculator.astro";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Roboto', sans-serif;
+  --font-mono: 'Roboto', monospace;
+  --font-serif: 'Roboto', sans-serif;
+}
+
+:root {
+  font-family: 'Roboto', sans-serif;
+  color-scheme: light;
+}
+
+html, body {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+body, button, input, select, textarea, div, span, p, h1, h2, h3, h4, h5, h6, label, table, th, td {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* Enforce crisp sharp corners and Roboto font everywhere per engineering design specification */
+*,
+*::before,
+*::after {
+  font-family: 'Roboto', sans-serif !important;
+  border-radius: 0px !important;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-slate-100, #F1F5F9);
+}
+.dark ::-webkit-scrollbar-track {
+  background: #16181D;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-slate-300, #CBD5E1);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #2E3646;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #424957;
+}
+
+/* Tabular figures for telemetry */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Number input spinners removed for sleek UI */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}

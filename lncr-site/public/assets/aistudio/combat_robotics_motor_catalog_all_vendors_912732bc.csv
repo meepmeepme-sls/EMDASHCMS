@@ -24,8 +24,8 @@ Just Cuz Robotics,DartBox V2 Drive (Dragon),Dragon Motor (4mm Shaft),DragonDrive
 Just Cuz Robotics,DartBox V2 Gecko Drive,4mm Shaft,GECKO-DB-4MM,Brushed DC,Drive,130 Can Equivalent,2062,91.7,22.5:1,3S-6S LiPo,53.7,"Lower speed & current draw, optimized for 4S-6S operation"
 Just Cuz Robotics,Blitz Pro 2306 Gearmotor,5.2:1 Ratio 650kV (Drive),BLITZ_PRO_5.2_MK4_650_NEW,Brushless Outrunner,Drive,2306,650,125.0,5.2:1,3S-6S LiPo,,Bulletproof 24mm gearmotor with D-shaft pinion
 Just Cuz Robotics,Blitz Pro 2306 Gearmotor,27:1 Ratio 1500kV (High Reduction),HR_BLITZ_PRO_27_MK4_1500_NEW,Brushless Outrunner,Weapon / Arm / Actuator,2306,1500,55.6,27:1,3S-4S LiPo,,Hammersaw arm or high-torque actuator motor
-Just Cuz Robotics,Blitz Lite 1604 Gearmotors,2850KV (2S-6S),BLITZ LITE 20MM 2850KV SLOW,Brushless Outrunner,Drive,1604,2850,2850.0,Planetary,2-6S LiPo,,Peak power density brushless gearmotor
-Just Cuz Robotics,Blitz Lite 1604 Gearmotors,3800KV (2S-4S),BLITZ LITE 20MM 3800KV FAST,Brushless Outrunner,Drive,1604,3800,3800.0,Planetary,2-4S LiPo,,Peak power density brushless gearmotor
+Just Cuz Robotics,Blitz Lite 1604 Gearmotors,2850KV (2S-6S),BLITZ LITE 20MM 2850KV SLOW,Brushless Outrunner,Drive,1604,2850,98.3,29:1,2-6S LiPo,,Peak power density brushless gearmotor
+Just Cuz Robotics,Blitz Lite 1604 Gearmotors,3800KV (2S-4S),BLITZ LITE 20MM 3800KV FAST,Brushless Outrunner,Drive,1604,3800,131.0,29:1,2-4S LiPo,,Peak power density brushless gearmotor
 Just Cuz Robotics,2306.5 Just 'Cuz Edition Brushless Motor,Standard,2306M1000,Brushless Outrunner,Drive / Weapon,2306.5,1000,1000.0,1:1,3S-8S LiPo,35.8,Drop-in replacement for high-voltage beetle drive
 Just Cuz Robotics,Cherry Bomb JCR-4935,1000kV Complete Motor,JCR-4935,Brushless Outrunner,Weapon (Heavy Duty),40 x 12mm,1000,1000.0,1:1,3S-6S LiPo,216.5,"Battle-hardened beetleweight weapon motor, 8mm 4140 shaft"
 Just Cuz Robotics,HMR-5022 Hammersaw Motor,1700kV,HMR-5022-1700-FAST,Brushless Outrunner,Weapon / Hammersaw,5022,1700,1700.0,1:1,3S-4S LiPo,,Beta hammersaw motor

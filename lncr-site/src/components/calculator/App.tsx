@@ -6,11 +6,20 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import type { ToolType, WeightClassId, BatteryChemistry, WeaponState, CenterDistanceState } from './types';
+import {
+  ToolType,
+  WeightClassId,
+  BatteryChemistry,
+  WeaponState,
+  CenterDistanceState,
+} from './types';
 import { WEIGHT_CLASSES, getWeightClassDefaults, RECOMMENDED_CELL_COUNTS } from './utils/constants';
 import { computeWeapon, calculatePackVoltage } from './utils/calculations';
-import type { GlobalAppState } from './utils/urlState';
-import { serializeStateToUrl, parseStateFromUrl } from './utils/urlState';
+import {
+  GlobalAppState,
+  serializeStateToUrl,
+  parseStateFromUrl,
+} from './utils/urlState';
 import { exportConfigurationToCsv } from './utils/csvExport';
 import {
   saveSessionState,
@@ -29,7 +38,6 @@ import { CapacitanceTool } from './components/tools/CapacitanceTool';
 import { GlossaryFlyout } from './components/common/GlossaryFlyout';
 import { FruityDecor, FruityMySpaceBar } from './fruity/FruityDecor';
 import { audioPlayer } from './fruity/audioEngine';
-import './fruity/fruity.css';
 
 const INITIAL_STATE: GlobalAppState = {
   theme: 'light',
@@ -164,11 +172,9 @@ export default function App() {
   };
 
   // Serious Mode state: toggles between clean engineering UI and Frutiger Aero aesthetic
-  // Defaults to true (Serious Mode active by default) per user specification
   const [seriousMode, setSeriousMode] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return true;
-    const stored = localStorage.getItem('lncr_serious_mode');
-    return stored !== null ? stored === 'true' : true;
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('lncr_serious_mode') === 'true';
   });
 
   const toggleSeriousMode = () => {
@@ -697,9 +703,7 @@ export default function App() {
       <footer className="mt-auto border-t border-[#E2E8F0] dark:border-[#2D333F] bg-white dark:bg-[#16181D] px-4 lg:px-8 py-4 transition-colors">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <a
-            href="https://www.latenightcombat.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/"
             className="text-sm font-bold text-[#0F172A] dark:text-[#CEDDFD] hover:text-[#094AD8] dark:hover:text-[#60A5FA] transition-colors"
           >
             latenightcombat.com

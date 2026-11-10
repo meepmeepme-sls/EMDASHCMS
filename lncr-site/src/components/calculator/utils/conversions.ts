@@ -3,7 +3,7 @@
  * Default SI internal representations with lossless field-level conversion
  */
 
-import type { LengthUnit, MassUnit, SpeedUnit, EnergyUnit, MoiUnit } from '../types';
+import { LengthUnit, MassUnit, SpeedUnit, EnergyUnit, MoiUnit } from '../types';
 
 // Length conversions
 export function lengthToMm(val: number, unit: LengthUnit): number {
@@ -56,17 +56,13 @@ export function kgToUnit(valKg: number, targetUnit: MassUnit): number {
 // Mass Moment of Inertia (MOI) conversions (kg*m^2 internal SI)
 // 1 kg*m^2 = 10,000,000 g*cm^2
 // 1 lb*in^2 = 0.45359237 kg * (0.0254 m)^2 = 0.0002926396534292 kg*m^2
-// 1 oz*in^2 = (1/16) lb*in^2 = 0.000018289978339325 kg*m^2
 export const KG_M2_PER_LB_IN2 = 0.0002926396534292;
-export const KG_M2_PER_OZ_IN2 = 0.000018289978339325;
 export const G_CM2_PER_KG_M2 = 10000000;
 
 export function moiToKgM2(val: number, unit: MoiUnit | string): number {
   switch (unit) {
     case 'g*cm^2':
       return val / G_CM2_PER_KG_M2;
-    case 'oz*in^2':
-      return val * KG_M2_PER_OZ_IN2;
     case 'lb*in^2':
       return val * KG_M2_PER_LB_IN2;
     case 'kg*m^2':
@@ -79,8 +75,6 @@ export function kgM2ToUnit(valKgM2: number, targetUnit: MoiUnit | string): numbe
   switch (targetUnit) {
     case 'g*cm^2':
       return valKgM2 * G_CM2_PER_KG_M2;
-    case 'oz*in^2':
-      return valKgM2 / KG_M2_PER_OZ_IN2;
     case 'lb*in^2':
       return valKgM2 / KG_M2_PER_LB_IN2;
     case 'kg*m^2':

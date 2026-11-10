@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import type { ToolType, ToolCategory, WeightClassId } from '../../types';
+import { ToolType, ToolCategory, WeightClassId } from '../../types';
 import { WEIGHT_CLASSES } from '../../utils/constants';
 import { audioPlayer } from '../../fruity/audioEngine';
 
@@ -79,10 +79,6 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <a
               href="/"
-              onClick={(e) => {
-                e.preventDefault();
-                onSelectTool('drivetrain');
-              }}
               className="flex items-center gap-2 group text-decoration-none"
             >
               <img

@@ -42,7 +42,7 @@ export type MassUnit = 'kg' | 'lbs' | 'g' | 'oz';
 export type SpeedUnit = 'm/s' | 'mph' | 'ft/s' | 'km/h';
 export type EnergyUnit = 'J' | 'ft-lbs';
 export type TorqueUnit = 'N*m' | 'oz-in' | 'in-lbs';
-export type MoiUnit = 'kg*m^2' | 'g*cm^2' | 'lb*in^2' | 'oz*in^2';
+export type MoiUnit = 'kg*m^2' | 'g*cm^2' | 'lb*in^2';
 
 // Commercial blade MOI presets
 export interface BladeMoiPreset {
@@ -99,10 +99,8 @@ export interface DrivetrainState {
   wheelDiameter: number; // in current unit
   wheelDiameterUnit: LengthUnit;
   efficiencyPercent: number; // default 85%
-  speedUnit?: 'ft/s' | 'mph' | 'm/s';
+  speedUnit?: 'ft/s' | 'mph';
 }
-
-export type WeaponShape = 'disc' | 'bar' | 'drum' | 'custom';
 
 // State interface for Weapon (simplified to MOI & Effective Diameter)
 export interface WeaponState {
@@ -114,9 +112,6 @@ export interface WeaponState {
   effectiveDiameterUnit: LengthUnit;
   weaponMass?: number;
   weaponMassUnit?: MassUnit;
-  weaponShape?: WeaponShape;
-  toothCount?: number;
-  driveSpeedFps?: number;
   motorPresetId: string;
   motorKv: number;
   manualRpmOverride: number | null;
@@ -184,20 +179,4 @@ export interface CapacitanceState {
   allowableRippleVolts: number;
   safetyFactor: number;
   cellCount: number;
-}
-
-// Interfaces for Weapon What-If Tool
-export interface WeaponWhatIfFamily {
-  id: string;
-  name: string;
-  brand: string;
-  variants: { id: string; name: string; kv: number }[];
-}
-
-export interface WeaponWhatIfState {
-  selectedFamilyId: string;
-  customKvsText: string;
-  minCells: number;
-  maxCells: number;
-  speedUnit: 'mph' | 'm/s' | 'ft/s';
 }

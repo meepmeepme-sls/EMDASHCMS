@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { audioPlayer, TIFFANY_DAY_TRACKS } from './audioEngine';
-import type { TrackInfo } from './audioEngine';
+import { audioPlayer, TIFFANY_DAY_TRACKS, TrackInfo } from './audioEngine';
 import { usePageViews } from './usePageViews';
 
 interface StickerItem {

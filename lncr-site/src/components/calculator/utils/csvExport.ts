@@ -2,7 +2,7 @@
  * Late Night Combat Robotics Calculator Suite - CSV Configuration & Performance Exporter
  */
 
-import type { GlobalAppState } from './urlState';
+import { GlobalAppState } from './urlState';
 import {
   computeDrivetrain,
   computeWeapon,

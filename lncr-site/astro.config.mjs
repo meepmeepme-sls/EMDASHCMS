@@ -1,5 +1,6 @@
 import node from "@astrojs/node";
 import react from "@astrojs/react";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, fontProviders } from "astro/config";
 import emdash, { local } from "emdash/astro";
 import { sqlite } from "emdash/db";
@@ -9,6 +10,9 @@ export default defineConfig({
 	adapter: node({
 		mode: "standalone",
 	}),
+	vite: {
+		plugins: [tailwindcss()],
+	},
 	image: {
 		layout: "constrained",
 		responsiveStyles: true,

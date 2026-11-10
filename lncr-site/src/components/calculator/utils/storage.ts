@@ -3,8 +3,7 @@
  * Provides safe, versioned persistence for all calculator parameters and preferences.
  */
 
-import type { GlobalAppState } from './urlState';
-import { parseStateFromUrl } from './urlState';
+import { GlobalAppState, parseStateFromUrl } from './urlState';
 
 const SESSION_STORAGE_KEY = 'lncr_session_v1';
 

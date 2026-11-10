@@ -1,17 +1,99 @@
 ---
-import CosmosLayout from "../layouts/CosmosLayout.astro";
-import CalculatorApp from "../components/calculator/App";
-import "../styles/calculator.css";
+import "../components/calculator/index.css";
+import "../components/calculator/fruity/fruity.css";
 ---
 
-<CosmosLayout
-  title="Combat Robotics Engineering Calculator"
-  pageType="calculator"
-  description="Native modular combat robotics calculators for drivetrain speed, weapon kinetic energy, electronics spin-up, center distance, and battery sizing with SPARC & NHRL compliance."
->
-  <div class="content-wrapper content-wrapper--calculator" style="max-width: 1400px; margin: 0 auto 60px auto; padding: 0 16px;">
-    <div class="lncr-calculator-root">
-      <CalculatorApp client:load />
-    </div>
-  </div>
-</CosmosLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Late Night Combat Robotics | Combat Robotics Calculator Suite</title>
+    <script is:inline>
+      (function() {
+        try {
+          var theme = localStorage.getItem('lnc_theme');
+          if (!theme) {
+            var params = new URLSearchParams(window.location.search);
+            theme = params.get('theme');
+          }
+          if (!theme) {
+            var raw = localStorage.getItem('lncr_session_v1');
+            if (raw) {
+              var parsed = JSON.parse(raw);
+              if (parsed && parsed.state && parsed.state.theme) {
+                theme = parsed.state.theme;
+              }
+            }
+          }
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="description" content="Modular combat robotics calculators for drivetrain speed, weapon kinetic energy, electronics spin-up, center distance, and battery sizing with SPARC & NHRL compliance." />
+    <meta property="og:title" content="Late Night Combat Robotics | Combat Robotics Calculator Suite" />
+    <meta property="og:description" content="Modular combat robotics calculators for drivetrain speed, weapon kinetic energy, electronics spin-up, center distance, and battery sizing with SPARC & NHRL compliance." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/png" href="/assets/aistudio/www.latenightcombat.com-510x510_617ea2b1.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-[#F8FAFC] dark:bg-[#16181D] text-[#0F172A] dark:text-[#E2E4E9] antialiased selection:bg-[#094AD8] selection:text-white min-h-screen">
+    <!-- Background Music Stream (Kevin MacLeod - Cipher) -->
+    <audio id="lncr-bg-audio" src="/music/cipher.mp3" preload="auto" loop playsinline autoplay></audio>
+    <script is:inline>
+      (function() {
+        try {
+          var audio = document.getElementById('lncr-bg-audio');
+          if (!audio) return;
+          var savedVol = localStorage.getItem('lncr_music_vol');
+          var vol = savedVol !== null ? parseInt(savedVol, 10) / 100 : 0.55;
+          audio.volume = isNaN(vol) ? 0.55 : Math.max(0, Math.min(1, vol));
+
+          var p = audio.play();
+          if (p !== undefined) {
+            p.catch(function() {
+              audio.muted = true;
+              audio.play().catch(function() {});
+
+              var unlock = function() {
+                audio.muted = false;
+                if (audio.paused) {
+                  audio.play().catch(function() {});
+                }
+                var events = ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'keydown', 'touchstart', 'touchend', 'scroll', 'wheel'];
+                for (var i = 0; i < events.length; i++) {
+                  window.removeEventListener(events[i], unlock, true);
+                  document.removeEventListener(events[i], unlock, true);
+                }
+              };
+
+              var events = ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'keydown', 'touchstart', 'touchend', 'scroll', 'wheel'];
+              for (var i = 0; i < events.length; i++) {
+                window.addEventListener(events[i], unlock, { once: true, passive: true, capture: true });
+                document.addEventListener(events[i], unlock, { once: true, passive: true, capture: true });
+              }
+            });
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <div id="root"></div>
+    <script>
+      import { createRoot } from 'react-dom/client';
+      import React from 'react';
+      import App from '../components/calculator/App';
+
+      const rootEl = document.getElementById('root');
+      if (rootEl) {
+        createRoot(rootEl).render(React.createElement(App));
+      }
+    </script>
+  </body>
+</html>

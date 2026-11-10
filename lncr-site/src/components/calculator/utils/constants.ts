@@ -3,8 +3,16 @@
  * Grounded in SPARC v1.7 Specifications and Level 5 Robotics motor libraries
  */
 
-import type { WeightClassId } from '../types';
-import type { WeightClassInfo, BatteryChemistryConfig, BladeMoiPreset, MotorPreset, BeltPitchPreset, LengthUnit, GearboxPreset, WeaponWhatIfFamily } from '../types';
+import {
+  WeightClassInfo,
+  WeightClassId,
+  BatteryChemistryConfig,
+  BladeMoiPreset,
+  MotorPreset,
+  BeltPitchPreset,
+  LengthUnit,
+  GearboxPreset,
+} from '../types';
 
 export const NHRL_TIP_SPEED_LIMIT_MPH = 250;
 export const NHRL_TIP_SPEED_LIMIT_MS = 250 * 0.44704; // 111.76 m/s
@@ -1004,59 +1012,4 @@ export function getWeightClassDefaults(wc: WeightClassId): WeightClassDefaults {
         moiKgM2: 0.00088,
       };
   }
-}
-
-/**
- * Group weapon motors dynamically into families for What-If parametric matrix sweeps.
- * Follows LNCR preset ordering: Repeat Robotics -> Alphabetical -> Just Cuz Robotics last.
- */
-export function getWeaponMotorFamilies(): WeaponWhatIfFamily[] {
-  const familyMap = new Map<string, WeaponWhatIfFamily>();
-  const weaponMotors = MOTOR_PRESETS.filter((m) => m.category === 'weapon' || m.category === 'both');
-
-  const getFamilyName = (name: string): string => {
-    let clean = name.replace(/\s+\d+KV.*$/i, '').trim();
-    clean = clean.replace(/\/8\b/, '');
-    return clean;
-  };
-
-  weaponMotors.forEach((motor) => {
-    const familyName = getFamilyName(motor.name);
-    if (!familyMap.has(familyName)) {
-      let brand = 'Other';
-      if (familyName.toLowerCase().startsWith('repeat robotics')) brand = 'Repeat Robotics';
-      else if (familyName.toLowerCase().startsWith('just cuz')) brand = 'Just Cuz Robotics';
-      else if (familyName.toLowerCase().startsWith('fingertech')) brand = 'FingerTech';
-
-      const id = familyName.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-      familyMap.set(familyName, {
-        id,
-        name: familyName,
-        brand,
-        variants: [],
-      });
-    }
-    familyMap.get(familyName)!.variants.push({
-      id: motor.id,
-      name: motor.name,
-      kv: motor.kv,
-    });
-  });
-
-  const families = Array.from(familyMap.values());
-  families.forEach((f) => f.variants.sort((a, b) => a.kv - b.kv));
-
-  // Sort families: Repeat Robotics first, then Alphabetical, then Just Cuz Robotics strictly last
-  return families.sort((a, b) => {
-    const aRepeat = a.brand === 'Repeat Robotics';
-    const bRepeat = b.brand === 'Repeat Robotics';
-    const aJcr = a.brand === 'Just Cuz Robotics';
-    const bJcr = b.brand === 'Just Cuz Robotics';
-
-    if (aRepeat && !bRepeat) return -1;
-    if (!aRepeat && bRepeat) return 1;
-    if (aJcr && !bJcr) return 1;
-    if (!aJcr && bJcr) return -1;
-    return a.name.localeCompare(b.name);
-  });
 }
