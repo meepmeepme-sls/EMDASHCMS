@@ -9,6 +9,7 @@ import {
   computeSpinUp,
   computeCenterDistance,
   computeBatteryRuntime,
+  computeCapacitance,
 } from './calculations';
 import { WEIGHT_CLASSES, BATTERY_CHEMISTRIES } from './constants';
 
@@ -72,7 +73,7 @@ export function exportConfigurationToCsv(state: GlobalAppState) {
     lines.push(`SPARC v1.7 Compliance (<= 48V),${res.isOver48V ? 'Requires Event Organizer Approval' : 'Compliant'}`);
   } else if (state.activeTool === 'weapon') {
     const chem = state.hasWeaponBattery ? state.weaponChemistry : state.chemistry;
-    const cells = state.hasWeaponBattery ? state.weaponCellCount : state.weapon.cellCount;
+    const cells = state.hasWeaponBattery ? state.weaponCellCount : state.drivetrain.cellCount;
     const res = computeWeapon(state.weapon, chem, state.voltageState, cells, (state.hasWeaponBattery ? state.useWeaponDirectVoltage : state.useDirectVoltage) ? (state.hasWeaponBattery ? state.weaponDirectVoltage : state.directVoltage) : undefined);
     lines.push('--- WEAPON SPECIFICATIONS ---');
     lines.push('Parameter,Value,Unit');
@@ -82,7 +83,7 @@ export function exportConfigurationToCsv(state: GlobalAppState) {
     }
     lines.push(`Effective Diameter,${state.weapon.effectiveDiameter},${state.weapon.effectiveDiameterUnit}`);
     lines.push(`Motor Kv,${state.weapon.motorKv},RPM/V`);
-    lines.push(`Battery Cell Count,${state.weapon.cellCount},S`);
+    lines.push(`Battery Cell Count,${cells},S`);
     lines.push(`Pack Voltage,${res.packVoltage.toFixed(2)},V`);
     lines.push(`Weapon Input Teeth (Driver),${state.weapon.inputTeeth ?? 16},T`);
     lines.push(`Weapon Output Teeth (Driven),${state.weapon.outputTeeth ?? 16},T`);
@@ -100,7 +101,7 @@ export function exportConfigurationToCsv(state: GlobalAppState) {
     lines.push(`SPARC v1.7 Compliance (<= 48V),${res.isOver48V ? 'Requires Event Organizer Approval' : 'Compliant'}`);
   } else if (state.activeTool === 'spinup') {
     const chem = state.hasWeaponBattery ? state.weaponChemistry : state.chemistry;
-    const cells = state.hasWeaponBattery ? state.weaponCellCount : state.spinup.cellCount;
+    const cells = state.hasWeaponBattery ? state.weaponCellCount : state.drivetrain.cellCount;
     const directV = (state.hasWeaponBattery ? state.useWeaponDirectVoltage : state.useDirectVoltage)
       ? (state.hasWeaponBattery ? state.weaponDirectVoltage : state.directVoltage)
       : undefined;
@@ -120,7 +121,7 @@ export function exportConfigurationToCsv(state: GlobalAppState) {
     lines.push('--- ELECTRONICS & SPIN-UP SPECIFICATIONS ---');
     lines.push('Parameter,Value,Unit');
     lines.push(`Motor Kv,${effectiveKv},RPM/V${state.spinup.useWeaponTabMotorKv !== false ? ' (From Weapon Tab)' : ' (Custom)'}`);
-    lines.push(`Battery Cell Count,${state.spinup.cellCount},S`);
+    lines.push(`Battery Cell Count,${cells},S`);
     lines.push(`Pack Voltage,${res.packVoltage.toFixed(2)},V`);
     lines.push(`Gear Reduction Ratio,${effectiveGr},:1${state.spinup.useWeaponTabGearRatio !== false ? ' (From Weapon Tab)' : ' (Custom)'}`);
     lines.push(`Motor Internal Resistance,${state.spinup.motorResistance},Ohms`);
@@ -140,6 +141,31 @@ export function exportConfigurationToCsv(state: GlobalAppState) {
     lines.push(`Time to 95.0% RPM (Spin-Up),${res.timeTo95PercentSec.toFixed(3)},seconds`);
     lines.push(`Max Free RPM,${res.freeRpm.toFixed(0)},RPM`);
     lines.push(`Energy Stored at 95% Speed,${res.energyAt95Joules.toFixed(1)},Joules`);
+  } else if (state.activeTool === 'capacitance') {
+    const res = computeCapacitance(
+      { ...state.capacitance, cellCount: state.drivetrain.cellCount },
+      state.chemistry,
+      state.voltageState,
+      state.useDirectVoltage ? state.directVoltage : undefined
+    );
+    lines.push('--- RECOMMENDED CAPACITANCE SPECIFICATIONS ---');
+    lines.push('Parameter,Value,Unit');
+    lines.push(`Battery Cell Count,${state.drivetrain.cellCount},S`);
+    lines.push(`Pack Voltage,${res.packVoltage.toFixed(2)},V`);
+    lines.push(`Max Pack Voltage,${res.maxPackVoltage.toFixed(2)},V`);
+    lines.push(`Wire Length,${state.capacitance.wireLength},${state.capacitance.wireLengthUnit}`);
+    lines.push(`Peak Current,${state.capacitance.peakCurrentAmps},A`);
+    lines.push(`Allowable Ripple Voltage,${state.capacitance.allowableRippleVolts},V`);
+    lines.push(`Safety Factor,${state.capacitance.safetyFactor},x`);
+    lines.push('');
+    lines.push('--- COMPUTED CAPACITANCE METRICS ---');
+    lines.push('Metric,Value,Unit');
+    lines.push(`Recommended Capacitance,${res.recommendedCapacitanceUf},uF`);
+    lines.push(`Minimum Voltage Rating,${res.recommendedVoltageRatingVolts},V`);
+    lines.push(`Suggested Capacitor Bank,"${res.suggestedPackConfig}"`);
+    lines.push(`Loop Inductance,${res.loopInductanceNanoHenrys.toFixed(0)},nH`);
+    lines.push(`Unfiltered Voltage Spike,${res.unfilteredSpikeVolts.toFixed(1)},V`);
+    lines.push(`SPARC v1.7 Compliance (<= 48V),${res.isOver48V ? 'Requires Event Organizer Approval' : 'Compliant'}`);
   } else if (state.activeTool === 'center-distance') {
     const res = computeCenterDistance(state.centerDistance);
     lines.push('--- CENTER DISTANCE SPECIFICATIONS ---');
@@ -162,11 +188,15 @@ export function exportConfigurationToCsv(state: GlobalAppState) {
     lines.push(`Teeth in Mesh (Small Pulley),${res.teethInMesh.toFixed(1)},teeth`);
     lines.push(`Tooth Mesh Safety (>= 6 teeth),${res.isMeshSafe ? 'Safe' : 'WARNING: Less than 6 teeth in mesh'}`);
   } else if (state.activeTool === 'battery') {
-    const res = computeBatteryRuntime(state.batteryRuntime, state.chemistry);
+    const res = computeBatteryRuntime(
+      { ...state.batteryRuntime, cellCount: state.drivetrain.cellCount },
+      state.chemistry,
+      state.useDirectVoltage ? state.directVoltage : undefined
+    );
     lines.push('--- BATTERY & RUNTIME SPECIFICATIONS ---');
     lines.push('Parameter,Value,Unit');
     lines.push(`Battery Chemistry,"${BATTERY_CHEMISTRIES[state.chemistry]?.label || state.chemistry}"`);
-    lines.push(`Cell Count,${state.batteryRuntime.cellCount},S`);
+    lines.push(`Cell Count,${state.drivetrain.cellCount},S`);
     lines.push(`Pack Nominal Voltage,${res.packNominalVoltage.toFixed(2)},V`);
     lines.push(`Pack Max Voltage,${res.packMaxVoltage.toFixed(2)},V`);
     lines.push(`Battery Pack Capacity,${state.batteryRuntime.batteryCapacityMah},mAh`);

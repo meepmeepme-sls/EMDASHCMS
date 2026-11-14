@@ -33,6 +33,8 @@ interface CapacitanceToolProps {
   onChangeWeaponChemistry?: (chem: BatteryChemistry) => void;
   weaponCellCount?: number;
   onChangeWeaponCellCount?: (cellCount: number) => void;
+  drivetrainCellCount?: number;
+  onChangeDrivetrainCellCount?: (cellCount: number) => void;
   useDirectVoltage?: boolean;
   onChangeUseDirectVoltage?: (useDirect: boolean) => void;
   directVoltage?: number;
@@ -57,6 +59,8 @@ export const CapacitanceTool: React.FC<CapacitanceToolProps> = ({
   onChangeWeaponChemistry,
   weaponCellCount = state.cellCount,
   onChangeWeaponCellCount,
+  drivetrainCellCount,
+  onChangeDrivetrainCellCount,
   useDirectVoltage = false,
   onChangeUseDirectVoltage,
   directVoltage = 14.8,
@@ -66,8 +70,9 @@ export const CapacitanceTool: React.FC<CapacitanceToolProps> = ({
   weaponDirectVoltage = 14.8,
   onChangeWeaponDirectVoltage,
 }) => {
+  const effectiveCells = drivetrainCellCount ?? state.cellCount;
   const results = computeCapacitance(
-    state,
+    { ...state, cellCount: effectiveCells },
     chemistry,
     voltageState,
     useDirectVoltage ? directVoltage : undefined
@@ -82,8 +87,14 @@ export const CapacitanceTool: React.FC<CapacitanceToolProps> = ({
         onChangeChemistry={onChangeChemistry}
         voltageState={voltageState}
         onChangeVoltageState={onChangeVoltageState}
-        cellCount={state.cellCount}
-        onChangeCellCount={(cells) => onChange({ ...state, cellCount: cells })}
+        cellCount={effectiveCells}
+        onChangeCellCount={(cells) => {
+          if (onChangeDrivetrainCellCount) {
+            onChangeDrivetrainCellCount(cells);
+          } else {
+            onChange({ ...state, cellCount: cells });
+          }
+        }}
         weightClass={weightClass}
         hasWeaponBattery={hasWeaponBattery}
         onChangeHasWeaponBattery={onChangeHasWeaponBattery}

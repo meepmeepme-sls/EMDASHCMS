@@ -80,7 +80,7 @@ export const ElectronicsSpinUpTool: React.FC<ElectronicsSpinUpToolProps> = ({
   const isUseWeaponTabGearRatio = state.useWeaponTabGearRatio !== false;
 
   const effectiveChem = hasWeaponBattery ? weaponChemistry : chemistry;
-  const effectiveCells = hasWeaponBattery ? weaponCellCount : state.cellCount;
+  const effectiveCells = hasWeaponBattery ? weaponCellCount : (drivetrainCellCount ?? state.cellCount);
   const effectiveDirectV = hasWeaponBattery
     ? useWeaponDirectVoltage
       ? weaponDirectVoltage

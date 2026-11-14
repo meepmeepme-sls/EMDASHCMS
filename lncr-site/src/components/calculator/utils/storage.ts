@@ -102,7 +102,7 @@ export function loadInitialAppState(search: string, fallback: GlobalAppState): G
   const saved = loadSessionState();
   if (saved) {
     // Merge with fallback to ensure any newly added fields or schema updates exist
-    return {
+    const merged: GlobalAppState = {
       ...fallback,
       ...saved,
       drivetrain: { ...fallback.drivetrain, ...saved.drivetrain },
@@ -112,6 +112,22 @@ export function loadInitialAppState(search: string, fallback: GlobalAppState): G
       centerDistance: { ...fallback.centerDistance, ...saved.centerDistance },
       batteryRuntime: { ...fallback.batteryRuntime, ...saved.batteryRuntime },
     };
+
+    // Repair any previously persisted session where subsystem cell counts diverged
+    const mainCells = merged.drivetrain.cellCount;
+    merged.capacitance.cellCount = mainCells;
+    merged.batteryRuntime.cellCount = mainCells;
+    if (!merged.hasWeaponBattery) {
+      merged.weaponCellCount = mainCells;
+      merged.weapon.cellCount = mainCells;
+      merged.spinup.cellCount = mainCells;
+      merged.weaponChemistry = merged.chemistry;
+    } else {
+      merged.weapon.cellCount = merged.weaponCellCount;
+      merged.spinup.cellCount = merged.weaponCellCount;
+    }
+
+    return merged;
   }
 
   // Priority 3: Default baseline state

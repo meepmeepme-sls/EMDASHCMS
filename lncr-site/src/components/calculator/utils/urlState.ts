@@ -123,6 +123,9 @@ export function serializeStateToUrl(state: GlobalAppState): string {
   if (state.voltageState === 'max') {
     params.set('vs', 'max');
   }
+  if (state.drivetrain.cellCount !== defaultDriveCells) {
+    params.set('ds', String(state.drivetrain.cellCount));
+  }
   if (state.hasWeaponBattery) {
     params.set('wb', '1');
     if (state.weaponChemistry !== 'lipo') {
@@ -496,6 +499,45 @@ export function parseStateFromUrl(search: string, fallback: GlobalAppState): Glo
   if (p.has('bwa') || p.has('b_wamps')) state.batteryRuntime.avgWeaponCurrentAmps = Number(p.get('bwa') || p.get('b_wamps')) || state.batteryRuntime.avgWeaponCurrentAmps;
   if (p.has('bdur') || p.has('b_dur')) state.batteryRuntime.matchDurationSec = Number(p.get('bdur') || p.get('b_dur')) || state.batteryRuntime.matchDurationSec;
   if (p.has('bres') || p.has('b_res')) state.batteryRuntime.reserveMarginPercent = Number(p.get('bres') || p.get('b_res')) || state.batteryRuntime.reserveMarginPercent;
+
+  // Normalize & synchronize battery cell counts across subsystems
+  const parseCellParam = (keys: string[]): number | null => {
+    for (const k of keys) {
+      if (p.has(k)) {
+        const n = Number(p.get(k));
+        if (Number.isFinite(n) && n > 0) return n;
+      }
+    }
+    return null;
+  };
+  const dsVal = parseCellParam(['ds', 'd_s']);
+  const wsVal = parseCellParam(['ws', 'w_s']);
+  const ssVal = parseCellParam(['ss', 's_s']);
+  const csVal = parseCellParam(['cs', 'c_s']);
+  const bsVal = parseCellParam(['bs', 'b_s']);
+  const wbsVal = parseCellParam(['wbs', 'wb_s']);
+
+  const mainCandidates = state.hasWeaponBattery
+    ? [dsVal, csVal, bsVal]
+    : [dsVal, wsVal, ssVal, csVal, bsVal];
+  const mainCells = mainCandidates.find((v): v is number => v !== null) ?? state.drivetrain.cellCount;
+
+  state.drivetrain.cellCount = mainCells;
+  state.capacitance.cellCount = mainCells;
+  state.batteryRuntime.cellCount = mainCells;
+
+  if (!state.hasWeaponBattery) {
+    state.weaponCellCount = mainCells;
+    state.weapon.cellCount = mainCells;
+    state.spinup.cellCount = mainCells;
+    state.weaponChemistry = state.chemistry;
+  } else {
+    const wpnCells =
+      [wbsVal, wsVal, ssVal].find((v): v is number => v !== null) ?? state.weaponCellCount;
+    state.weaponCellCount = wpnCells;
+    state.weapon.cellCount = wpnCells;
+    state.spinup.cellCount = wpnCells;
+  }
 
   return state;
 }

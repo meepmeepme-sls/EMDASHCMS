@@ -80,7 +80,7 @@ export const WeaponTool: React.FC<WeaponToolProps> = ({
   extendedPreset = false,
 }) => {
   const effectiveChem = hasWeaponBattery ? weaponChemistry : chemistry;
-  const effectiveCells = hasWeaponBattery ? weaponCellCount : state.cellCount;
+  const effectiveCells = hasWeaponBattery ? weaponCellCount : (drivetrainCellCount ?? state.cellCount);
   const effectiveDirectV = hasWeaponBattery
     ? useWeaponDirectVoltage ? weaponDirectVoltage : undefined
     : useDirectVoltage ? directVoltage : undefined;

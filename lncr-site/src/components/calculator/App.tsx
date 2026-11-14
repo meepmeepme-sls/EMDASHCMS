@@ -228,9 +228,11 @@ export default function App() {
       ? appState.drivetrain.cellCount
       : (d.driveCellCount ?? recCells[0]);
 
-    const newWeaponCellCount = recCells.includes(appState.weaponCellCount)
-      ? appState.weaponCellCount
-      : (d.weaponCellCount ?? recCells[0]);
+    const newWeaponCellCount = appState.hasWeaponBattery
+      ? (recCells.includes(appState.weaponCellCount)
+          ? appState.weaponCellCount
+          : (d.weaponCellCount ?? recCells[0]))
+      : newDriveCellCount;
 
     setAppState((prev) => ({
       ...prev,
@@ -313,18 +315,27 @@ export default function App() {
     : appState.chemistry;
   const effectiveWeaponCellCount = appState.hasWeaponBattery
     ? appState.weaponCellCount
-    : appState.weapon.cellCount;
+    : appState.drivetrain.cellCount;
 
   const handleToggleHasWeaponBattery = (enabled: boolean) => {
     setAppState((prev) => ({
       ...prev,
       hasWeaponBattery: enabled,
-      ...(enabled && !prev.hasWeaponBattery
+      ...(enabled
         ? {
             weaponChemistry: prev.chemistry,
-            weaponCellCount: prev.weapon.cellCount,
+            weaponCellCount: prev.drivetrain.cellCount,
+            weapon: { ...prev.weapon, cellCount: prev.drivetrain.cellCount },
+            spinup: { ...prev.spinup, cellCount: prev.drivetrain.cellCount },
           }
-        : {}),
+        : {
+            weaponChemistry: prev.chemistry,
+            weaponCellCount: prev.drivetrain.cellCount,
+            useWeaponDirectVoltage: false,
+            weaponDirectVoltage: prev.directVoltage ?? 14.8,
+            weapon: { ...prev.weapon, cellCount: prev.drivetrain.cellCount },
+            spinup: { ...prev.spinup, cellCount: prev.drivetrain.cellCount },
+          }),
     }));
   };
 
@@ -347,13 +358,13 @@ export default function App() {
     setAppState((prev) => ({
       ...prev,
       drivetrain: { ...prev.drivetrain, cellCount: cells },
+      capacitance: { ...prev.capacitance, cellCount: cells },
+      batteryRuntime: { ...prev.batteryRuntime, cellCount: cells },
       ...(!prev.hasWeaponBattery
         ? {
             weaponCellCount: cells,
             weapon: { ...prev.weapon, cellCount: cells },
             spinup: { ...prev.spinup, cellCount: cells },
-            capacitance: { ...prev.capacitance, cellCount: cells },
-            batteryRuntime: { ...prev.batteryRuntime, cellCount: cells },
           }
         : {}),
     }));
@@ -542,7 +553,25 @@ export default function App() {
         {appState.activeTool === 'drivetrain' && (
           <DrivetrainTool
             state={appState.drivetrain}
-            onChange={(drivetrain) => setAppState((prev) => ({ ...prev, drivetrain }))}
+            onChange={(drivetrain) =>
+              setAppState((prev) => ({
+                ...prev,
+                drivetrain,
+                ...(drivetrain.cellCount !== prev.drivetrain.cellCount
+                  ? {
+                      capacitance: { ...prev.capacitance, cellCount: drivetrain.cellCount },
+                      batteryRuntime: { ...prev.batteryRuntime, cellCount: drivetrain.cellCount },
+                      ...(!prev.hasWeaponBattery
+                        ? {
+                            weaponCellCount: drivetrain.cellCount,
+                            weapon: { ...prev.weapon, cellCount: drivetrain.cellCount },
+                            spinup: { ...prev.spinup, cellCount: drivetrain.cellCount },
+                          }
+                        : {}),
+                    }
+                  : {}),
+              }))
+            }
             chemistry={appState.chemistry}
             onChangeChemistry={handleChangeMainChemistry}
             voltageState={appState.voltageState}
@@ -556,6 +585,8 @@ export default function App() {
             onChangeWeaponChemistry={handleChangeWeaponChemistry}
             weaponCellCount={effectiveWeaponCellCount}
             onChangeWeaponCellCount={handleChangeWeaponCellCount}
+            drivetrainCellCount={appState.drivetrain.cellCount}
+            onChangeDrivetrainCellCount={handleChangeMainCellCount}
             useDirectVoltage={appState.useDirectVoltage}
             onChangeUseDirectVoltage={handleToggleUseDirectVoltage}
             directVoltage={appState.directVoltage}
@@ -649,6 +680,8 @@ export default function App() {
             onChangeWeaponChemistry={handleChangeWeaponChemistry}
             weaponCellCount={effectiveWeaponCellCount}
             onChangeWeaponCellCount={handleChangeWeaponCellCount}
+            drivetrainCellCount={appState.drivetrain.cellCount}
+            onChangeDrivetrainCellCount={handleChangeMainCellCount}
             useDirectVoltage={appState.useDirectVoltage}
             onChangeUseDirectVoltage={handleToggleUseDirectVoltage}
             directVoltage={appState.directVoltage}
@@ -687,6 +720,8 @@ export default function App() {
             onChangeWeaponChemistry={handleChangeWeaponChemistry}
             weaponCellCount={effectiveWeaponCellCount}
             onChangeWeaponCellCount={handleChangeWeaponCellCount}
+            drivetrainCellCount={appState.drivetrain.cellCount}
+            onChangeDrivetrainCellCount={handleChangeMainCellCount}
             useDirectVoltage={appState.useDirectVoltage}
             onChangeUseDirectVoltage={handleToggleUseDirectVoltage}
             directVoltage={appState.directVoltage}

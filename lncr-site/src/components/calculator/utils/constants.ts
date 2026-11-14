@@ -161,6 +161,30 @@ export const MOTOR_PRESETS: MotorPreset[] = [
     notes: 'Beetleweight high-torque drive gearmotor',
   },
   {
+    id: 'rr_pro_brushless_2006_6s',
+    name: 'Repeat Robotics Pro Brushless 2006 Drive 1900KV 6S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 1900,
+    gearRatio: 27.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.08,
+    maxAmps: 25,
+    notes: 'Beetleweight high-torque 6S drive gearmotor',
+  },
+  {
+    id: 'rr_pro_brushless_2006_6s_131',
+    name: 'Repeat Robotics Pro Brushless 2006 High Reduction 1900KV 6S LiPo',
+    category: 'drive',
+    weightClasses: ['beetle'],
+    kv: 1900,
+    gearRatio: 131.0,
+    ratedVoltage: 22.2,
+    internalResistanceOhms: 0.08,
+    maxAmps: 25,
+    notes: 'Beetleweight high reduction 131:1 gearmotor',
+  },
+  {
     id: 'rr_belt_drive_2812_800',
     name: 'Repeat Robotics Belt Drive 2812 800KV 2-8S LiPo',
     category: 'both',
@@ -945,8 +969,8 @@ export const BIGBOT_GEARBOX_PRESETS: GearboxPreset[] = [
 ];
 
 export const RECOMMENDED_CELL_COUNTS: Record<WeightClassId, number[]> = {
-  ant: [2, 3, 4],
-  beetle: [3, 4, 5, 6],
+  ant: [2, 3, 4, 5, 6],
+  beetle: [2, 3, 4, 5, 6, 8],
   bigbot: [4, 5, 6, 7, 8, 10, 12, 14, 16],
 };
 
